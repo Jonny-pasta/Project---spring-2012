@@ -1,0 +1,9 @@
+Aplikacia Recipebook je urèená pre kadého,
+kto vie vari a potrebuje nieèo, kde si 
+zaznamená jednotlivé recepty. Recipebook 
+by mala uívate¾om ponúknu monos uloenia 
+receptu s rozèelením do kategorii. Následne 
+by mal ponúknu vyh¾adávanie pod¾a tıchto 
+kategórii, ale aj jednotlivıch atribút. 
+Cie¾om je jednoduchá a hlavne preh¾adná 
+evidencia receptov.
