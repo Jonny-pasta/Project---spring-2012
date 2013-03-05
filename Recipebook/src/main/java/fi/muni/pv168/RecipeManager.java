@@ -11,26 +11,6 @@ import java.util.List;
 public interface RecipeManager {
     
     /**
-     * getters, setters 
-     */
-    int getId();
-    void setId(int id);    
-    String getName();
-    void setName(String name);   
-    MealType getType();
-    void setType(MealType type);   
-    MealCategory getCategory();
-    void setCategory(MealCategory category);   
-    List<Ingredient> getIngredients();
-    void setIngredients(List<Ingredient> ingredients);    
-    Time getCookingTime();
-    void setCookingTime(Time cookingTime);   
-    int getNumPortions();
-    void setNumPortions(int numPortions);
-    String getInstructions();
-    void setInstructions(String instructions); 
-    
-    /**
      * creates a recipe
      * @param recipe recipe to be created
      */
