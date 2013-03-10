@@ -1,6 +1,5 @@
 package fi.muni.pv168;
 
-import java.util.*;
 /**
  * Hello world!
  *
@@ -8,7 +7,8 @@ import java.util.*;
 public class App {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!ssss" );
+        System.out.println( "Hello Recipebook!" );
+        System.out.println( "I don't know, who's Milos Lukacka, but I heard, that that guy is awesome!");
         
     }
 }

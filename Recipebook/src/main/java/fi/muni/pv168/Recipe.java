@@ -10,6 +10,18 @@ import java.util.List;
  * @author Mimo
  */
 public class Recipe {
+
+    public Recipe(int id, String name, MealType type, MealCategory category, Time cookingTime, int numPortions, String instructions, List<Ingredient> ingredients) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.category = category;
+        this.cookingTime = cookingTime;
+        this.numPortions = numPortions;
+        this.instructions = instructions;
+        this.ingredients = ingredients;
+    }
+    
     private int id;
     private String name;
     private MealType type;
@@ -42,4 +54,54 @@ public class Recipe {
 
     public String getInstructions() {return instructions;}
     public void setInstructions(String instructions) {this.instructions = instructions;}
+    
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + this.id;
+        hash = 89 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 89 * hash + (this.type != null ? this.type.hashCode() : 0);
+        hash = 89 * hash + (this.category != null ? this.category.hashCode() : 0);
+        hash = 89 * hash + (this.cookingTime != null ? this.cookingTime.hashCode() : 0);
+        hash = 89 * hash + this.numPortions;
+        hash = 89 * hash + (this.instructions != null ? this.instructions.hashCode() : 0);
+        hash = 89 * hash + (this.ingredients != null ? this.ingredients.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Recipe other = (Recipe) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+            return false;
+        }
+        if (this.type != other.type) {
+            return false;
+        }
+        if (this.category != other.category) {
+            return false;
+        }
+        if (this.cookingTime != other.cookingTime && (this.cookingTime == null || !this.cookingTime.equals(other.cookingTime))) {
+            return false;
+        }
+        if (this.numPortions != other.numPortions) {
+            return false;
+        }
+        if ((this.instructions == null) ? (other.instructions != null) : !this.instructions.equals(other.instructions)) {
+            return false;
+        }
+        if (this.ingredients != other.ingredients && (this.ingredients == null || !this.ingredients.equals(other.ingredients))) {
+            return false;
+        }
+        return true;
+    }
 }
