@@ -207,6 +207,254 @@ public class RecipebookTest {
         }
     }
     
+    @Test
+    public void addIngredientsToRecipe()
+    {
+        Ingredient beacon = new Ingredient("slanina", 1, "kg");
+        Ingredient sosage = new Ingredient("klobasa", 1, "kg");
+        Ingredient bread = new Ingredient("chlieb", 1, "kg");
+        
+        List<Ingredient> startingIngredients = new ArrayList<Ingredient>();
+        List<Ingredient> ingredientsToAdd = new ArrayList<Ingredient>();
+        
+        List<Ingredient> expectedIngredients = new ArrayList<Ingredient>();
+        
+        startingIngredients.add(bread);
+        
+        ingredientsToAdd.add(sosage);
+        ingredientsToAdd.add(beacon);
+        
+        expectedIngredients.add(bread);
+        expectedIngredients.add(sosage);
+        expectedIngredients.add(beacon);
+        
+        Recipe r1 = new Recipe(1, "Slanina s klobasou", MealType.MAIN_DISH, MealCategory.MEAT, new Time(20), 5, "k slanine pridajte klobasu jedzte s chlebom", startingIngredients);
+        
+        recipebook.createRecipe(r1);
+        
+        assertEquals(recipebook.findRecipeById(1).getIngredients(), startingIngredients);
+        
+        recipebook.addIngredientsToRecipe(ingredientsToAdd, r1);
+        
+        assertEquals(recipebook.findRecipeById(1).getIngredients(), expectedIngredients);
+    }
+    
+    @Test
+    public void addIngredientsToRecipeWithWrongAttributes()
+    {
+        Ingredient beacon = new Ingredient("slanina", 1, "kg");
+        Ingredient sosage = new Ingredient("klobasa", 1, "kg");
+        Ingredient bread = new Ingredient("chlieb", 1, "kg");
+        Ingredient beaconFromOrava = new Ingredient("oravska slanina", 1, "kg");
+        
+        List<Ingredient> startingIngredients = new ArrayList<Ingredient>();
+        List<Ingredient> emptyIngredients = new ArrayList<Ingredient>();
+        
+        List<Ingredient> ingredientsToAdd = new ArrayList<Ingredient>();
+        
+        startingIngredients.add(bread);
+        startingIngredients.add(sosage);
+        startingIngredients.add(beacon);
+        ingredientsToAdd.add(beaconFromOrava);
+        
+        Recipe r1 = new Recipe(1, "Slanina s klobasou", MealType.MAIN_DISH, MealCategory.MEAT, new Time(20), 5, "k slanine pridajte klobasu jedzte s chlebom", startingIngredients);
+        Recipe r2 = new Recipe(1, "Slanina", MealType.MAIN_DISH, MealCategory.MEAT, new Time(20), 5, "lala", startingIngredients);
+        
+        recipebook.createRecipe(r1);
+        
+        try{
+            recipebook.addIngredientsToRecipe(null, r1);
+            fail();
+        }catch(IllegalArgumentException ex){
+            //OK
+        }
+        
+        try{
+            recipebook.addIngredientsToRecipe(ingredientsToAdd, null);
+            fail();
+        }catch(IllegalArgumentException ex){
+            //OK
+        }
+        
+        try{
+            recipebook.addIngredientsToRecipe(emptyIngredients, r1);
+            fail();
+        }catch(IllegalArgumentException ex){
+            //OK
+        }
+        
+        try{
+            recipebook.addIngredientsToRecipe(ingredientsToAdd, r2);
+            fail();
+        }catch(IllegalArgumentException ex){
+            //OK
+        }
+        
+        try{
+            recipebook.addIngredientsToRecipe(startingIngredients, r1);
+            fail();
+        }catch(IllegalArgumentException ex){
+            //OK
+        }
+    }
+    
+    @Test
+    public void removeIngredientsFromRecipe()
+    {
+        Ingredient butter = new Ingredient("butter", 0.1, "kg");
+        Ingredient asparagus = new Ingredient("asparagus", 0.1, "kg");
+        Ingredient bread = new Ingredient("chlieb", 0.1, "kg");
+        Ingredient grepfruit = new Ingredient("grepfruit", 0.1, "kg");
+        
+        List<Ingredient> startingIngredients = new ArrayList<Ingredient>();
+        List<Ingredient> ingredientsToRem = new ArrayList<Ingredient>();
+        
+        List<Ingredient> expectedIngredients = new ArrayList<Ingredient>();
+        
+        startingIngredients.add(butter);
+        startingIngredients.add(asparagus);
+        startingIngredients.add(bread);
+        startingIngredients.add(grepfruit);
+        
+        ingredientsToRem.add(asparagus);
+        
+        expectedIngredients.add(bread);
+        expectedIngredients.add(butter);
+        expectedIngredients.add(grepfruit);
+        
+        Recipe r1 = new Recipe(1, "Chleba s maslom", MealType.APPETIZER, MealCategory.MEATLESS, new Time(20), 5, "Natrite chlieb s maslom", startingIngredients);
+        
+        recipebook.createRecipe(r1);
+        
+        assertEquals(recipebook.findRecipeById(1).getIngredients(), startingIngredients);
+        
+        recipebook.removeIngredientsFromRecipe(ingredientsToRem, r1);
+        
+        assertEquals(recipebook.findRecipeById(1).getIngredients(), expectedIngredients);
+        
+        expectedIngredients.remove(grepfruit);
+        String [] rem = {"grepfruit"};
+        
+        recipebook.removeIngredientsFromRecipe(rem, r1);
+        
+        assertEquals(recipebook.findRecipeById(1).getIngredients(), expectedIngredients);
+    }
+    
+    @Test
+    public void removeIngredientsFromRecipeWithWrongAttributes()
+    {
+        Ingredient beacon = new Ingredient("slanina", 1, "kg");
+        Ingredient sosage = new Ingredient("klobasa", 1, "kg");
+        Ingredient bread = new Ingredient("chlieb", 1, "kg");
+        Ingredient beaconFromOrava = new Ingredient("oravska slanina", 1, "kg");
+        
+        List<Ingredient> startingIngredients = new ArrayList<Ingredient>();
+        List<Ingredient> emptyIngredients = new ArrayList<Ingredient>();
+        
+        List<Ingredient> wrongIngredients = new ArrayList<Ingredient>();
+        
+        startingIngredients.add(bread);
+        startingIngredients.add(sosage);
+        startingIngredients.add(beacon);
+        
+        wrongIngredients.add(beaconFromOrava);
+        
+        Recipe r1 = new Recipe(1, "Slanina s klobasou", MealType.MAIN_DISH, MealCategory.MEAT, new Time(20), 5, "k slanine pridajte klobasu jedzte s chlebom", startingIngredients);
+        Recipe r2 = new Recipe(1, "Slanina", MealType.MAIN_DISH, MealCategory.MEAT, new Time(20), 5, "lala", startingIngredients);
+        
+        recipebook.createRecipe(r1);
+        
+        try{
+            recipebook.removeIngredientsFromRecipe(wrongIngredients, r1);
+            fail();
+        }catch(IllegalArgumentException ex){
+            //OK
+        }
+        
+        try{
+            recipebook.removeIngredientsFromRecipe(startingIngredients, null);
+            fail();
+        }catch(IllegalArgumentException ex){
+            //OK
+        }
+        
+        try{
+            recipebook.removeIngredientsFromRecipe(emptyIngredients, r1);
+            fail();
+        }catch(IllegalArgumentException ex){
+            //OK
+        }
+        
+        try{
+            recipebook.removeIngredientsFromRecipe(startingIngredients, r2);
+            fail();
+        }catch(IllegalArgumentException ex){
+            //OK
+        }
+        
+        try{
+            String [] str= {"ahoj", "ako", "sa", "mas"};
+            
+            recipebook.removeIngredientsFromRecipe(str, r1);
+            fail();
+        }catch(IllegalArgumentException ex){
+            //OK
+        }
+        
+        try{
+             String [] str= {"beacon"};
+            
+            recipebook.removeIngredientsFromRecipe(str, r2);
+            fail();
+        }catch(IllegalArgumentException ex){
+            //OK
+        }
+    }
+    
+    @Test
+    public void findRecipeByType()
+    {
+        Ingredient beacon = new Ingredient("slanina", 1, "kg");
+        Ingredient sosage = new Ingredient("klobasa", 1, "kg");
+        Ingredient butter = new Ingredient("butter", 0.1, "kg");
+        Ingredient asparagus = new Ingredient("asparagus", 0.1, "kg");
+        Ingredient bread = new Ingredient("chlieb", 0.1, "kg");
+        Ingredient mustard = new Ingredient("horcica", 0.1, "kg");
+        
+        List<Ingredient> ingredients1 = new ArrayList<Ingredient>();
+        List<Ingredient> ingredients2 = new ArrayList<Ingredient>();
+        List<Ingredient> ingredients3 = new ArrayList<Ingredient>();
+        
+        ingredients1.add(bread);
+        ingredients1.add(butter);
+        
+        ingredients2.add(bread);
+        ingredients2.add(beacon);
+        ingredients2.add(sosage);
+        
+        ingredients3.add(bread);
+        ingredients3.add(beacon);
+        ingredients3.add(mustard);
+        
+        Recipe r1 = new Recipe(1, "Chleba s maslom", MealType.APPETIZER, MealCategory.MEATLESS, new Time(20), 5, "Natrite chlieb s maslom", ingredients1);
+        Recipe r2 = new Recipe(1, "Slanina s klobasou", MealType.MAIN_DISH, MealCategory.MEAT, new Time(20), 5, "k slanine pridajte klobasu jedzte s chlebom", ingredients2);
+        Recipe r3 = new Recipe(1, "Slanina s horcicou", MealType.MAIN_DISH, MealCategory.MEAT, new Time(20), 5, "namocte slaninu do horcice zajedajte chlebom", ingredients3);
+    
+        recipebook.createRecipe(r1);
+        recipebook.createRecipe(r2);
+        recipebook.createRecipe(r3);
+        
+        List<Recipe> expected = new ArrayList<Recipe>();
+        List<Recipe> result;
+        
+        expected.add(r2);
+        expected.add(r3);
+        
+        result = recipebook.findRecipeByType(MealType.MAIN_DISH);
+        
+        assertEquals(result, expected);
+    }
+    
     private static Comparator<Recipe> idComparator = new Comparator<Recipe>() {
 
         @Override
