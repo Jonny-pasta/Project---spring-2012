@@ -1,12 +1,5 @@
 package fi.muni.pv168;
 
-
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import static org.junit.Assert.*;
@@ -834,7 +827,7 @@ public class RecipebookTest {
                 
         recipebook.createRecipe(r1);
         
-        int i = r1.getId();
+        long i = r1.getId();
         
         Recipe result = recipebook.findRecipeById(i);
         assertEquals(r1,result);
@@ -883,11 +876,10 @@ public class RecipebookTest {
         recipebook.createRecipe(r1);
         recipebook.createRecipe(r2);
         
-        List<Recipe> expected = Arrays.asList(r1,r2);
-        List<Recipe> actual = recipebook.findAllRecipes();
-        
-        Collections.sort(actual,idComparator);
-        Collections.sort(expected,idComparator);
+        SortedSet<Recipe> expected = new TreeSet<Recipe>();
+        expected.add(r1);
+        expected.add(r2);
+        SortedSet<Recipe> actual = recipebook.findAllRecipes();
         
         assertEquals(expected, actual);
     }
@@ -950,8 +942,8 @@ public class RecipebookTest {
         recipebook.createRecipe(r2);
         recipebook.createRecipe(r3);
         
-        List<Recipe> expected = new ArrayList<Recipe>();
-        List<Recipe> result;
+        SortedSet<Recipe> expected = new TreeSet<Recipe>();
+        SortedSet<Recipe> result;
         
         expected.add(r2);
         expected.add(r3);
@@ -1019,8 +1011,8 @@ public class RecipebookTest {
         recipebook.createRecipe(r2);
         recipebook.createRecipe(r3);
         
-        List<Recipe> expected = new ArrayList<Recipe>();
-        List<Recipe> result;
+        SortedSet<Recipe> expected = new TreeSet<Recipe>();
+        SortedSet<Recipe> result;
         
         expected.add(r2);
         expected.add(r3);
@@ -1091,8 +1083,8 @@ public class RecipebookTest {
         SortedSet<Ingredient> set = new TreeSet<Ingredient>();
         set.add(bread);
         set.add(beacon);
-        List<Recipe> expected = new ArrayList<Recipe>();
-        List<Recipe> result;
+        SortedSet<Recipe> expected = new TreeSet<Recipe>();
+        SortedSet<Recipe> result;
         
         expected.add(r2);
         expected.add(r3);
@@ -1130,7 +1122,7 @@ public class RecipebookTest {
         r1.setId(1);
         r1.setName("Chleba s maslom");
         r1.setType(MealType.APPETIZER);
-        r1.setCookingTime(20);
+        r1.setCookingTime(15);
         r1.setNumPortions(1);
         r1.setInstructions("natrite chlieb maslom");
         r1.setIngredients(ingredients1);
@@ -1150,7 +1142,7 @@ public class RecipebookTest {
         r3.setId(1);
         r3.setName("Slanina s horcicou");
         r3.setType(MealType.MAIN_DISH);
-        r3.setCookingTime(20);
+        r3.setCookingTime(25);
         r3.setNumPortions(1);
         r3.setInstructions("namocte slaninu do horcice, zajedzte chlebom");
         r3.setIngredients(ingredients3);
@@ -1160,23 +1152,14 @@ public class RecipebookTest {
         recipebook.createRecipe(r2);
         recipebook.createRecipe(r3);
         
-        List<Recipe> expected = new ArrayList<Recipe>();
-        List<Recipe> result;
+        SortedSet<Recipe> expected = new TreeSet<Recipe>();
+        SortedSet<Recipe> result;
         
         expected.add(r1);
         expected.add(r2);
         
-        result = recipebook.findRecipesByCookingTime(new Time(15), new Time(20));
+        result = recipebook.findRecipesByCookingTime(15, 20);
         
         assertEquals(result, expected);
     }
-    
-    
-    private static Comparator<Recipe> idComparator = new Comparator<Recipe>() {
-
-        @Override
-        public int compare(Recipe o1, Recipe o2) {
-            return Integer.valueOf(o1.getId()).compareTo(Integer.valueOf(o2.getId()));
-        }
-    };
 }

@@ -32,11 +32,27 @@ public class Ingredient implements Comparable<Ingredient> {
      * getters, setters
      */
     public String getName() {return name;}
-    public void setName(String name) {this.name = name;}
+    public void setName(String name) {
+        if ((name == null)||(name.equals(""))) {
+            throw new IllegalArgumentException("name cannot be null");
+        }
+        this.name = name;
+    }
+    
     public double getAmount() {return amount;}
-    public void setAmount(double amount) {this.amount = amount;}
+    public void setAmount(double amount) {
+        if (amount<1){
+            throw new IllegalArgumentException("amount cannot be negative");
+        }
+        this.amount = amount;}
+    
     public String getUnit() {return unit;}
-    public void setUnit(String unit) {this.unit = unit;}
+    public void setUnit(String unit) {
+        if ((unit == null)||(unit.equals(""))) {
+            throw new IllegalArgumentException("unit cannot be null");
+        }
+        this.unit = unit;
+    }
 
     @Override
     public int hashCode() {

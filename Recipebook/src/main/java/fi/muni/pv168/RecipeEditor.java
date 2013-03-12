@@ -1,6 +1,5 @@
 package fi.muni.pv168;
 
-import java.util.List;
 import java.util.SortedSet;
 
 /**

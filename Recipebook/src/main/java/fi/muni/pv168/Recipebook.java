@@ -1,7 +1,5 @@
 package fi.muni.pv168;
 
-import java.sql.Time;
-import java.util.List;
 import java.util.SortedSet;
 
 /**
@@ -30,31 +28,27 @@ public class Recipebook implements RecipeEditor, RecipeViewer {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Recipe findRecipeById(int id) {
+    public Recipe findRecipeById(long id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<Recipe> findRecipesByType(MealType type) {
+    public SortedSet<Recipe> findRecipesByType(MealType type) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<Recipe> findRecipesByCategory(MealCategory category) {
+    public SortedSet<Recipe> findRecipesByCategory(MealCategory category) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<Recipe> findRecipesByIngredients(String[] ingredients) {
+    public SortedSet<Recipe> findRecipesByIngredients(SortedSet<Ingredient> ingredients) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<Recipe> findRecipesByIngredients(SortedSet<Ingredient> ingredients) {
+    public SortedSet<Recipe> findRecipesByCookingTime(long fromTime, long toTime) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<Recipe> findRecipesByCookingTime(Time fromTime, Time toTime) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public List<Recipe> findAllRecipes() {
+    public SortedSet<Recipe> findAllRecipes() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

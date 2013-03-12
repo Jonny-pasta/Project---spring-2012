@@ -12,7 +12,7 @@ public class Recipe implements Comparable<Recipe> {
 
     public Recipe(){}
     
-    private int id;
+    private long id;
     private String name;
     private MealType type;
     private MealCategory category;
@@ -21,8 +21,8 @@ public class Recipe implements Comparable<Recipe> {
     private String instructions;
     private SortedSet<Ingredient> ingredients;
        
-    public int getId() {return id;}
-    public void setId(int id) {
+    public long getId() {return id;}
+    public void setId(long id) {
         if (id<1) {
             throw new IllegalArgumentException("id has to be possitive");
         }
@@ -88,7 +88,7 @@ public class Recipe implements Comparable<Recipe> {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + this.id;
+        hash = 97 * hash + (int) (this.id ^ (this.id >>> 32));
         hash = 97 * hash + (this.name != null ? this.name.hashCode() : 0);
         hash = 97 * hash + (this.type != null ? this.type.hashCode() : 0);
         hash = 97 * hash + (this.category != null ? this.category.hashCode() : 0);
@@ -142,6 +142,6 @@ public class Recipe implements Comparable<Recipe> {
     
     @Override
     public int compareTo(Recipe o) {
-        return this.getId() - o.getId();
+        return new Long(this.getId()).compareTo(new Long(o.getId()));
     }   
 }
