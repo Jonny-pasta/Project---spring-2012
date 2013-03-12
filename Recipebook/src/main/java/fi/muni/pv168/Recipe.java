@@ -1,71 +1,101 @@
 package fi.muni.pv168;
 
-import java.sql.Time;
 import java.util.Collections;
-import java.util.List;
+import java.util.SortedSet;
 
 /**
  * class that represents single recipe in our recipe book
  * @date 5.3.2013
  * @author Mimo
  */
-public class Recipe {
+public class Recipe implements Comparable<Recipe> {
 
-    public Recipe(int id, String name, MealType type, MealCategory category, Time cookingTime, int numPortions, String instructions, List<Ingredient> ingredients) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.category = category;
-        this.cookingTime = cookingTime;
-        this.numPortions = numPortions;
-        this.instructions = instructions;
-        this.ingredients = ingredients;
-    }
+    public Recipe(){}
     
     private int id;
     private String name;
     private MealType type;
     private MealCategory category;
-    private Time cookingTime;
+    private long cookingTime;
     private int numPortions;
     private String instructions;
-    private List<Ingredient> ingredients;
+    private SortedSet<Ingredient> ingredients;
        
     public int getId() {return id;}
-    public void setId(int id) {this.id = id;}
+    public void setId(int id) {
+        if (id<1) {
+            throw new IllegalArgumentException("id has to be possitive");
+        }
+        this.id = id;
+    }
 
     public String getName() {return name;}
-    public void setName(String name) {this.name = name;}
+    public void setName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("name cannot be null");
+        }
+        this.name = name;
+    }
 
     public MealType getType() {return type;}
-    public void setType(MealType type) {this.type = type;}
+    public void setType(MealType type) {
+        if (type == null) {
+            throw new IllegalArgumentException("type cannot be null");
+        }
+        this.type = type;
+    }
 
     public MealCategory getCategory() {return category;}
-    public void setCategory(MealCategory category) {this.category = category;}
+    public void setCategory(MealCategory category) {
+        if (category == null) {
+            throw new IllegalArgumentException("category cannot be null");
+        }
+        this.category = category;
+    }
 
-    public List<Ingredient> getIngredients() {return Collections.unmodifiableList(ingredients);}
-    public void setIngredients(List<Ingredient> ingredients) {ingredients.addAll(ingredients);}
+    public SortedSet<Ingredient> getIngredients() {return Collections.unmodifiableSortedSet(ingredients);}
+    public void setIngredients(SortedSet<Ingredient> ingredients) {
+        if ((ingredients == null)||(ingredients.isEmpty())) {
+            throw new IllegalArgumentException("ingredients cannot be null/empty");
+        }
+        ingredients.addAll(ingredients);
+    }
 
-    public Time getCookingTime() {return cookingTime;}
-    public void setCookingTime(Time cookingTime) {this.cookingTime = cookingTime;}
+    public long getCookingTime() {return cookingTime;}
+    public void setCookingTime(long cookingTime) {
+        if (cookingTime<0) {
+            throw new IllegalArgumentException("time has to be possitive");
+        }
+        this.cookingTime = cookingTime;
+    }
     
     public int getNumPortions() {return numPortions;}
-    public void setNumPortions(int numPortions) {this.numPortions = numPortions;}
+    public void setNumPortions(int numPortions) {
+        if (numPortions < 1) {
+            throw new IllegalArgumentException("num of portions has to be possitive");
+        }
+        this.numPortions = numPortions;
+    }
 
     public String getInstructions() {return instructions;}
-    public void setInstructions(String instructions) {this.instructions = instructions;}
-    
+    public void setInstructions(String instructions) {
+        if (instructions == null) {
+            throw new IllegalArgumentException("instructions cannot be null");
+        }
+        this.instructions = instructions;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 89 * hash + this.id;
-        hash = 89 * hash + (this.name != null ? this.name.hashCode() : 0);
-        hash = 89 * hash + (this.type != null ? this.type.hashCode() : 0);
-        hash = 89 * hash + (this.category != null ? this.category.hashCode() : 0);
-        hash = 89 * hash + (this.cookingTime != null ? this.cookingTime.hashCode() : 0);
-        hash = 89 * hash + this.numPortions;
-        hash = 89 * hash + (this.instructions != null ? this.instructions.hashCode() : 0);
-        hash = 89 * hash + (this.ingredients != null ? this.ingredients.hashCode() : 0);
+        hash = 97 * hash + this.id;
+        hash = 97 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 97 * hash + (this.type != null ? this.type.hashCode() : 0);
+        hash = 97 * hash + (this.category != null ? this.category.hashCode() : 0);
+        hash = 97 * hash + (int) (this.cookingTime ^ (this.cookingTime >>> 32));
+        hash = 97 * hash + this.numPortions;
+        hash = 97 * hash + (this.instructions != null ? this.instructions.hashCode() : 0);
+        hash = 97 * hash + (this.ingredients != null ? this.ingredients.hashCode() : 0);
         return hash;
     }
 
@@ -90,7 +120,7 @@ public class Recipe {
         if (this.category != other.category) {
             return false;
         }
-        if (this.cookingTime != other.cookingTime && (this.cookingTime == null || !this.cookingTime.equals(other.cookingTime))) {
+        if (this.cookingTime != other.cookingTime) {
             return false;
         }
         if (this.numPortions != other.numPortions) {
@@ -104,11 +134,14 @@ public class Recipe {
         }
         return true;
     }
-
+    
     @Override
     public String toString() {
         return "Recipe{" + "id=" + id + ", name=" + name + ", type=" + type + ", category=" + category + ", cookingTime=" + cookingTime + ", numPortions=" + numPortions + ", instructions=" + instructions + ", ingredients=" + ingredients + "}";
     }
     
-    
+    @Override
+    public int compareTo(Recipe o) {
+        return this.getId() - o.getId();
+    }   
 }

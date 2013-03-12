@@ -1,6 +1,7 @@
 package fi.muni.pv168;
 
 import java.util.List;
+import java.util.SortedSet;
 
 /**
  * interface that represents editor of the recipes
@@ -24,25 +25,19 @@ public interface RecipeEditor {
      * edit a recipe
      * @param recipe recipe to be edited 
      */
-    void editRecipe(Recipe recipe);
+    void updateRecipe(Recipe recipeToBeUpdated, Recipe update);
     
     /**
      * adds ingredients into existing recipe
      * @param ingredients list of ingredients to be added
      * @param recipe recipe that ingredients should be added into
      */
-    void addIngredientsToRecipe(List<Ingredient> ingredients, Recipe recipe);
+    void addIngredientsToRecipe(SortedSet<Ingredient> ingredients, Recipe recipe);
     
     /**
      * remove ingredients from existing recipe
      * @param ingredients list of ingredients to be removed
      * @param recipe recipe that ingredients should be removed from
      */
-    void removeIngredientsFromRecipe(List<Ingredient> ingredients, Recipe recipe);
-    /**
-     * remove ingredients from existing recipe
-     * @param ingredients string array of ingredients to be removed
-     * @param recipe recipe that ingredients should be removed from
-     */
-    void removeIngredientsFromRecipe(String[] ingredients, Recipe recipe);
+    void removeIngredientsFromRecipe(SortedSet<Ingredient> ingredients, Recipe recipe);
 }

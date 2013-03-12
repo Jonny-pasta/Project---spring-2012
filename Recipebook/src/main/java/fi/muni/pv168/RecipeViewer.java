@@ -2,6 +2,7 @@ package fi.muni.pv168;
 
 import java.sql.Time;
 import java.util.List;
+import java.util.SortedSet;
 
 
 /**
@@ -22,27 +23,21 @@ public interface RecipeViewer {
      * @param type type of the searched recipes
      * @return list of recipes with entered type
      */
-    List<Recipe> findRecipeByType(MealType type);
+    List<Recipe> findRecipesByType(MealType type);
     
     /**
      * find recipes by it's category
      * @param category category of the searched recipes
      * @return list of recipes with entered category
      */
-    List<Recipe> findRecipeByCategory(MealCategory category);
+    List<Recipe> findRecipesByCategory(MealCategory category);
     
-    /**
-     * find recipes by it's ingredients
-     * @param ingredients string array of ingredients of the searched recipes
-     * @return list of recipes with entered ingredients
-     */
-    List<Recipe> findRecipesByIngredients(String[] ingredients);
     /**
      * find recipes by it's ingredients
      * @param ingredients list of ingredients of the searched recipes
      * @return list of recipes with entered ingredients
      */
-    List<Recipe> findRecipesByIngredients(List<Ingredient> ingredients);
+    List<Recipe> findRecipesByIngredients(SortedSet<Ingredient> ingredients);
     
     /**
      * find recipes by it's cooking time

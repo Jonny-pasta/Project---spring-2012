@@ -2,6 +2,7 @@ package fi.muni.pv168;
 
 import java.sql.Time;
 import java.util.List;
+import java.util.SortedSet;
 
 /**
  *
@@ -17,19 +18,15 @@ public class Recipebook implements RecipeEditor, RecipeViewer {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void editRecipe(Recipe recipe) {
+    public void updateRecipe(Recipe recipeToBeUpdated, Recipe update) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void addIngredientsToRecipe(List<Ingredient> ingredients, Recipe recipe) {
+    public void addIngredientsToRecipe(SortedSet<Ingredient> ingredients, Recipe recipe) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void removeIngredientsFromRecipe(List<Ingredient> ingredients, Recipe recipe) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void removeIngredientsFromRecipe(String[] ingredients, Recipe recipe) {
+    public void removeIngredientsFromRecipe(SortedSet<Ingredient> ingredients, Recipe recipe) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -37,11 +34,11 @@ public class Recipebook implements RecipeEditor, RecipeViewer {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<Recipe> findRecipeByType(MealType type) {
+    public List<Recipe> findRecipesByType(MealType type) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<Recipe> findRecipeByCategory(MealCategory category) {
+    public List<Recipe> findRecipesByCategory(MealCategory category) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -49,7 +46,7 @@ public class Recipebook implements RecipeEditor, RecipeViewer {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<Recipe> findRecipesByIngredients(List<Ingredient> ingredients) {
+    public List<Recipe> findRecipesByIngredients(SortedSet<Ingredient> ingredients) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
