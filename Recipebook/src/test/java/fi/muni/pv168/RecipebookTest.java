@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package fi.muni.pv168;
 
 
@@ -39,9 +35,14 @@ public class RecipebookTest {
         
         recipebook.createRecipe(recipe);
         
-        Recipe result = recipebook.findRecipeById(1);
-        assertEquals(recipe, result);
-        assertNotSame(recipe, result);
+        Recipe result;
+        try {
+            result = recipebook.findRecipeById(1);
+            assertEquals(recipe, result);
+            assertNotSame(recipe, result);
+        } catch (Exception e){
+            fail();
+        }
     }
 
     @Test
@@ -178,6 +179,13 @@ public class RecipebookTest {
         
         assertNull(recipebook.findRecipeById(r1.getId()));
         assertNotNull(recipebook.findRecipeById(r2.getId()));
+        
+        try{
+            recipebook.deleteRecipe(r1);
+            fail();
+        } catch (Exception e) {
+            //OK
+        }
                 
     }
     
@@ -417,7 +425,6 @@ public class RecipebookTest {
         Ingredient beacon = new Ingredient("slanina", 1, "kg");
         Ingredient sosage = new Ingredient("klobasa", 1, "kg");
         Ingredient butter = new Ingredient("butter", 0.1, "kg");
-        Ingredient asparagus = new Ingredient("asparagus", 0.1, "kg");
         Ingredient bread = new Ingredient("chlieb", 0.1, "kg");
         Ingredient mustard = new Ingredient("horcica", 0.1, "kg");
         
