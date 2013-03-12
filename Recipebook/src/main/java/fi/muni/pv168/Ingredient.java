@@ -9,7 +9,7 @@ package fi.muni.pv168;
 public class Ingredient implements Comparable<Ingredient> {
     
     /**
-     * attributes
+     *  name of the ingredient, amount of it, unit of the amount
      */
     private String name;
     private double amount;
@@ -23,6 +23,9 @@ public class Ingredient implements Comparable<Ingredient> {
      */
     public Ingredient(){}
     public Ingredient(String name, double amount, String unit){
+        if ((name == null)||(name.equals(""))||(amount<1)||(unit == null)||(unit.equals(""))){
+            throw new IllegalArgumentException("wrong attributes in Ingredient constructor");
+        }
         this.name = name;
         this.amount = amount;
         this.unit = unit;
@@ -88,7 +91,8 @@ public class Ingredient implements Comparable<Ingredient> {
     public String toString() {
         return "Ingredient{" + "name=" + name + ", amount=" + amount + ", unit=" + unit + '}';
     }
-
+    
+    @Override
     public int compareTo(Ingredient o) {
         int diff = this.getName().compareTo(o.getName());
         if (diff != 0) {

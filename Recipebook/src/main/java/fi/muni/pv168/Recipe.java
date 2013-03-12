@@ -9,9 +9,14 @@ import java.util.SortedSet;
  * @author Mimo
  */
 public class Recipe implements Comparable<Recipe> {
-
+    /**
+     * constructor
+     */
     public Recipe(){}
     
+    /**
+     * attributes of the recipe: ID, name, type, category, cooking time (in minutes), number of portions, instructions to cook and a set of ingredients
+     */
     private long id;
     private String name;
     private MealType type;
@@ -21,6 +26,10 @@ public class Recipe implements Comparable<Recipe> {
     private String instructions;
     private SortedSet<Ingredient> ingredients;
        
+    
+    /**
+     * getters, setters
+     */
     public long getId() {return id;}
     public void setId(long id) {
         if (id<1) {

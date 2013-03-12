@@ -3,7 +3,7 @@ package fi.muni.pv168;
 import java.util.SortedSet;
 
 /**
- *
+ * class represents recipe book itself - manager of ingredients and recipes
  * @author Mimo
  */
 public class Recipebook implements RecipeEditor, RecipeViewer {
