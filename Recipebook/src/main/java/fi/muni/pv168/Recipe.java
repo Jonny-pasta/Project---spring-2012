@@ -5,6 +5,7 @@ import java.util.SortedSet;
 
 /**
  * class that represents single recipe in our recipe book
+ * Note: This class has a natural ordering that is inconsistent with equals.
  * @date 5.3.2013
  * @author Mimo
  */
