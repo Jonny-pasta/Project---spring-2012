@@ -48,6 +48,14 @@ public class Recipebook implements RecipeEditor, RecipeViewer {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public SortedSet<Recipe> findRecipesUptoCookingTime(long toTime) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public SortedSet<Recipe> findRecipesFromCookingTime(long fromTime) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public SortedSet<Recipe> findAllRecipes() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

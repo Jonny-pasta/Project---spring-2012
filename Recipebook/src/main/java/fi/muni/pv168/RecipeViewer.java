@@ -44,6 +44,8 @@ public interface RecipeViewer {
      * @return list of recipes with cooking time between lower and upper borders
      */
     SortedSet<Recipe> findRecipesByCookingTime(long fromTime, long toTime);
+    SortedSet<Recipe> findRecipesUptoCookingTime(long toTime);
+    SortedSet<Recipe> findRecipesFromCookingTime(long fromTime);
     
     /**
      * find all recipes in the recipe book
