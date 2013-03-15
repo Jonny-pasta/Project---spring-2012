@@ -17,23 +17,30 @@ public interface RecipeViewer {
     Recipe findRecipeById(long id);
     
     /**
+     * find recipes, that have this substring in their names
+     * @param name name of the searched recipes
+     * @return set of recipes with entered substring
+     */
+    SortedSet<Recipe> findRecipesByName(String name);
+    
+    /**
      * find recipes by it's type
      * @param type type of the searched recipes
-     * @return list of recipes with entered type
+     * @return set of recipes with entered type
      */
     SortedSet<Recipe> findRecipesByType(MealType type);
     
     /**
      * find recipes by it's category
      * @param category category of the searched recipes
-     * @return list of recipes with entered category
+     * @return set of recipes with entered category
      */
     SortedSet<Recipe> findRecipesByCategory(MealCategory category);
     
     /**
      * find recipes by it's ingredients
      * @param ingredients list of ingredients of the searched recipes
-     * @return list of recipes with entered ingredients
+     * @return set of recipes with entered ingredients
      */
     SortedSet<Recipe> findRecipesByIngredients(SortedSet<Ingredient> ingredients);
     
@@ -41,7 +48,7 @@ public interface RecipeViewer {
      * find recipes by it's cooking time
      * @param fromTime lower border of the searched cooking time
      * @param toTime upper border of the searched cooking time
-     * @return list of recipes with cooking time between lower and upper borders
+     * @return set of recipes with cooking time between lower and upper borders
      */
     SortedSet<Recipe> findRecipesByCookingTime(long fromTime, long toTime);
     SortedSet<Recipe> findRecipesUptoCookingTime(long toTime);

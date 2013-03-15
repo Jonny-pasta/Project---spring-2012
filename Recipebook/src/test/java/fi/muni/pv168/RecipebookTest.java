@@ -836,6 +836,75 @@ public class RecipebookTest {
     }
     
     @Test
+    public void findRecipeByName()
+    {
+        Ingredient beacon = new Ingredient("slanina", 1, "kg");
+        Ingredient sosage = new Ingredient("klobasa", 1, "kg");
+        Ingredient butter = new Ingredient("butter", 0.1, "kg");
+        Ingredient bread = new Ingredient("chlieb", 0.1, "kg");
+        Ingredient mustard = new Ingredient("horcica", 0.1, "kg");
+        
+        SortedSet<Ingredient> ingredients1 = new TreeSet<Ingredient>();
+        SortedSet<Ingredient> ingredients2 = new TreeSet<Ingredient>();
+        SortedSet<Ingredient> ingredients3 = new TreeSet<Ingredient>();
+        
+        ingredients1.add(bread);
+        ingredients1.add(butter);
+        
+        ingredients2.add(bread);
+        ingredients2.add(beacon);
+        ingredients2.add(sosage);
+        
+        ingredients3.add(bread);
+        ingredients3.add(beacon);
+        ingredients3.add(mustard);
+        
+        Recipe r1 = new Recipe();
+        r1.setId(1);
+        r1.setName("Chleba s maslom");
+        r1.setType(MealType.APPETIZER);
+        r1.setCookingTime(20);
+        r1.setNumPortions(1);
+        r1.setInstructions("natrite chlieb maslom");
+        r1.setIngredients(ingredients1);
+        r1.setCategory(MealCategory.MEAT);
+        
+        Recipe r2 = new Recipe();
+        r2.setId(1);
+        r2.setName("Slanina s klobasou");
+        r2.setType(MealType.MAIN_DISH);
+        r2.setCookingTime(20);
+        r2.setNumPortions(1);
+        r2.setInstructions("k slanine pridajte klobasu jedzte s chlebom");
+        r2.setIngredients(ingredients2);
+        r2.setCategory(MealCategory.MEAT);
+        
+        Recipe r3 = new Recipe();
+        r3.setId(1);
+        r3.setName("Slanina s horcicou");
+        r3.setType(MealType.MAIN_DISH);
+        r3.setCookingTime(20);
+        r3.setNumPortions(1);
+        r3.setInstructions("namocte slaninu do horcice, zajedzte chlebom");
+        r3.setIngredients(ingredients3);
+        r3.setCategory(MealCategory.MEAT);
+        
+        recipebook.createRecipe(r1);
+        recipebook.createRecipe(r2);
+        recipebook.createRecipe(r3);
+        
+        SortedSet<Recipe> expected = new TreeSet<Recipe>();
+        SortedSet<Recipe> result;
+        
+        expected.add(r2);
+        expected.add(r3);
+        
+        result = recipebook.findRecipesByName("slanina");
+        
+        assertEquals(result, expected);
+    }
+    
+    @Test
     public void findAllRecipes(){
         
         assertTrue(recipebook.findAllRecipes().isEmpty());

@@ -32,6 +32,10 @@ public class Recipebook implements RecipeEditor, RecipeViewer {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public SortedSet<Recipe> findRecipesByName(String name) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public SortedSet<Recipe> findRecipesByType(MealType type) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
