@@ -10,6 +10,7 @@ import java.util.SortedSet;
  * @author Mimo
  */
 public class Recipe implements Comparable<Recipe> {
+    
     /**
      * constructor
      */
@@ -26,8 +27,7 @@ public class Recipe implements Comparable<Recipe> {
     private int numPortions;
     private String instructions;
     private SortedSet<Ingredient> ingredients;
-       
-    
+           
     /**
      * getters, setters
      */
