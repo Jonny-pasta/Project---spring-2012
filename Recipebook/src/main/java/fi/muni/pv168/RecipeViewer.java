@@ -14,7 +14,7 @@ public interface RecipeViewer {
      * @param id id of the searched recipe
      * @return recipe with entered ID
      */    
-    Recipe findRecipeById(long id);
+    Recipe findRecipeById(int id);
     
     /**
      * find recipes, that have this substring in their names
@@ -50,9 +50,9 @@ public interface RecipeViewer {
      * @param toTime upper border of the searched cooking time
      * @return set of recipes with cooking time between lower and upper borders
      */
-    SortedSet<Recipe> findRecipesByCookingTime(long fromTime, long toTime);
-    SortedSet<Recipe> findRecipesUptoCookingTime(long toTime);
-    SortedSet<Recipe> findRecipesFromCookingTime(long fromTime);
+    SortedSet<Recipe> findRecipesByCookingTime(int fromTime, int toTime);
+    SortedSet<Recipe> findRecipesUptoCookingTime(int toTime);
+    SortedSet<Recipe> findRecipesFromCookingTime(int fromTime);
     
     /**
      * find all recipes in the recipe book

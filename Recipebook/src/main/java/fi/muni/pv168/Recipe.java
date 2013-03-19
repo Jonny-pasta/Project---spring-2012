@@ -19,11 +19,12 @@ public class Recipe implements Comparable<Recipe> {
     /**
      * attributes of the recipe: ID, name, type, category, cooking time (in minutes), number of portions, instructions to cook and a set of ingredients
      */
-    private long id;
+    private int id;
     private String name;
     private MealType type;
     private MealCategory category;
-    private long cookingTime;
+    //cooking time in minutes
+    private int cookingTime;
     private int numPortions;
     private String instructions;
     private SortedSet<Ingredient> ingredients;
@@ -31,8 +32,8 @@ public class Recipe implements Comparable<Recipe> {
     /**
      * getters, setters
      */
-    public long getId() {return id;}
-    public void setId(long id) {
+    public int getId() {return id;}
+    public void setId(int id) {
         if (id<1) {
             throw new IllegalArgumentException("id has to be possitive");
         }
@@ -71,8 +72,8 @@ public class Recipe implements Comparable<Recipe> {
         ingredients.addAll(ingredients);
     }
 
-    public long getCookingTime() {return cookingTime;}
-    public void setCookingTime(long cookingTime) {
+    public int getCookingTime() {return cookingTime;}
+    public void setCookingTime(int cookingTime) {
         if (cookingTime<0) {
             throw new IllegalArgumentException("time has to be possitive");
         }
@@ -98,11 +99,11 @@ public class Recipe implements Comparable<Recipe> {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 97 * hash + this.id;
         hash = 97 * hash + (this.name != null ? this.name.hashCode() : 0);
         hash = 97 * hash + (this.type != null ? this.type.hashCode() : 0);
         hash = 97 * hash + (this.category != null ? this.category.hashCode() : 0);
-        hash = 97 * hash + (int) (this.cookingTime ^ (this.cookingTime >>> 32));
+        hash = 97 * hash + this.cookingTime;
         hash = 97 * hash + this.numPortions;
         hash = 97 * hash + (this.instructions != null ? this.instructions.hashCode() : 0);
         hash = 97 * hash + (this.ingredients != null ? this.ingredients.hashCode() : 0);

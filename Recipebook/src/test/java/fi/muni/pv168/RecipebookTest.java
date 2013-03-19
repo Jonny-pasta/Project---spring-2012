@@ -261,7 +261,7 @@ public class RecipebookTest {
             //OK
         }
         
-        Recipe r2 = new Recipe();;
+        Recipe r2 = new Recipe();
         r2.setName("goat");
         r2.setType(MealType.MAIN_DISH);
         r2.setCookingTime(120);
@@ -276,7 +276,6 @@ public class RecipebookTest {
             //OK
         }
 
-        r2 = new Recipe();
         r2.setId(2);
         r2.setType(MealType.MAIN_DISH);
         r2.setCookingTime(120);
@@ -450,7 +449,6 @@ public class RecipebookTest {
             //OK
         }
         
-        r1 = new Recipe();
         r1.setName("chicken");
         r1.setType(MealType.MAIN_DISH);
         r1.setCookingTime(120);
@@ -827,7 +825,7 @@ public class RecipebookTest {
                 
         recipebook.createRecipe(r1);
         
-        long i = r1.getId();
+        int i = r1.getId();
         
         Recipe result = recipebook.findRecipeById(i);
         assertEquals(r1,result);

@@ -28,7 +28,7 @@ public class Recipebook implements RecipeEditor, RecipeViewer {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Recipe findRecipeById(long id) {
+    public Recipe findRecipeById(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -48,15 +48,15 @@ public class Recipebook implements RecipeEditor, RecipeViewer {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public SortedSet<Recipe> findRecipesByCookingTime(long fromTime, long toTime) {
+    public SortedSet<Recipe> findRecipesByCookingTime(int fromTime, int toTime) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public SortedSet<Recipe> findRecipesUptoCookingTime(long toTime) {
+    public SortedSet<Recipe> findRecipesUptoCookingTime(int toTime) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public SortedSet<Recipe> findRecipesFromCookingTime(long fromTime) {
+    public SortedSet<Recipe> findRecipesFromCookingTime(int fromTime) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
