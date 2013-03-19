@@ -35,5 +35,11 @@
       <artifactId>logback-core</artifactId>
       <version>1.0.9</version>
     </dependency>
+    <dependency>
+      <groupId>com.oracle</groupId>
+      <artifactId>ojdbc14</artifactId>
+      <version>10.2.0.4.0</version>
+      <type>pom</type>
+    </dependency>
   </dependencies>
 </project>
