@@ -11,6 +11,7 @@ public class Ingredient implements Comparable<Ingredient> {
     /**
      *  name of the ingredient, amount of it, unit of the amount
      */
+    private Long id;
     private String name;
     private double amount;
     private String unit;
@@ -21,11 +22,22 @@ public class Ingredient implements Comparable<Ingredient> {
      * @param amount amount to add to the meal
      * @param unit amount of what do add to the meal
      */
+    public void setID(Long id)
+    {
+        this.id = id;
+    }
+    
+    public Long getID()
+    {
+        return this.id;
+    }
+    
     public Ingredient(){}
     public Ingredient(String name, double amount, String unit){
         if ((name == null)||(name.equals(""))||(amount<1)||(unit == null)||(unit.equals(""))){
             throw new IllegalArgumentException("wrong attributes in Ingredient constructor");
         }
+        this.id = null;
         this.name = name;
         this.amount = amount;
         this.unit = unit;
