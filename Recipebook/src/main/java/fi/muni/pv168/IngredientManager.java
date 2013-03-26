@@ -218,4 +218,11 @@ public class IngredientManager {
             throw new InvalidEntityException("amount is 0");
         }
     }
+    
+    public void createTables() throws ServiceFailureException, SQLException {
+        Connection con = dataSource.getConnection();
+        con.setAutoCommit(false);
+        PreparedStatement query = con.prepareStatement("CREATE TABLE \"Ingredient\" (\"id\" BIGINT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY, \"name\" VARCHAR(255), \"amount\" DOUBLE, \"unit\" VARCHAR(255), \"recipeID\" INTEGER(NOT NULL))");
+        query.executeUpdate();
+    }
 }
