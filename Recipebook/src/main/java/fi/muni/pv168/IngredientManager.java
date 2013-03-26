@@ -34,7 +34,7 @@ public class IngredientManager {
         }
     }
 
-    public SortedSet<Ingredient> getIngredientsOfRecipe(long recipeId) throws ServiceFailureException {
+    public SortedSet<Ingredient> getIngredientsOfRecipe(Long recipeId) throws ServiceFailureException {
         checkDataSource();
 
         Connection connection = null;
@@ -42,14 +42,14 @@ public class IngredientManager {
 
         try {
             connection = dataSource.getConnection();
-            querry = connection.prepareStatement("SELECT id, name, amount, init FROM Ingredients WHERE recipeId = ?");
+            querry = connection.prepareStatement("SELECT id, name, amount, unit FROM Ingredients WHERE recipeId = ?");
 
             querry.setLong(1, recipeId);
 
             ResultSet resultsDB = querry.executeQuery();
 
             SortedSet<Ingredient> result = new TreeSet<Ingredient>();
-
+            logger.log(Level.SEVERE, "SOM PRED WHILOM");
             while (resultsDB.next()) {
                 Ingredient output = rowToIngredient(resultsDB);
                 validate(output);
@@ -76,25 +76,25 @@ public class IngredientManager {
         validate(ingredient);
 
         Connection connection = null;
-        PreparedStatement querry = null;
+        PreparedStatement query = null;
 
         try {
             connection = dataSource.getConnection();
 
             connection.setAutoCommit(false);
 
-            querry = connection.prepareStatement("INSERT INTO Ingredients (name, amount, unit, recipeId) VALUES( ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            query = connection.prepareStatement("INSERT INTO INGREDIENTS (NAME, AMOUNT, UNIT, RECIPEID) VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
-            querry.setString(1, ingredient.getName());
-            querry.setDouble(2, ingredient.getAmount());
-            querry.setString(3, ingredient.getUnit());
-            querry.setLong(4, recipeId);
+            query.setString(1, ingredient.getName());
+            query.setDouble(2, ingredient.getAmount());
+            query.setString(3, ingredient.getUnit());
+            query.setLong(4, recipeId);
 
-            int count = querry.executeUpdate();
+            int count = query.executeUpdate();
 
             DBUtils.checkUpdatesCount(count, true);
 
-            long newId = DBUtils.getId(querry.getGeneratedKeys());
+            long newId = DBUtils.getId(query.getGeneratedKeys());
 
             ingredient.setID(newId);
 
@@ -105,7 +105,7 @@ public class IngredientManager {
             throw new ServiceFailureException(msg, ex);
         } finally {
             DBUtils.doRollbackQuietly(connection);
-            DBUtils.closeQuietly(connection, querry);
+            DBUtils.closeQuietly(connection, query);
         }
     }
 
@@ -220,9 +220,30 @@ public class IngredientManager {
     }
     
     public void createTables() throws ServiceFailureException, SQLException {
+        logger.log(Level.SEVERE, "SOM V CREATETABLES");
         Connection con = dataSource.getConnection();
         con.setAutoCommit(false);
-        PreparedStatement query = con.prepareStatement("CREATE TABLE \"Ingredient\" (\"id\" BIGINT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY, \"name\" VARCHAR(255), \"amount\" DOUBLE, \"unit\" VARCHAR(255), \"recipeID\" INTEGER(NOT NULL))");
+        logger.log(Level.SEVERE, "PRESLO CONNECTIONOM");
+        String createTableSQL = "CREATE TABLE INGREDIENTS("
+                + "ID BIGINT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY, "
+                + "NAME VARCHAR(255), "
+                + "AMOUNT DOUBLE, "
+                + "UNIT VARCHAR(255), "
+                + "RECIPEID INTEGER NOT NULL "
+                + ")";
+                
+        PreparedStatement query = con.prepareStatement(createTableSQL);
         query.executeUpdate();
+        con.commit();
+        logger.log(Level.SEVERE, "PRESLO STATEMENTOM");
+    }
+    
+    public void dropTable() throws ServiceFailureException, SQLException {
+        logger.log(Level.SEVERE, "DROPUJEM TABLE");
+        Connection con = dataSource.getConnection();
+        con.setAutoCommit(false);
+        PreparedStatement query = con.prepareStatement("DROP TABLE INGREDIENTS");
+        query.executeUpdate();
+        con.commit();
     }
 }

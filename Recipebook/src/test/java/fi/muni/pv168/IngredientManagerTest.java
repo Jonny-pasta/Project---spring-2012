@@ -4,6 +4,7 @@
  */
 package fi.muni.pv168;
 
+import fi.muni.pv168.exceptions.InvalidEntityException;
 import fi.muni.pv168.exceptions.ServiceFailureException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -27,28 +28,40 @@ import static org.junit.Assert.*;
  */
 public class IngredientManagerTest {
     private IngredientManager manager;
-    
+    private static final Logger logger = Logger.getLogger(
+            IngredientManager.class.getName());
     @Before
     public void setUp() throws Exception{
         manager = new IngredientManager();
         BasicDataSource ds = new BasicDataSource();
-        ds.setUrl("jdbc:derby:memory:igredientmng-test;create=true");       
+        ds.setUrl("jdbc:derby:memory:ingredient;create=true");       
         manager.setDataSource(ds);
+        manager.createTables();
+        logger.log(Level.SEVERE, "VYTVORIL SOM TABULKU");
+    }
+    
+    @After
+    public void end() throws Exception{
+        manager.dropTable();
     }
     
     @Test
     public void getIngredientsFromRecipeTest(){
-        try {
-            assertNull(manager.getIngredientsOfRecipe(1));
+        logger.log(Level.SEVERE, "SOM V PRVEJ METODE");
+        /* try {
+            assertNull(manager.getIngredientsOfRecipe(1l));
         } catch (ServiceFailureException ex) {
             Logger.getLogger(IngredientManagerTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         
         Ingredient chicken = new Ingredient("chicken", 1, "kg");
         Ingredient potatoes = new Ingredient("potatoes", 1, "kg");
         try {
+            logger.log(Level.SEVERE, "PRIDAVAM PRVU INGREDIENCIU");
             manager.createIngredient(chicken, 1);
+            logger.log(Level.SEVERE, "PRIDAL SOM PRVU, PRIDAVAM DRUHU INGREDIENCIU");
             manager.createIngredient(potatoes, 1);
+            logger.log(Level.SEVERE, "PRIDAL SOM DRUHU INGREDIENCIU");            
         } catch (ServiceFailureException ex) {
             Logger.getLogger(IngredientManagerTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -58,7 +71,7 @@ public class IngredientManagerTest {
         
         SortedSet<Ingredient> result;
         try {
-            result = manager.getIngredientsOfRecipe(1);
+            result = manager.getIngredientsOfRecipe(1l);
             assertEquals(expected, result);
         } catch (ServiceFailureException ex) {
             Logger.getLogger(IngredientManagerTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -89,7 +102,7 @@ public class IngredientManagerTest {
         
         SortedSet<Ingredient> result;
         try {
-            result = manager.getIngredientsOfRecipe(2);
+            result = manager.getIngredientsOfRecipe(2l);
             assertEquals(expected, result);
         } catch (ServiceFailureException ex) {
             Logger.getLogger(IngredientManagerTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -114,7 +127,7 @@ public class IngredientManagerTest {
         try {
             manager.createIngredient(chicken,1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (InvalidEntityException ex) {
             //OK
         } catch (ServiceFailureException ex) {
             fail();
@@ -126,7 +139,7 @@ public class IngredientManagerTest {
         try {
             manager.createIngredient(potatoes,1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (InvalidEntityException ex) {
             //OK
         } catch (ServiceFailureException ex) {
             fail();
@@ -138,7 +151,7 @@ public class IngredientManagerTest {
         try {
             manager.createIngredient(milk,1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (InvalidEntityException ex) {
             //OK
         } catch (ServiceFailureException ex) {
             fail();
@@ -163,7 +176,7 @@ public class IngredientManagerTest {
         SortedSet<Ingredient> expected = new TreeSet<Ingredient>();
         expected.add(chicken1);
         try {
-            assertEquals(expected,manager.getIngredientsOfRecipe(1));
+            assertEquals(expected,manager.getIngredientsOfRecipe(1l));
         } catch (ServiceFailureException ex) {
             Logger.getLogger(IngredientManagerTest.class.getName()).log(Level.SEVERE, null, ex);
             fail();
