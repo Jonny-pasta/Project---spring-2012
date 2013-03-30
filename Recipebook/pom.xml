@@ -56,19 +56,16 @@
             <artifactId>derbytools</artifactId>
             <version>10.8.3.0</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derbynet</artifactId>
             <version>10.9.1.0</version>
         </dependency>
-            
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derbyclient</artifactId>
             <version>10.9.1.0</version>
-        </dependency>
-            
+        </dependency>           
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
@@ -81,4 +78,5 @@
             <type>pom</type>
         </dependency>
     </dependencies>
+    
 </project>
