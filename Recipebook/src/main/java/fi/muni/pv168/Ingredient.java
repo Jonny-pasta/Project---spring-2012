@@ -22,12 +22,12 @@ public class Ingredient implements Comparable<Ingredient> {
      * @param amount amount to add to the meal
      * @param unit amount of what do add to the meal
      */
-    public void setID(Long id)
+    public void setId(Long id)
     {
         this.id = id;
     }
     
-    public Long getID()
+    public Long getId()
     {
         return this.id;
     }

@@ -2,6 +2,7 @@ package fi.muni.pv168;
 
 import java.util.Collections;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * class that represents single recipe in our recipe book
@@ -66,10 +67,11 @@ public class Recipe implements Comparable<Recipe> {
 
     public SortedSet<Ingredient> getIngredients() {return Collections.unmodifiableSortedSet(ingredients);}
     public void setIngredients(SortedSet<Ingredient> ingredients) {
-        if ((ingredients == null)||(ingredients.isEmpty())) {
-            throw new IllegalArgumentException("ingredients cannot be null/empty");
+        if (ingredients == null) {
+            throw new IllegalArgumentException("ingredients cannot be null");
         }
-        ingredients.addAll(ingredients);
+        this.ingredients = new TreeSet<Ingredient>();
+        this.ingredients.addAll(ingredients);
     }
 
     public int getCookingTime() {return cookingTime;}

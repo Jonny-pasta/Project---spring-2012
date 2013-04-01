@@ -28,25 +28,19 @@ public class IngredientManagerImpl implements IngredientManager {
         this.dataSource = dataSource;
     }
 
-    private void checkDataSource() {
-        if (dataSource == null) {
-            throw new IllegalStateException("DataSource is not set");
-        }
-    }
-
     public SortedSet<Ingredient> getIngredientsOfRecipe(long recipeId) throws ServiceFailureException {
         checkDataSource();
 
         Connection connection = null;
-        PreparedStatement querry = null;
+        PreparedStatement query = null;
 
         try {
             connection = dataSource.getConnection();
-            querry = connection.prepareStatement("SELECT id, name, amount, unit FROM Ingredients WHERE recipeId = ?");
+            query = connection.prepareStatement("SELECT ID, NAME, AMOUNT, UNIT FROM INGREDIENTS WHERE RECIPEID = ?");
 
-            querry.setLong(1, recipeId);
+            query.setLong(1, recipeId);
 
-            ResultSet resultsDB = querry.executeQuery();
+            ResultSet resultsDB = query.executeQuery();
 
             SortedSet<Ingredient> result = new TreeSet<Ingredient>();
             while (resultsDB.next()) {
@@ -65,7 +59,7 @@ public class IngredientManagerImpl implements IngredientManager {
             throw new ServiceFailureException(msg, ex);
 
         } finally {
-            DBUtils.closeQuietly(connection, querry);
+            DBUtils.closeQuietly(connection, query);
         }
     }
 
@@ -96,7 +90,7 @@ public class IngredientManagerImpl implements IngredientManager {
 
             long newId = DBUtils.getId(query.getGeneratedKeys());
 
-            ingredient.setID(newId);
+            ingredient.setId(newId);
 
             connection.commit();
         } catch (SQLException ex) {
@@ -110,33 +104,29 @@ public class IngredientManagerImpl implements IngredientManager {
     }
 
     public void updateIngredient(Ingredient ingredient) throws ServiceFailureException {
-        if (ingredient == null) {
-            throw new IllegalArgumentException("ingredient");
-        }
-
         checkDataSource();
         validate(ingredient);
 
-        if (ingredient.getID() == null) {
+        if (ingredient.getId() == null) {
             throw new InvalidEntityException("ingredient id is null");
         }
 
         Connection connection = null;
-        PreparedStatement querry = null;
+        PreparedStatement query = null;
 
         try {
             connection = dataSource.getConnection();
 
             connection.setAutoCommit(false);
 
-            querry = connection.prepareStatement(
-                    "UPDATE Ingredients SET name = ?, amount = ?, unit = ? WHERE id = ?");
+            query = connection.prepareStatement(
+                    "UPDATE INGREDIENTS SET NAME = ?, AMOUNT = ?, UNIT = ? WHERE ID = ?");
 
-            querry.setString(1, ingredient.getName());
-            querry.setDouble(2, ingredient.getAmount());
-            querry.setString(3, ingredient.getUnit());
+            query.setString(1, ingredient.getName());
+            query.setDouble(2, ingredient.getAmount());
+            query.setString(3, ingredient.getUnit());
 
-            int count = querry.executeUpdate();
+            int count = query.executeUpdate();
 
             DBUtils.checkUpdatesCount(count, false);
 
@@ -148,16 +138,14 @@ public class IngredientManagerImpl implements IngredientManager {
             throw new ServiceFailureException(msg, ex);
         } finally {
             DBUtils.doRollbackQuietly(connection);
-            DBUtils.closeQuietly(connection, querry);
+            DBUtils.closeQuietly(connection, query);
         }
     }
 
     public void deleteIngredient(Ingredient ingredient, long recipeId) throws ServiceFailureException {
-        if (ingredient == null) {
-            throw new IllegalArgumentException("ingredient");
-        }
-
-        if (ingredient.getID() == null) {
+        validate(ingredient);
+               
+        if (ingredient.getId() == null) {
             throw new InvalidEntityException("ingredient id is null");
         }
         
@@ -170,7 +158,6 @@ public class IngredientManagerImpl implements IngredientManager {
         }
 
         checkDataSource();
-        validate(ingredient);
 
         Connection connection = null;
         PreparedStatement querry = null;
@@ -181,9 +168,9 @@ public class IngredientManagerImpl implements IngredientManager {
             connection.setAutoCommit(false);
 
             querry = connection.prepareStatement(
-                    "DELETE FROM Ingredients WHERE id = ?");
+                    "DELETE FROM INGREDIENTS WHERE ID = ?");
 
-            querry.setLong(1, ingredient.getID());
+            querry.setLong(1, ingredient.getId());
 
             int count = querry.executeUpdate();
 
@@ -200,12 +187,18 @@ public class IngredientManagerImpl implements IngredientManager {
             DBUtils.closeQuietly(connection, querry);
         }
     }
-
+    
+    private void checkDataSource() {
+        if (dataSource == null) {
+            throw new IllegalStateException("DataSource is not set");
+        }
+    }
+    
     static private Ingredient rowToIngredient(ResultSet results){
         Ingredient newIngredient = new Ingredient();
         
         try {
-            newIngredient.setID(results.getLong("id"));
+            newIngredient.setId(results.getLong("id"));
             newIngredient.setName(results.getString("name"));
             newIngredient.setAmount(results.getDouble("amount"));
             newIngredient.setUnit(results.getString("unit"));

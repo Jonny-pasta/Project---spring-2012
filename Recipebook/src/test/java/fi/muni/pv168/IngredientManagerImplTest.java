@@ -78,9 +78,6 @@ public class IngredientManagerImplTest {
             Logger.getLogger(IngredientManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
             fail();
         }
-
-
-
     }
 
     @Test
@@ -97,11 +94,11 @@ public class IngredientManagerImplTest {
             Logger.getLogger(IngredientManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        Long ingredientId1 = chicken.getID();
+        Long ingredientId1 = chicken.getId();
         assertNotNull(ingredientId1);
-        Long ingredientId2 = potatoes.getID();
+        Long ingredientId2 = potatoes.getId();
         assertNotNull(ingredientId2);
-        Long ingredientId3 = milk.getID();
+        Long ingredientId3 = milk.getId();
         assertNotNull(ingredientId3);
 
         SortedSet<Ingredient> expected = new TreeSet<Ingredient>();
