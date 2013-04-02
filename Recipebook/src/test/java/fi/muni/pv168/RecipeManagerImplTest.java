@@ -57,18 +57,12 @@ public class RecipeManagerImplTest {
     @Test
     public void createRecipe() {
         Recipe recipe = new Recipe();
-        Ingredient chicken = new Ingredient("chicken", 1, "kg");
-        Ingredient potatoes = new Ingredient("potatoes", 1, "kg");
-        SortedSet<Ingredient> ingredients = new TreeSet<Ingredient>();
-        ingredients.add(chicken);
-        ingredients.add(potatoes);
-
+        
         recipe.setName("chicken");
         recipe.setType(MealType.MAIN_DISH);
         recipe.setCookingTime(120);
         recipe.setNumPortions(5);
         recipe.setInstructions("cook chiken");
-  //      recipe.setIngredients(ingredients);
         recipe.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(recipe);
@@ -216,32 +210,20 @@ public class RecipeManagerImplTest {
     @Test
     public void updateRecipe() {
         Recipe r1 = new Recipe();
-        Ingredient chicken = new Ingredient("chicken", 1, "kg");
-        Ingredient potatoes = new Ingredient("potatoes", 1, "kg");
-        SortedSet<Ingredient> ingredients = new TreeSet<Ingredient>();
-        ingredients.add(chicken);
-        ingredients.add(potatoes);
 
         r1.setName("chicken");
         r1.setType(MealType.MAIN_DISH);
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-   //     r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
 
-
-        Ingredient goat = new Ingredient("goat", 1, "kg");
-        SortedSet<Ingredient> ingredients2 = new TreeSet<Ingredient>();
-        ingredients2.add(goat);
-        ingredients2.add(potatoes);
         Recipe r2 = new Recipe();
         r2.setName("goat");
         r2.setType(MealType.MAIN_DISH);
         r2.setCookingTime(120);
         r2.setNumPortions(5);
         r2.setInstructions("cook goat");
-     //   r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(r1);
@@ -270,25 +252,14 @@ public class RecipeManagerImplTest {
     @Test
     public void updateRecipeWithWrongAttributes() {
         Recipe r1 = new Recipe();
-        Ingredient chicken = new Ingredient("chicken", 1, "kg");
-        Ingredient potatoes = new Ingredient("potatoes", 1, "kg");
-        SortedSet<Ingredient> ingredients = new TreeSet<Ingredient>();
-        ingredients.add(chicken);
-        ingredients.add(potatoes);
 
         r1.setName("chicken");
         r1.setType(MealType.MAIN_DISH);
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-  //      r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
 
-
-        Ingredient goat = new Ingredient("goat", 1, "kg");
-        SortedSet<Ingredient> ingredients2 = new TreeSet<Ingredient>();
-        ingredients2.add(goat);
-        ingredients2.add(potatoes);
         try {
             manager.createRecipe(r1);
         } catch (ServiceFailureException ex) {
@@ -315,7 +286,6 @@ public class RecipeManagerImplTest {
         r2.setCookingTime(120);
         r2.setNumPortions(5);
         r2.setInstructions("cook goat");
- //       r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
         try {
             manager.updateRecipe(r2);
@@ -333,7 +303,6 @@ public class RecipeManagerImplTest {
         r2.setCookingTime(120);
         r2.setNumPortions(5);
         r2.setInstructions("cook goat");
- //       r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
         try {
             manager.updateRecipe(r2);
@@ -352,7 +321,6 @@ public class RecipeManagerImplTest {
         r2.setCookingTime(120);
         r2.setNumPortions(5);
         r2.setInstructions("cook goat");
-  //      r2.setIngredients(ingredients2);
         try {
             manager.updateRecipe(r2);
             fail();
@@ -369,7 +337,6 @@ public class RecipeManagerImplTest {
         r2.setType(MealType.MAIN_DISH);
         r2.setNumPortions(5);
         r2.setInstructions("cook goat");
-   //     r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
         try {
             manager.updateRecipe(r2);
@@ -387,7 +354,6 @@ public class RecipeManagerImplTest {
         r2.setType(MealType.MAIN_DISH);
         r2.setCookingTime(120);
         r2.setInstructions("cook goat");
-   //     r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
         try {
             manager.updateRecipe(r2);
@@ -405,7 +371,6 @@ public class RecipeManagerImplTest {
         r2.setType(MealType.MAIN_DISH);
         r2.setCookingTime(120);
         r2.setNumPortions(5);
-   //     r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
         try {
             manager.updateRecipe(r2);
@@ -421,25 +386,13 @@ public class RecipeManagerImplTest {
     @Test
     public void deleteRecipe() {
         Recipe r1 = new Recipe();
-        Ingredient chicken = new Ingredient("chicken", 1, "kg");
-        Ingredient potatoes = new Ingredient("potatoes", 1, "kg");
-        SortedSet<Ingredient> ingredients = new TreeSet<Ingredient>();
-        ingredients.add(chicken);
-        ingredients.add(potatoes);
-
+        
         r1.setName("chicken");
         r1.setType(MealType.MAIN_DISH);
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-   //     r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
-
-
-        Ingredient goat = new Ingredient("goat", 1, "kg");
-        SortedSet<Ingredient> ingredients2 = new TreeSet<Ingredient>();
-        ingredients2.add(goat);
-        ingredients2.add(potatoes);
 
         Recipe r2 = new Recipe();
         r2.setName("goat");
@@ -447,7 +400,6 @@ public class RecipeManagerImplTest {
         r2.setCookingTime(120);
         r2.setNumPortions(5);
         r2.setInstructions("cook goat");
-    //    r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(r1);
@@ -482,11 +434,6 @@ public class RecipeManagerImplTest {
     @Test
     public void deleteRecipeWithWrongAttributes() {
         Recipe r1 = new Recipe();
-        Ingredient chicken = new Ingredient("chicken", 1, "kg");
-        Ingredient potatoes = new Ingredient("potatoes", 1, "kg");
-        SortedSet<Ingredient> ingredients = new TreeSet<Ingredient>();
-        ingredients.add(chicken);
-        ingredients.add(potatoes);
 
         try {
             manager.deleteRecipe(null);
@@ -503,7 +450,6 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-    //    r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(r1);
@@ -517,7 +463,6 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-    //    r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.deleteRecipe(r1);
@@ -534,7 +479,6 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-   //     r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.deleteRecipe(r1);
@@ -552,7 +496,6 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
- //       r1.setIngredients(ingredients);
         try {
             manager.deleteRecipe(r1);
             fail();
@@ -568,7 +511,6 @@ public class RecipeManagerImplTest {
         r1.setType(MealType.MAIN_DISH);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
- //       r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.deleteRecipe(r1);
@@ -585,7 +527,6 @@ public class RecipeManagerImplTest {
         r1.setType(MealType.MAIN_DISH);
         r1.setCookingTime(120);
         r1.setInstructions("cook chiken");
- //       r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.deleteRecipe(r1);
@@ -614,14 +555,12 @@ public class RecipeManagerImplTest {
             fail();
         }
 
-        SortedSet<Ingredient> set = new TreeSet<Ingredient>();
         r1 = new Recipe();
         r1.setName("chicken");
         r1.setType(MealType.MAIN_DISH);
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
- //       r1.setIngredients(set);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.deleteRecipe(r1);
@@ -637,19 +576,12 @@ public class RecipeManagerImplTest {
     @Test
     public void findRecipeById() {
 
-        Ingredient chicken = new Ingredient("chicken", 1, "kg");
-        Ingredient potatoes = new Ingredient("potatoes", 1, "kg");
-        SortedSet<Ingredient> ingredients1 = new TreeSet<Ingredient>();
-        ingredients1.add(chicken);
-        ingredients1.add(potatoes);
-
         Recipe r1 = new Recipe();
         r1.setName("chicken");
         r1.setType(MealType.MAIN_DISH);
         r1.setCookingTime(20);
         r1.setNumPortions(5);
         r1.setInstructions("cook chicken");
-  //      r1.setIngredients(ingredients1);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(r1);
@@ -673,26 +605,6 @@ public class RecipeManagerImplTest {
 
     @Test
     public void findRecipeByName() {
-        Ingredient beacon = new Ingredient("slanina", 1, "kg");
-        Ingredient sosage = new Ingredient("klobasa", 1, "kg");
-        Ingredient butter = new Ingredient("butter", 0.1, "kg");
-        Ingredient bread = new Ingredient("chlieb", 0.1, "kg");
-        Ingredient mustard = new Ingredient("horcica", 0.1, "kg");
-
-        SortedSet<Ingredient> ingredients1 = new TreeSet<Ingredient>();
-        SortedSet<Ingredient> ingredients2 = new TreeSet<Ingredient>();
-        SortedSet<Ingredient> ingredients3 = new TreeSet<Ingredient>();
-
-        ingredients1.add(bread);
-        ingredients1.add(butter);
-
-        ingredients2.add(bread);
-        ingredients2.add(beacon);
-        ingredients2.add(sosage);
-
-        ingredients3.add(bread);
-        ingredients3.add(beacon);
-        ingredients3.add(mustard);
 
         Recipe r1 = new Recipe();
         r1.setName("Chleba s maslom");
@@ -700,36 +612,44 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(20);
         r1.setNumPortions(1);
         r1.setInstructions("natrite chlieb maslom");
-      //  r1.setIngredients(ingredients1);
         r1.setCategory(MealCategory.MEAT);
 
         Recipe r2 = new Recipe();
-        r2.setName("slanina");
+        r2.setName("Slanina s chlebom");
         r2.setType(MealType.MAIN_DISH);
         r2.setCookingTime(20);
         r2.setNumPortions(1);
         r2.setInstructions("k slanine pridajte klobasu jedzte s chlebom");
-    //    r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
 
         Recipe r3 = new Recipe();
-        r3.setName("slanina");
+        r3.setName("slanina s horcicou");
         r3.setType(MealType.MAIN_DISH);
         r3.setCookingTime(20);
         r3.setNumPortions(1);
         r3.setInstructions("namocte slaninu do horcice, zajedzte chlebom");
-  //      r3.setIngredients(ingredients3);
         r3.setCategory(MealCategory.MEAT);
+        
+        Recipe r4 = new Recipe();
+        r4.setName("superslanina s horcicou");
+        r4.setType(MealType.MAIN_DISH);
+        r4.setCategory(MealCategory.MEAT);
+        r4.setCookingTime(20);
+        r4.setNumPortions(1);
+        r4.setInstructions("namocte superslaninu do horcice, zajedzte chlebom");
+        
         try {
             manager.createRecipe(r1);
             manager.createRecipe(r2);
             manager.createRecipe(r3);
-
+            manager.createRecipe(r4);
+            
             SortedSet<Recipe> expected = new TreeSet<Recipe>();
             SortedSet<Recipe> result;
 
             expected.add(r2);
             expected.add(r3);
+            expected.add(r4);
 
             result = manager.findRecipesByName("slanina");
 
@@ -750,11 +670,6 @@ public class RecipeManagerImplTest {
             fail();
         }
 
-        Ingredient chicken = new Ingredient("chicken", 1, "kg");
-        Ingredient potatoes = new Ingredient("potatoes", 1, "kg");
-        SortedSet<Ingredient> ingredients1 = new TreeSet<Ingredient>();
-        ingredients1.add(chicken);
-        ingredients1.add(potatoes);
 
         Recipe r1 = new Recipe();
         r1.setName("chicken");
@@ -762,14 +677,7 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(20);
         r1.setNumPortions(1);
         r1.setInstructions("cook chicken");
-   //     r1.setIngredients(ingredients1);
         r1.setCategory(MealCategory.MEAT);
-
-
-        Ingredient goat = new Ingredient("goat", 1, "kg");
-        SortedSet<Ingredient> ingredients2 = new TreeSet<Ingredient>();
-        ingredients2.add(goat);
-        ingredients2.add(potatoes);
 
         Recipe r2 = new Recipe();
         r2.setName("goat");
@@ -777,7 +685,6 @@ public class RecipeManagerImplTest {
         r2.setCookingTime(20);
         r2.setNumPortions(1);
         r2.setInstructions("cook goat");
-    //    r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(r1);
@@ -799,34 +706,12 @@ public class RecipeManagerImplTest {
     @Test
     public void findRecipeByType() {
         try {
-            Ingredient beacon = new Ingredient("slanina", 1, "kg");
-            Ingredient sosage = new Ingredient("klobasa", 1, "kg");
-            Ingredient butter = new Ingredient("butter", 0.1, "kg");
-            Ingredient bread = new Ingredient("chlieb", 0.1, "kg");
-            Ingredient mustard = new Ingredient("horcica", 0.1, "kg");
-
-            SortedSet<Ingredient> ingredients1 = new TreeSet<Ingredient>();
-            SortedSet<Ingredient> ingredients2 = new TreeSet<Ingredient>();
-            SortedSet<Ingredient> ingredients3 = new TreeSet<Ingredient>();
-
-            ingredients1.add(bread);
-            ingredients1.add(butter);
-
-            ingredients2.add(bread);
-            ingredients2.add(beacon);
-            ingredients2.add(sosage);
-
-            ingredients3.add(bread);
-            ingredients3.add(beacon);
-            ingredients3.add(mustard);
-
             Recipe r1 = new Recipe();
             r1.setName("Chleba s maslom");
             r1.setType(MealType.APPETIZER);
             r1.setCookingTime(20);
             r1.setNumPortions(1);
             r1.setInstructions("natrite chlieb maslom");
-    //        r1.setIngredients(ingredients1);
             r1.setCategory(MealCategory.MEAT);
 
             Recipe r2 = new Recipe();
@@ -835,7 +720,6 @@ public class RecipeManagerImplTest {
             r2.setCookingTime(20);
             r2.setNumPortions(1);
             r2.setInstructions("k slanine pridajte klobasu jedzte s chlebom");
-   //         r2.setIngredients(ingredients2);
             r2.setCategory(MealCategory.MEAT);
 
             Recipe r3 = new Recipe();
@@ -844,7 +728,6 @@ public class RecipeManagerImplTest {
             r3.setCookingTime(20);
             r3.setNumPortions(1);
             r3.setInstructions("namocte slaninu do horcice, zajedzte chlebom");
- //           r3.setIngredients(ingredients3);
             r3.setCategory(MealCategory.MEAT);
 
             manager.createRecipe(r1);
@@ -869,34 +752,12 @@ public class RecipeManagerImplTest {
     @Test
     public void findRecipeByCategory() {
         try {
-            Ingredient beacon = new Ingredient("slanina", 1, "kg");
-            Ingredient sosage = new Ingredient("klobasa", 1, "kg");
-            Ingredient butter = new Ingredient("butter", 0.1d, "kg");
-            Ingredient bread = new Ingredient("chlieb", 0.1d, "kg");
-            Ingredient mustard = new Ingredient("horcica", 0.1d, "kg");
-
-            SortedSet<Ingredient> ingredients1 = new TreeSet<Ingredient>();
-            SortedSet<Ingredient> ingredients2 = new TreeSet<Ingredient>();
-            SortedSet<Ingredient> ingredients3 = new TreeSet<Ingredient>();
-
-            ingredients1.add(bread);
-            ingredients1.add(butter);
-
-            ingredients2.add(bread);
-            ingredients2.add(beacon);
-            ingredients2.add(sosage);
-
-            ingredients3.add(bread);
-            ingredients3.add(beacon);
-            ingredients3.add(mustard);
-
             Recipe r1 = new Recipe();
             r1.setName("Chleba s maslom");
             r1.setType(MealType.APPETIZER);
             r1.setCookingTime(20);
             r1.setNumPortions(1);
             r1.setInstructions("natrite chlieb maslom");
-  //          r1.setIngredients(ingredients1);
             r1.setCategory(MealCategory.MEATLESS);
 
             Recipe r2 = new Recipe();
@@ -905,7 +766,6 @@ public class RecipeManagerImplTest {
             r2.setCookingTime(20);
             r2.setNumPortions(1);
             r2.setInstructions("k slanine pridajte klobasu jedzte s chlebom");
-  //          r2.setIngredients(ingredients2);
             r2.setCategory(MealCategory.MEAT);
 
             Recipe r3 = new Recipe();
@@ -914,7 +774,6 @@ public class RecipeManagerImplTest {
             r3.setCookingTime(20);
             r3.setNumPortions(1);
             r3.setInstructions("namocte slaninu do horcice, zajedzte chlebom");
-     //       r3.setIngredients(ingredients3);
             r3.setCategory(MealCategory.MEAT);
 
             manager.createRecipe(r1);
@@ -939,34 +798,12 @@ public class RecipeManagerImplTest {
     @Test
     public void findRecipesByCookingTime() {
         try {
-            Ingredient beacon = new Ingredient("slanina", 1, "kg");
-            Ingredient sosage = new Ingredient("klobasa", 1, "kg");
-            Ingredient butter = new Ingredient("butter", 0.1, "kg");
-            Ingredient bread = new Ingredient("chlieb", 0.1, "kg");
-            Ingredient mustard = new Ingredient("horcica", 0.1, "kg");
-
-            SortedSet<Ingredient> ingredients1 = new TreeSet<Ingredient>();
-            SortedSet<Ingredient> ingredients2 = new TreeSet<Ingredient>();
-            SortedSet<Ingredient> ingredients3 = new TreeSet<Ingredient>();
-
-            ingredients1.add(bread);
-            ingredients1.add(butter);
-
-            ingredients2.add(bread);
-            ingredients2.add(beacon);
-            ingredients2.add(sosage);
-
-            ingredients3.add(bread);
-            ingredients3.add(beacon);
-            ingredients3.add(mustard);
-
             Recipe r1 = new Recipe();
             r1.setName("Chleba s maslom");
             r1.setType(MealType.APPETIZER);
             r1.setCookingTime(15);
             r1.setNumPortions(1);
             r1.setInstructions("natrite chlieb maslom");
-   //         r1.setIngredients(ingredients1);
             r1.setCategory(MealCategory.MEAT);
 
             Recipe r2 = new Recipe();
@@ -975,7 +812,6 @@ public class RecipeManagerImplTest {
             r2.setCookingTime(20);
             r2.setNumPortions(1);
             r2.setInstructions("k slanine pridajte klobasu jedzte s chlebom");
-   //         r2.setIngredients(ingredients2);
             r2.setCategory(MealCategory.MEAT);
 
             Recipe r3 = new Recipe();
@@ -984,7 +820,6 @@ public class RecipeManagerImplTest {
             r3.setCookingTime(25);
             r3.setNumPortions(1);
             r3.setInstructions("namocte slaninu do horcice, zajedzte chlebom");
-    //        r3.setIngredients(ingredients3);
             r3.setCategory(MealCategory.MEAT);
 
             manager.createRecipe(r1);
@@ -1009,34 +844,12 @@ public class RecipeManagerImplTest {
     @Test
     public void findRecipesFromCookingTime() {
         try {
-            Ingredient beacon = new Ingredient("slanina", 1, "kg");
-            Ingredient sosage = new Ingredient("klobasa", 1, "kg");
-            Ingredient butter = new Ingredient("butter", 0.1, "kg");
-            Ingredient bread = new Ingredient("chlieb", 0.1, "kg");
-            Ingredient mustard = new Ingredient("horcica", 0.1, "kg");
-
-            SortedSet<Ingredient> ingredients1 = new TreeSet<Ingredient>();
-            SortedSet<Ingredient> ingredients2 = new TreeSet<Ingredient>();
-            SortedSet<Ingredient> ingredients3 = new TreeSet<Ingredient>();
-
-            ingredients1.add(bread);
-            ingredients1.add(butter);
-
-            ingredients2.add(bread);
-            ingredients2.add(beacon);
-            ingredients2.add(sosage);
-
-            ingredients3.add(bread);
-            ingredients3.add(beacon);
-            ingredients3.add(mustard);
-
             Recipe r1 = new Recipe();
             r1.setName("Chleba s maslom");
             r1.setType(MealType.APPETIZER);
             r1.setCookingTime(15);
             r1.setNumPortions(1);
             r1.setInstructions("natrite chlieb maslom");
-   //         r1.setIngredients(ingredients1);
             r1.setCategory(MealCategory.MEAT);
 
             Recipe r2 = new Recipe();
@@ -1045,7 +858,6 @@ public class RecipeManagerImplTest {
             r2.setCookingTime(20);
             r2.setNumPortions(1);
             r2.setInstructions("k slanine pridajte klobasu jedzte s chlebom");
-      //      r2.setIngredients(ingredients2);
             r2.setCategory(MealCategory.MEAT);
 
             Recipe r3 = new Recipe();
@@ -1054,7 +866,6 @@ public class RecipeManagerImplTest {
             r3.setCookingTime(25);
             r3.setNumPortions(1);
             r3.setInstructions("namocte slaninu do horcice, zajedzte chlebom");
-     //       r3.setIngredients(ingredients3);
             r3.setCategory(MealCategory.MEAT);
 
             manager.createRecipe(r1);
@@ -1079,34 +890,12 @@ public class RecipeManagerImplTest {
     @Test
     public void findRecipesUptoCookingTime() {
         try {
-            Ingredient beacon = new Ingredient("slanina", 1, "kg");
-            Ingredient sosage = new Ingredient("klobasa", 1, "kg");
-            Ingredient butter = new Ingredient("butter", 0.1, "kg");
-            Ingredient bread = new Ingredient("chlieb", 0.1, "kg");
-            Ingredient mustard = new Ingredient("horcica", 0.1, "kg");
-
-            SortedSet<Ingredient> ingredients1 = new TreeSet<Ingredient>();
-            SortedSet<Ingredient> ingredients2 = new TreeSet<Ingredient>();
-            SortedSet<Ingredient> ingredients3 = new TreeSet<Ingredient>();
-
-            ingredients1.add(bread);
-            ingredients1.add(butter);
-
-            ingredients2.add(bread);
-            ingredients2.add(beacon);
-            ingredients2.add(sosage);
-
-            ingredients3.add(bread);
-            ingredients3.add(beacon);
-            ingredients3.add(mustard);
-
             Recipe r1 = new Recipe();
             r1.setName("Chleba s maslom");
             r1.setType(MealType.APPETIZER);
             r1.setCookingTime(15);
             r1.setNumPortions(1);
             r1.setInstructions("natrite chlieb maslom");
-     //       r1.setIngredients(ingredients1);
             r1.setCategory(MealCategory.MEAT);
 
             Recipe r2 = new Recipe();
@@ -1115,7 +904,6 @@ public class RecipeManagerImplTest {
             r2.setCookingTime(20);
             r2.setNumPortions(1);
             r2.setInstructions("k slanine pridajte klobasu jedzte s chlebom");
-    //        r2.setIngredients(ingredients2);
             r2.setCategory(MealCategory.MEAT);
 
             Recipe r3 = new Recipe();
@@ -1124,7 +912,6 @@ public class RecipeManagerImplTest {
             r3.setCookingTime(25);
             r3.setNumPortions(1);
             r3.setInstructions("namocte slaninu do horcice, zajedzte chlebom");
-  //          r3.setIngredients(ingredients3);
             r3.setCategory(MealCategory.MEAT);
 
             manager.createRecipe(r1);

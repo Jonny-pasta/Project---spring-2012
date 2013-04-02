@@ -200,15 +200,19 @@ public class RecipeManagerImpl implements RecipeManager {
         checkDataSource();
 
         Connection connection = null;
-        PreparedStatement query = null;
+        Statement query = null;
 
         try {
             connection = dataSource.getConnection();
-            query = connection.prepareStatement("SELECT * FROM RECIPES WHERE NAME = ?");
+            
+            query = connection.createStatement();
 
-            query.setString(1, name);
-
-            ResultSet resultsDB = query.executeQuery();
+            boolean res = query.execute("SELECT * FROM RECIPES WHERE UPPER(NAME) LIKE UPPER('%" + name + "%')");
+            if (!res) {
+                throw new ServiceFailureException("selecting by name failure");
+            }
+            
+            ResultSet resultsDB = query.getResultSet();
 
             SortedSet<Recipe> result = new TreeSet<Recipe>();
             while (resultsDB.next()) {
