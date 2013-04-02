@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- *
+ * unit tests for IngredientManagerImpl
  * @author Mimo
  */
 public class IngredientManagerImplTest {

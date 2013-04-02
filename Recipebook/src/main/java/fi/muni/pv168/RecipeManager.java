@@ -4,10 +4,11 @@ import fi.muni.pv168.exceptions.ServiceFailureException;
 import java.util.SortedSet;
 
 /**
- *
+ * interface represents manager for handling recipes in database
  * @author mimo
  */
 public interface RecipeManager {
+    
     /** 
      * creates a recipe
      * @param recipe recipe to be created

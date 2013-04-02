@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 /**
- *
+ * class represents manager for handling recipes in database
  * @author Mimo
  */
 public class RecipeManagerImpl implements RecipeManager {
@@ -24,10 +24,15 @@ public class RecipeManagerImpl implements RecipeManager {
             IngredientManagerImpl.class.getName());
     private DataSource dataSource;
 
+    /**
+     * constructor, sets data source to given one
+     * @param dataSource given data source
+     */
     public RecipeManagerImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
+    // implementing RecipeManager.createRecipe
     public void createRecipe(Recipe recipe) throws ServiceFailureException {
         checkDataSource();
         validate(recipe);
@@ -69,6 +74,7 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
+    // implementing RecipeManager.updateRecipe
     public void updateRecipe(Recipe recipe) throws ServiceFailureException {
         checkDataSource();
         validate(recipe);
@@ -109,6 +115,7 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
+    // implementing RecipeManager.deleteRecipe
     public void deleteRecipe(Recipe recipe) throws ServiceFailureException {
         checkDataSource();
         validate(recipe);
@@ -150,6 +157,7 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
+    // implementing RecipeManager.findRecipeById
     public Recipe findRecipeById(Long id) throws ServiceFailureException {
         checkDataSource();
         
@@ -187,6 +195,7 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
+    // implements RecipeManager.findRecipesByName
     public SortedSet<Recipe> findRecipesByName(String name) throws ServiceFailureException {
         checkDataSource();
 
@@ -222,6 +231,7 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
+    // implementing RecipeManager.findRecipesByType
     public SortedSet<Recipe> findRecipesByType(MealType type) throws ServiceFailureException {
         checkDataSource();
 
@@ -257,6 +267,7 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
+    // implementing RecipeManager.findRecipesByCategory
     public SortedSet<Recipe> findRecipesByCategory(MealCategory category) throws ServiceFailureException {
         checkDataSource();
 
@@ -292,6 +303,7 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
+    // implementing RecipeManager.findRecipesByCookingTime
     public SortedSet<Recipe> findRecipesByCookingTime(int fromTime, int toTime) throws ServiceFailureException {
         checkDataSource();
 
@@ -328,14 +340,17 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
+    // implementing RecipeManager.findRecipesUpToCookingTime
     public SortedSet<Recipe> findRecipesUptoCookingTime(int toTime) throws ServiceFailureException {
         return this.findRecipesByCookingTime(0, toTime);
     }
 
+    // implementing RecipeManager.findRecipesFromCookingTime
     public SortedSet<Recipe> findRecipesFromCookingTime(int fromTime) throws ServiceFailureException {
         return this.findRecipesByCookingTime(fromTime, Integer.MAX_VALUE);
     }
 
+    // implementing RecipeManager.findAllRecipes
     public SortedSet<Recipe> findAllRecipes() throws ServiceFailureException {
         checkDataSource();
 
@@ -368,12 +383,20 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
+    /**
+     * checks if data source is not null
+     */
     private void checkDataSource() {
         if (dataSource == null) {
             throw new IllegalStateException("DataSource is not set");
         }
     }
 
+    /**
+     * transfers results from database into new recipe
+     * @param results database output
+     * @return new recipe
+     */
     static private Recipe rowToRecipe(ResultSet results) {
         Recipe newRecipe = new Recipe();
 
@@ -391,6 +414,10 @@ public class RecipeManagerImpl implements RecipeManager {
         return newRecipe;
     }
 
+    /**
+     * validate, that given recipe is valid entity
+     * @param recipe 
+     */
     static private void validate(Recipe recipe) {
         if (recipe == null) {
             throw new IllegalArgumentException("Recipe is null");

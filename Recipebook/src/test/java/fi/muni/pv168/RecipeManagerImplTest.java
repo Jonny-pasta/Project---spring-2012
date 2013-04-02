@@ -15,8 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * class contains tests for recipe book
- *
+ * class contains tests for RecipeManagerImpl
  * @author Mimo
  */
 public class RecipeManagerImplTest {

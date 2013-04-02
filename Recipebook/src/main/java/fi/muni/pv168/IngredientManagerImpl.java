@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 /**
- *
+ * class is manager for handling ingredients in database
  * @author mulan
  */
 public class IngredientManagerImpl implements IngredientManager {
@@ -24,10 +24,15 @@ public class IngredientManagerImpl implements IngredientManager {
             IngredientManagerImpl.class.getName());
     private DataSource dataSource;
 
+    /**
+     * constructor, sets given data source
+     * @param dataSource given data source
+     */
     public IngredientManagerImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
+    // implementing IngredientManager.getIngredientsOfRecipe
     public SortedSet<Ingredient> getIngredientsOfRecipe(long recipeId) throws ServiceFailureException {
         checkDataSource();
 
@@ -63,6 +68,7 @@ public class IngredientManagerImpl implements IngredientManager {
         }
     }
 
+    // implementing IngredientManager.createIngredient
     public void createIngredient(Ingredient ingredient, long recipeId) throws ServiceFailureException {
         checkDataSource();
         validate(ingredient);
@@ -103,6 +109,7 @@ public class IngredientManagerImpl implements IngredientManager {
         }
     }
 
+    // implementing IngredientManager.updateIngredient
     public void updateIngredient(Ingredient ingredient) throws ServiceFailureException {
         checkDataSource();
         validate(ingredient);
@@ -142,6 +149,7 @@ public class IngredientManagerImpl implements IngredientManager {
         }
     }
 
+    // implementing IngredientManager.deleteIngredient
     public void deleteIngredient(Ingredient ingredient, long recipeId) throws ServiceFailureException {
         validate(ingredient);
                
@@ -188,12 +196,20 @@ public class IngredientManagerImpl implements IngredientManager {
         }
     }
     
+    /**
+     * checks if data source is not null
+     */
     private void checkDataSource() {
         if (dataSource == null) {
             throw new IllegalStateException("DataSource is not set");
         }
     }
     
+    /**
+     * transforms rows from database into new ingredient
+     * @param results result set from database
+     * @return new ingredient with attributes from database
+     */
     static private Ingredient rowToIngredient(ResultSet results){
         Ingredient newIngredient = new Ingredient();
         
@@ -209,6 +225,10 @@ public class IngredientManagerImpl implements IngredientManager {
         return newIngredient;
     }
 
+    /**
+     * validates, if given ingredient is valid entity
+     * @param ingredient 
+     */
     static private void validate(Ingredient ingredient) {
         if (ingredient == null) {
             throw new IllegalArgumentException("Ingredient is null");

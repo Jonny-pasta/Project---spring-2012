@@ -4,7 +4,7 @@ import fi.muni.pv168.exceptions.ServiceFailureException;
 import java.util.SortedSet;
 
 /**
- *
+ * interface for handling ingredients in database
  * @author Mimo
  */
 public interface IngredientManager {

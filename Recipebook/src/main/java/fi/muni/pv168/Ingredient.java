@@ -1,7 +1,7 @@
 package fi.muni.pv168;
 
 /**
- * class that represents an ingredient, that should be added into some meal
+ * class that represents an ingredient
  * it contains name, amount and unit of amount
  * @date 5.3.2013
  * @author Mimo
@@ -16,23 +16,19 @@ public class Ingredient implements Comparable<Ingredient> {
     private double amount;
     private String unit;
     
+    
+    
+    /**
+     * parameterless constructor
+     */
+    public Ingredient(){}
+    
     /**
      * constructors
      * @param name name of the ingredient - what it is
      * @param amount amount to add to the meal
      * @param unit amount of what do add to the meal
      */
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-    
-    public Long getId()
-    {
-        return this.id;
-    }
-    
-    public Ingredient(){}
     public Ingredient(String name, double amount, String unit){
         if ((name == null)||(name.equals(""))||(amount<0)||(unit == null)||(unit.equals(""))){
             throw new IllegalArgumentException("wrong attributes in Ingredient constructor");
@@ -46,6 +42,14 @@ public class Ingredient implements Comparable<Ingredient> {
     /**
      * getters, setters
      */
+    public Long getId() {return this.id;}
+    public void setId(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
+        this.id = id;
+    }
+    
     public String getName() {return name;}
     public void setName(String name) {
         if ((name == null)||(name.equals(""))) {
@@ -69,6 +73,7 @@ public class Ingredient implements Comparable<Ingredient> {
         this.unit = unit;
     }
 
+    // overriding Object.hashCode()
     @Override
     public int hashCode() {
         int hash = 3;
@@ -78,6 +83,7 @@ public class Ingredient implements Comparable<Ingredient> {
         return hash;
     }
 
+    // overriding Object.equals()
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -99,11 +105,13 @@ public class Ingredient implements Comparable<Ingredient> {
         return true;
     }
 
+    // overriding Object.toString()
     @Override
     public String toString() {
         return "Ingredient{" + "name=" + name + ", amount=" + amount + ", unit=" + unit + '}';
     }
     
+    // overriding compareTo
     @Override
     public int compareTo(Ingredient o) {
         int diff = this.getName().compareTo(o.getName());

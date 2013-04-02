@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Tue Apr 02 02:11:25 CEST 2013:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.9.1.0 - (1344872): instance a816c00e-013d-c815-7fc0-00000373bd58 
-on database directory memory:C:\Users\Mimo\Desktop\inf\Java\Project---spring-2012\Recipebook\recipe  with class loader sun.misc.Launcher$AppClassLoader@67ce08c7 
+Tue Apr 02 10:35:15 CEST 2013:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.9.1.0 - (1344872): instance a816c00e-013d-c9e2-c61e-000003770208 
+on database directory memory:C:\Users\Mimo\Desktop\inf\Java\Project---spring-2012\Recipebook\ingredient  with class loader sun.misc.Launcher$AppClassLoader@7a2760f 
 Loaded from file:/C:/Users/Mimo/.m2/repository/org/apache/derby/derby/10.9.1.0/derby-10.9.1.0.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.7.0_17-b02
