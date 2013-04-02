@@ -92,6 +92,7 @@ public class RecipeManagerImpl implements RecipeManager {
             query.setInt(4, recipe.getCookingTime());
             query.setInt(5, recipe.getNumPortions());
             query.setString(6, recipe.getInstructions());
+            query.setLong(7, recipe.getId());
 
             int count = query.executeUpdate();
 
@@ -109,6 +110,9 @@ public class RecipeManagerImpl implements RecipeManager {
     }
 
     public void deleteRecipe(Recipe recipe) throws ServiceFailureException {
+        checkDataSource();
+        validate(recipe);
+
         if (recipe.getId() == null) {
             throw new InvalidEntityException("recipe ID is null");
         }
@@ -116,9 +120,6 @@ public class RecipeManagerImpl implements RecipeManager {
         if (this.findRecipeById(recipe.getId()) == null) {
             throw new IllegalArgumentException("recipe is not in DB");
         }
-
-        checkDataSource();
-        validate(recipe);
 
         Connection connection = null;
         PreparedStatement querry = null;
@@ -151,18 +152,28 @@ public class RecipeManagerImpl implements RecipeManager {
 
     public Recipe findRecipeById(Long id) throws ServiceFailureException {
         checkDataSource();
+        
+        if (id == null) {
+            throw new IllegalArgumentException();
+        }
 
         Connection con = null;
         PreparedStatement query = null;
 
         try {
             con = dataSource.getConnection();
-            query = con.prepareStatement("SELECT NAME, TYPE, CATEGORY, COOKINGTIME, NUMPORTIONS, INSTRUCTIONS FROM RECIPES WHERE ID = ?");
+            query = con.prepareStatement("SELECT * FROM RECIPES WHERE ID = ?");
 
             query.setLong(1, id);
 
             ResultSet resultDB = query.executeQuery();
 
+            boolean b = resultDB.next();
+            
+            if (!b) {
+                throw new IllegalArgumentException();
+            }
+            
             Recipe output = rowToRecipe(resultDB);
             validate(output);
 
@@ -184,7 +195,7 @@ public class RecipeManagerImpl implements RecipeManager {
 
         try {
             connection = dataSource.getConnection();
-            query = connection.prepareStatement("SELECT ID, TYPE, CATEGORY, COOKINGTIME, NUMPORTIONS, INSTRUCTIONS FROM RECIPES WHERE NAME = ?");
+            query = connection.prepareStatement("SELECT * FROM RECIPES WHERE NAME = ?");
 
             query.setString(1, name);
 
@@ -219,7 +230,7 @@ public class RecipeManagerImpl implements RecipeManager {
 
         try {
             connection = dataSource.getConnection();
-            query = connection.prepareStatement("SELECT ID, NAME, CATEGORY, COOKINGTIME, NUMPORTIONS, INSTRUCTIONS FROM RECIPES WHERE TYPE = ?");
+            query = connection.prepareStatement("SELECT * FROM RECIPES WHERE TYPE = ?");
 
             query.setInt(1, MealType.toInt(type));
 
@@ -254,7 +265,7 @@ public class RecipeManagerImpl implements RecipeManager {
 
         try {
             connection = dataSource.getConnection();
-            query = connection.prepareStatement("SELECT ID, NAME, TYPE, COOKINGTIME, NUMPORTIONS, INSTRUCTIONS FROM RECIPES WHERE CATEGORY = ?");
+            query = connection.prepareStatement("SELECT * FROM RECIPES WHERE CATEGORY = ?");
 
             query.setInt(1, MealCategory.toInt(category));
 
@@ -289,7 +300,7 @@ public class RecipeManagerImpl implements RecipeManager {
 
         try {
             connection = dataSource.getConnection();
-            query = connection.prepareStatement("SELECT ID, NAME, TYPE, CATEGORY, NUMPORTIONS, INSTRUCTIONS FROM RECIPES WHERE COOKINGTIME BETWEEN ? AND ?");
+            query = connection.prepareStatement("SELECT * FROM RECIPES WHERE COOKINGTIME BETWEEN ? AND ?");
 
             query.setInt(1, fromTime);
             query.setInt(2, toTime);
@@ -393,10 +404,10 @@ public class RecipeManagerImpl implements RecipeManager {
         if (recipe.getCategory() == null) {
             throw new InvalidEntityException("category is null");
         }
-        if (recipe.getCookingTime() < 0) {
+        if (recipe.getCookingTime() <= 0) {
             throw new InvalidEntityException("cooking time is negative");
         }
-        if (recipe.getNumPortions() < 0) {
+        if (recipe.getNumPortions() <= 0) {
             throw new InvalidEntityException("number of portions is negative");
         }
         if (recipe.getInstructions() == null) {

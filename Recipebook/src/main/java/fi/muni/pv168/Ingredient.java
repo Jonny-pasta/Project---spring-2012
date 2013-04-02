@@ -34,7 +34,7 @@ public class Ingredient implements Comparable<Ingredient> {
     
     public Ingredient(){}
     public Ingredient(String name, double amount, String unit){
-        if ((name == null)||(name.equals(""))||(amount<1)||(unit == null)||(unit.equals(""))){
+        if ((name == null)||(name.equals(""))||(amount<0)||(unit == null)||(unit.equals(""))){
             throw new IllegalArgumentException("wrong attributes in Ingredient constructor");
         }
         this.id = null;

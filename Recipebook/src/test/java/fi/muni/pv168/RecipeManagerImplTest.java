@@ -32,11 +32,11 @@ public class RecipeManagerImplTest {
         String createTableSQL = "CREATE TABLE RECIPES("
                 + "ID BIGINT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY, "
                 + "NAME VARCHAR(255), "
-                + "MEALTYPE INT, "
-                + "MEALCATEGORY INT, "
+                + "TYPE INT, "
+                + "CATEGORY INT, "
                 + "COOKINGTIME INT, "
                 + "NUMPORTIONS INT, "
-                + "INSTRUCTIONS VARCHAR(10000)"
+                + "INSTRUCTIONS VARCHAR(255)"
                 + ")";
         Connection con = ds.getConnection();
         con.setAutoCommit(false);
@@ -69,7 +69,7 @@ public class RecipeManagerImplTest {
         recipe.setCookingTime(120);
         recipe.setNumPortions(5);
         recipe.setInstructions("cook chiken");
-        recipe.setIngredients(ingredients);
+  //      recipe.setIngredients(ingredients);
         recipe.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(recipe);
@@ -116,12 +116,12 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-        r1.setIngredients(ingredients);
+    //    r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(r1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (InvalidEntityException ex) {
             //OK
         } catch (ServiceFailureException ex) {
             Logger.getLogger(RecipeManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -133,12 +133,12 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-        r1.setIngredients(ingredients);
+    //    r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(r1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (InvalidEntityException ex) {
             //OK
         } catch (ServiceFailureException ex) {
             Logger.getLogger(RecipeManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -155,7 +155,7 @@ public class RecipeManagerImplTest {
         try {
             manager.createRecipe(r1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (InvalidEntityException ex) {
             //OK
         } catch (ServiceFailureException ex) {
             Logger.getLogger(RecipeManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -167,12 +167,12 @@ public class RecipeManagerImplTest {
         r1.setType(MealType.MAIN_DISH);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-        r1.setIngredients(ingredients);
+   //     r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(r1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (InvalidEntityException ex) {
             //OK
         } catch (ServiceFailureException ex) {
             Logger.getLogger(RecipeManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -184,12 +184,12 @@ public class RecipeManagerImplTest {
         r1.setType(MealType.MAIN_DISH);
         r1.setCookingTime(120);
         r1.setInstructions("cook chiken");
-        r1.setIngredients(ingredients);
+  //      r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(r1);
             fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (InvalidEntityException ex) {
             //OK
         } catch (ServiceFailureException ex) {
             Logger.getLogger(RecipeManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -201,31 +201,12 @@ public class RecipeManagerImplTest {
         r1.setType(MealType.MAIN_DISH);
         r1.setCookingTime(120);
         r1.setNumPortions(5);
-        r1.setIngredients(ingredients);
+  //      r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(r1);
             fail();
-        } catch (IllegalArgumentException ex) {
-            //OK
-        } catch (ServiceFailureException ex) {
-            Logger.getLogger(RecipeManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
-            fail();
-        }
-
-        SortedSet<Ingredient> set = new TreeSet<Ingredient>();
-        r1 = new Recipe();
-        r1.setName("chicken");
-        r1.setType(MealType.MAIN_DISH);
-        r1.setCookingTime(120);
-        r1.setNumPortions(5);
-        r1.setInstructions("cook chiken");
-        r1.setIngredients(set);
-        r1.setCategory(MealCategory.MEAT);
-        try {
-            manager.createRecipe(r1);
-            fail();
-        } catch (IllegalArgumentException ex) {
+        } catch (InvalidEntityException ex) {
             //OK
         } catch (ServiceFailureException ex) {
             Logger.getLogger(RecipeManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -247,7 +228,7 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-        r1.setIngredients(ingredients);
+   //     r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
 
 
@@ -261,7 +242,7 @@ public class RecipeManagerImplTest {
         r2.setCookingTime(120);
         r2.setNumPortions(5);
         r2.setInstructions("cook goat");
-        r2.setIngredients(ingredients2);
+     //   r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(r1);
@@ -301,7 +282,7 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-        r1.setIngredients(ingredients);
+  //      r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
 
 
@@ -335,7 +316,7 @@ public class RecipeManagerImplTest {
         r2.setCookingTime(120);
         r2.setNumPortions(5);
         r2.setInstructions("cook goat");
-        r2.setIngredients(ingredients2);
+ //       r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
         try {
             manager.updateRecipe(r2);
@@ -353,7 +334,7 @@ public class RecipeManagerImplTest {
         r2.setCookingTime(120);
         r2.setNumPortions(5);
         r2.setInstructions("cook goat");
-        r2.setIngredients(ingredients2);
+ //       r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
         try {
             manager.updateRecipe(r2);
@@ -372,7 +353,7 @@ public class RecipeManagerImplTest {
         r2.setCookingTime(120);
         r2.setNumPortions(5);
         r2.setInstructions("cook goat");
-        r2.setIngredients(ingredients2);
+  //      r2.setIngredients(ingredients2);
         try {
             manager.updateRecipe(r2);
             fail();
@@ -389,7 +370,7 @@ public class RecipeManagerImplTest {
         r2.setType(MealType.MAIN_DISH);
         r2.setNumPortions(5);
         r2.setInstructions("cook goat");
-        r2.setIngredients(ingredients2);
+   //     r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
         try {
             manager.updateRecipe(r2);
@@ -407,7 +388,7 @@ public class RecipeManagerImplTest {
         r2.setType(MealType.MAIN_DISH);
         r2.setCookingTime(120);
         r2.setInstructions("cook goat");
-        r2.setIngredients(ingredients2);
+   //     r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
         try {
             manager.updateRecipe(r2);
@@ -425,27 +406,7 @@ public class RecipeManagerImplTest {
         r2.setType(MealType.MAIN_DISH);
         r2.setCookingTime(120);
         r2.setNumPortions(5);
-        r2.setIngredients(ingredients2);
-        r2.setCategory(MealCategory.MEAT);
-        try {
-            manager.updateRecipe(r2);
-            fail();
-        } catch (InvalidEntityException ex) {
-            //OK
-        } catch (ServiceFailureException ex) {
-            Logger.getLogger(RecipeManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
-            fail();
-        }
-
-        SortedSet<Ingredient> set = new TreeSet<Ingredient>();
-        r2 = new Recipe();
-        r2.setId(recipeId);
-        r2.setName("goat");
-        r2.setType(MealType.MAIN_DISH);
-        r2.setCookingTime(120);
-        r2.setNumPortions(5);
-        r2.setInstructions("cook goat");
-        r2.setIngredients(set);
+   //     r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
         try {
             manager.updateRecipe(r2);
@@ -472,7 +433,7 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-        r1.setIngredients(ingredients);
+   //     r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
 
 
@@ -487,7 +448,7 @@ public class RecipeManagerImplTest {
         r2.setCookingTime(120);
         r2.setNumPortions(5);
         r2.setInstructions("cook goat");
-        r2.setIngredients(ingredients2);
+    //    r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(r1);
@@ -497,7 +458,12 @@ public class RecipeManagerImplTest {
 
             manager.deleteRecipe(r1);
 
-            assertNull(manager.findRecipeById(r1.getId()));
+            try{
+                manager.findRecipeById(r1.getId());
+                fail();
+            } catch (IllegalArgumentException ex) {
+                //OK
+            }
             assertNotNull(manager.findRecipeById(r2.getId()));
 
             try {
@@ -538,7 +504,7 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-        r1.setIngredients(ingredients);
+    //    r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(r1);
@@ -552,7 +518,7 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-        r1.setIngredients(ingredients);
+    //    r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.deleteRecipe(r1);
@@ -569,7 +535,7 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-        r1.setIngredients(ingredients);
+   //     r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.deleteRecipe(r1);
@@ -587,7 +553,7 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-        r1.setIngredients(ingredients);
+ //       r1.setIngredients(ingredients);
         try {
             manager.deleteRecipe(r1);
             fail();
@@ -603,7 +569,7 @@ public class RecipeManagerImplTest {
         r1.setType(MealType.MAIN_DISH);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-        r1.setIngredients(ingredients);
+ //       r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.deleteRecipe(r1);
@@ -620,7 +586,7 @@ public class RecipeManagerImplTest {
         r1.setType(MealType.MAIN_DISH);
         r1.setCookingTime(120);
         r1.setInstructions("cook chiken");
-        r1.setIngredients(ingredients);
+ //       r1.setIngredients(ingredients);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.deleteRecipe(r1);
@@ -656,7 +622,7 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(120);
         r1.setNumPortions(5);
         r1.setInstructions("cook chiken");
-        r1.setIngredients(set);
+ //       r1.setIngredients(set);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.deleteRecipe(r1);
@@ -684,7 +650,7 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(20);
         r1.setNumPortions(5);
         r1.setInstructions("cook chicken");
-        r1.setIngredients(ingredients1);
+  //      r1.setIngredients(ingredients1);
         r1.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(r1);
@@ -735,25 +701,25 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(20);
         r1.setNumPortions(1);
         r1.setInstructions("natrite chlieb maslom");
-        r1.setIngredients(ingredients1);
+      //  r1.setIngredients(ingredients1);
         r1.setCategory(MealCategory.MEAT);
 
         Recipe r2 = new Recipe();
-        r2.setName("Slanina s klobasou");
+        r2.setName("slanina");
         r2.setType(MealType.MAIN_DISH);
         r2.setCookingTime(20);
         r2.setNumPortions(1);
         r2.setInstructions("k slanine pridajte klobasu jedzte s chlebom");
-        r2.setIngredients(ingredients2);
+    //    r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
 
         Recipe r3 = new Recipe();
-        r3.setName("Slanina s horcicou");
+        r3.setName("slanina");
         r3.setType(MealType.MAIN_DISH);
         r3.setCookingTime(20);
         r3.setNumPortions(1);
         r3.setInstructions("namocte slaninu do horcice, zajedzte chlebom");
-        r3.setIngredients(ingredients3);
+  //      r3.setIngredients(ingredients3);
         r3.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(r1);
@@ -768,7 +734,7 @@ public class RecipeManagerImplTest {
 
             result = manager.findRecipesByName("slanina");
 
-            assertEquals(result, expected);
+            assertEquals(expected, result);
         } catch (ServiceFailureException ex) {
             Logger.getLogger(RecipeManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
             fail();
@@ -797,7 +763,7 @@ public class RecipeManagerImplTest {
         r1.setCookingTime(20);
         r1.setNumPortions(1);
         r1.setInstructions("cook chicken");
-        r1.setIngredients(ingredients1);
+   //     r1.setIngredients(ingredients1);
         r1.setCategory(MealCategory.MEAT);
 
 
@@ -812,7 +778,7 @@ public class RecipeManagerImplTest {
         r2.setCookingTime(20);
         r2.setNumPortions(1);
         r2.setInstructions("cook goat");
-        r2.setIngredients(ingredients2);
+    //    r2.setIngredients(ingredients2);
         r2.setCategory(MealCategory.MEAT);
         try {
             manager.createRecipe(r1);
@@ -861,25 +827,25 @@ public class RecipeManagerImplTest {
             r1.setCookingTime(20);
             r1.setNumPortions(1);
             r1.setInstructions("natrite chlieb maslom");
-            r1.setIngredients(ingredients1);
+    //        r1.setIngredients(ingredients1);
             r1.setCategory(MealCategory.MEAT);
 
             Recipe r2 = new Recipe();
-            r2.setName("Slanina s klobasou");
+            r2.setName("slanina");
             r2.setType(MealType.MAIN_DISH);
             r2.setCookingTime(20);
             r2.setNumPortions(1);
             r2.setInstructions("k slanine pridajte klobasu jedzte s chlebom");
-            r2.setIngredients(ingredients2);
+   //         r2.setIngredients(ingredients2);
             r2.setCategory(MealCategory.MEAT);
 
             Recipe r3 = new Recipe();
-            r3.setName("Slanina s horcicou");
+            r3.setName("slanina");
             r3.setType(MealType.MAIN_DISH);
             r3.setCookingTime(20);
             r3.setNumPortions(1);
             r3.setInstructions("namocte slaninu do horcice, zajedzte chlebom");
-            r3.setIngredients(ingredients3);
+ //           r3.setIngredients(ingredients3);
             r3.setCategory(MealCategory.MEAT);
 
             manager.createRecipe(r1);
@@ -906,9 +872,9 @@ public class RecipeManagerImplTest {
         try {
             Ingredient beacon = new Ingredient("slanina", 1, "kg");
             Ingredient sosage = new Ingredient("klobasa", 1, "kg");
-            Ingredient butter = new Ingredient("butter", 0.1, "kg");
-            Ingredient bread = new Ingredient("chlieb", 0.1, "kg");
-            Ingredient mustard = new Ingredient("horcica", 0.1, "kg");
+            Ingredient butter = new Ingredient("butter", 0.1d, "kg");
+            Ingredient bread = new Ingredient("chlieb", 0.1d, "kg");
+            Ingredient mustard = new Ingredient("horcica", 0.1d, "kg");
 
             SortedSet<Ingredient> ingredients1 = new TreeSet<Ingredient>();
             SortedSet<Ingredient> ingredients2 = new TreeSet<Ingredient>();
@@ -931,8 +897,8 @@ public class RecipeManagerImplTest {
             r1.setCookingTime(20);
             r1.setNumPortions(1);
             r1.setInstructions("natrite chlieb maslom");
-            r1.setIngredients(ingredients1);
-            r1.setCategory(MealCategory.MEAT);
+  //          r1.setIngredients(ingredients1);
+            r1.setCategory(MealCategory.MEATLESS);
 
             Recipe r2 = new Recipe();
             r2.setName("Slanina s klobasou");
@@ -940,7 +906,7 @@ public class RecipeManagerImplTest {
             r2.setCookingTime(20);
             r2.setNumPortions(1);
             r2.setInstructions("k slanine pridajte klobasu jedzte s chlebom");
-            r2.setIngredients(ingredients2);
+  //          r2.setIngredients(ingredients2);
             r2.setCategory(MealCategory.MEAT);
 
             Recipe r3 = new Recipe();
@@ -949,7 +915,7 @@ public class RecipeManagerImplTest {
             r3.setCookingTime(20);
             r3.setNumPortions(1);
             r3.setInstructions("namocte slaninu do horcice, zajedzte chlebom");
-            r3.setIngredients(ingredients3);
+     //       r3.setIngredients(ingredients3);
             r3.setCategory(MealCategory.MEAT);
 
             manager.createRecipe(r1);
@@ -1001,7 +967,7 @@ public class RecipeManagerImplTest {
             r1.setCookingTime(15);
             r1.setNumPortions(1);
             r1.setInstructions("natrite chlieb maslom");
-            r1.setIngredients(ingredients1);
+   //         r1.setIngredients(ingredients1);
             r1.setCategory(MealCategory.MEAT);
 
             Recipe r2 = new Recipe();
@@ -1010,7 +976,7 @@ public class RecipeManagerImplTest {
             r2.setCookingTime(20);
             r2.setNumPortions(1);
             r2.setInstructions("k slanine pridajte klobasu jedzte s chlebom");
-            r2.setIngredients(ingredients2);
+   //         r2.setIngredients(ingredients2);
             r2.setCategory(MealCategory.MEAT);
 
             Recipe r3 = new Recipe();
@@ -1019,7 +985,7 @@ public class RecipeManagerImplTest {
             r3.setCookingTime(25);
             r3.setNumPortions(1);
             r3.setInstructions("namocte slaninu do horcice, zajedzte chlebom");
-            r3.setIngredients(ingredients3);
+    //        r3.setIngredients(ingredients3);
             r3.setCategory(MealCategory.MEAT);
 
             manager.createRecipe(r1);
@@ -1071,7 +1037,7 @@ public class RecipeManagerImplTest {
             r1.setCookingTime(15);
             r1.setNumPortions(1);
             r1.setInstructions("natrite chlieb maslom");
-            r1.setIngredients(ingredients1);
+   //         r1.setIngredients(ingredients1);
             r1.setCategory(MealCategory.MEAT);
 
             Recipe r2 = new Recipe();
@@ -1080,7 +1046,7 @@ public class RecipeManagerImplTest {
             r2.setCookingTime(20);
             r2.setNumPortions(1);
             r2.setInstructions("k slanine pridajte klobasu jedzte s chlebom");
-            r2.setIngredients(ingredients2);
+      //      r2.setIngredients(ingredients2);
             r2.setCategory(MealCategory.MEAT);
 
             Recipe r3 = new Recipe();
@@ -1089,7 +1055,7 @@ public class RecipeManagerImplTest {
             r3.setCookingTime(25);
             r3.setNumPortions(1);
             r3.setInstructions("namocte slaninu do horcice, zajedzte chlebom");
-            r3.setIngredients(ingredients3);
+     //       r3.setIngredients(ingredients3);
             r3.setCategory(MealCategory.MEAT);
 
             manager.createRecipe(r1);
@@ -1141,7 +1107,7 @@ public class RecipeManagerImplTest {
             r1.setCookingTime(15);
             r1.setNumPortions(1);
             r1.setInstructions("natrite chlieb maslom");
-            r1.setIngredients(ingredients1);
+     //       r1.setIngredients(ingredients1);
             r1.setCategory(MealCategory.MEAT);
 
             Recipe r2 = new Recipe();
@@ -1150,7 +1116,7 @@ public class RecipeManagerImplTest {
             r2.setCookingTime(20);
             r2.setNumPortions(1);
             r2.setInstructions("k slanine pridajte klobasu jedzte s chlebom");
-            r2.setIngredients(ingredients2);
+    //        r2.setIngredients(ingredients2);
             r2.setCategory(MealCategory.MEAT);
 
             Recipe r3 = new Recipe();
@@ -1159,7 +1125,7 @@ public class RecipeManagerImplTest {
             r3.setCookingTime(25);
             r3.setNumPortions(1);
             r3.setInstructions("namocte slaninu do horcice, zajedzte chlebom");
-            r3.setIngredients(ingredients3);
+  //          r3.setIngredients(ingredients3);
             r3.setCategory(MealCategory.MEAT);
 
             manager.createRecipe(r1);
