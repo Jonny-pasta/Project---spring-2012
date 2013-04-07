@@ -670,7 +670,6 @@ public class RecipeManagerImplTest {
             fail();
         }
 
-
         Recipe r1 = new Recipe();
         r1.setName("chicken");
         r1.setType(MealType.MAIN_DISH);

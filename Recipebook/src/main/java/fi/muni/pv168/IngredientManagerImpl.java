@@ -8,14 +8,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 /**
  * class is manager for handling ingredients in database
+ *
  * @author mulan
  */
 public class IngredientManagerImpl implements IngredientManager {
@@ -26,46 +25,11 @@ public class IngredientManagerImpl implements IngredientManager {
 
     /**
      * constructor, sets given data source
+     *
      * @param dataSource given data source
      */
     public IngredientManagerImpl(DataSource dataSource) {
         this.dataSource = dataSource;
-    }
-
-    // implementing IngredientManager.getIngredientsOfRecipe
-    public SortedSet<Ingredient> getIngredientsOfRecipe(long recipeId) throws ServiceFailureException {
-        checkDataSource();
-
-        Connection connection = null;
-        PreparedStatement query = null;
-
-        try {
-            connection = dataSource.getConnection();
-            query = connection.prepareStatement("SELECT ID, NAME, AMOUNT, UNIT FROM INGREDIENTS WHERE RECIPEID = ?");
-
-            query.setLong(1, recipeId);
-
-            ResultSet resultsDB = query.executeQuery();
-
-            SortedSet<Ingredient> result = new TreeSet<Ingredient>();
-            while (resultsDB.next()) {
-                Ingredient output = rowToIngredient(resultsDB);
-                validate(output);
-
-                result.add(output);
-            }
-
-            return result;
-
-        } catch (SQLException ex) {
-            String msg = "Error getting ingredients for recipe id " + recipeId + " from DB";
-
-            logger.log(Level.SEVERE, msg, ex);
-            throw new ServiceFailureException(msg, ex);
-
-        } finally {
-            DBUtils.closeQuietly(connection, query);
-        }
     }
 
     // implementing IngredientManager.createIngredient
@@ -82,7 +46,7 @@ public class IngredientManagerImpl implements IngredientManager {
             connection.setAutoCommit(false);
 
             query = connection.prepareStatement(
-                    "INSERT INTO INGREDIENTS (NAME, AMOUNT, UNIT, RECIPEID) VALUES(?, ?, ?, ?)", 
+                    "INSERT INTO INGREDIENTS (NAME, AMOUNT, UNIT, RECIPEID) VALUES(?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
 
             query.setString(1, ingredient.getName());
@@ -152,17 +116,13 @@ public class IngredientManagerImpl implements IngredientManager {
     // implementing IngredientManager.deleteIngredient
     public void deleteIngredient(Ingredient ingredient, long recipeId) throws ServiceFailureException {
         validate(ingredient);
-               
+
         if (ingredient.getId() == null) {
             throw new InvalidEntityException("ingredient id is null");
         }
-        
+
         if (recipeId < 0) {
             throw new IllegalArgumentException("recipeId");
-        }
-        
-        if (!(this.getIngredientsOfRecipe(recipeId).contains(ingredient))){
-            throw new IllegalArgumentException("ingredient is not in this recipe");
         }
 
         checkDataSource();
@@ -195,7 +155,46 @@ public class IngredientManagerImpl implements IngredientManager {
             DBUtils.closeQuietly(connection, querry);
         }
     }
-    
+
+    @Override
+    public Ingredient getIngredient(Long id) throws ServiceFailureException {
+        checkDataSource();
+
+        if (id == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Connection con = null;
+        PreparedStatement query = null;
+        try {
+            con = dataSource.getConnection();
+            con.setAutoCommit(false);
+            query = con.prepareStatement(
+                    "SELECT * FROM INGREDIENTS WHERE ID = ?");
+            query.setLong(1, id);
+
+            ResultSet resultDB = query.executeQuery();
+
+            boolean b = resultDB.next();
+
+            if (!b) {
+                throw new IllegalArgumentException();
+            }
+
+            Ingredient output = rowToIngredient(resultDB);
+            validate(output);
+            con.commit();
+            return output;
+        } catch (SQLException ex) {
+            String msg = "Error getting ingredient for ID " + id + " from DB";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new ServiceFailureException(msg, ex);
+        } finally {
+            DBUtils.doRollbackQuietly(con);
+            DBUtils.closeQuietly(con, query);
+        }
+    }
+
     /**
      * checks if data source is not null
      */
@@ -204,30 +203,11 @@ public class IngredientManagerImpl implements IngredientManager {
             throw new IllegalStateException("DataSource is not set");
         }
     }
-    
-    /**
-     * transforms rows from database into new ingredient
-     * @param results result set from database
-     * @return new ingredient with attributes from database
-     */
-    static private Ingredient rowToIngredient(ResultSet results){
-        Ingredient newIngredient = new Ingredient();
-        
-        try {
-            newIngredient.setId(results.getLong("id"));
-            newIngredient.setName(results.getString("name"));
-            newIngredient.setAmount(results.getDouble("amount"));
-            newIngredient.setUnit(results.getString("unit"));
-        } catch (SQLException ex) {
-            Logger.getLogger(IngredientManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return newIngredient;
-    }
 
     /**
      * validates, if given ingredient is valid entity
-     * @param ingredient 
+     *
+     * @param ingredient
      */
     static private void validate(Ingredient ingredient) {
         if (ingredient == null) {
@@ -239,8 +219,28 @@ public class IngredientManagerImpl implements IngredientManager {
         if (ingredient.getUnit() == null) {
             throw new InvalidEntityException("unit is null");
         }
-        if ((Double.compare(ingredient.getAmount(), 0.0) == 0)||(ingredient.getAmount()<0)) {
+        if ((Double.compare(ingredient.getAmount(), 0.0) == 0) || (ingredient.getAmount() < 0)) {
             throw new InvalidEntityException("amount is 0 or less");
         }
+    }
+    
+    /**
+     * transforms rows from database into new ingredient
+     *
+     * @param results result set from database
+     * @return new ingredient with attributes from database
+     */
+    static private Ingredient rowToIngredient(ResultSet results) {
+        Ingredient newIngredient = new Ingredient();
+
+        try {
+            newIngredient.setId(results.getLong("id"));
+            newIngredient.setName(results.getString("name"));
+            newIngredient.setAmount(results.getDouble("amount"));
+            newIngredient.setUnit(results.getString("unit"));
+        } catch (SQLException ex) {
+            Logger.getLogger(IngredientManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return newIngredient;
     }
 }

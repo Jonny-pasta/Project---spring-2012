@@ -204,7 +204,6 @@ public class RecipeManagerImpl implements RecipeManager {
 
         try {
             connection = dataSource.getConnection();
-            
             query = connection.createStatement();
 
             boolean res = query.execute("SELECT * FROM RECIPES WHERE UPPER(NAME) LIKE UPPER('%" + name + "%')");

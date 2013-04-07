@@ -55,61 +55,48 @@ public class IngredientManagerImplTest {
     }
 
     @Test
-    public void getIngredientsFromRecipeTest() {
-
-        Ingredient chicken = new Ingredient("chicken", 1, "kg");
-        Ingredient potatoes = new Ingredient("potatoes", 1, "kg");
+    public void getBody() {
         try {
-            manager.createIngredient(chicken, 1);
-            manager.createIngredient(potatoes, 1);
+            manager.getIngredient(1l);
+            fail();
+        } catch (IllegalArgumentException ex) {
+            //OK
         } catch (ServiceFailureException ex) {
             Logger.getLogger(IngredientManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail();
         }
-        SortedSet<Ingredient> expected = new TreeSet<Ingredient>();
-        expected.add(chicken);
-        expected.add(potatoes);
-
-        SortedSet<Ingredient> result;
+        
+        Ingredient ingredient = new Ingredient("chicken", 1, "kg");
         try {
-            result = manager.getIngredientsOfRecipe(1l);
-            assertEquals(expected, result);
-            assertNotSame(expected, result);
+            manager.createIngredient(ingredient, 1l);
+            Long iId = ingredient.getId();
+            assertNotNull(iId);
+            
+            Ingredient result = manager.getIngredient(iId);
+            assertEquals(ingredient, result);
         } catch (ServiceFailureException ex) {
             Logger.getLogger(IngredientManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
             fail();
         }
     }
-
+    
     @Test
     public void createIngredient() {
         Ingredient chicken = new Ingredient("chicken", 1, "kg");
-        Ingredient potatoes = new Ingredient("potatoes", 1, "kg");
-        Ingredient milk = new Ingredient("milk", 1, "l");
 
         try {
             manager.createIngredient(chicken, 1);
-            manager.createIngredient(potatoes, 2);
-            manager.createIngredient(milk, 2);
         } catch (ServiceFailureException ex) {
             Logger.getLogger(IngredientManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail();
         }
 
-        Long ingredientId1 = chicken.getId();
-        assertNotNull(ingredientId1);
-        Long ingredientId2 = potatoes.getId();
-        assertNotNull(ingredientId2);
-        Long ingredientId3 = milk.getId();
-        assertNotNull(ingredientId3);
+        Long iId = chicken.getId();
+        assertNotNull(iId);
 
-        SortedSet<Ingredient> expected = new TreeSet<Ingredient>();
-        expected.add(milk);
-        expected.add(potatoes);
-
-        SortedSet<Ingredient> result;
         try {
-            result = manager.getIngredientsOfRecipe(2l);
-            assertEquals(expected, result);
-            assertNotSame(expected, result);
+            Ingredient result = manager.getIngredient(iId);
+            assertEquals(chicken, result);
         } catch (ServiceFailureException ex) {
             Logger.getLogger(IngredientManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
             fail();
@@ -166,23 +153,31 @@ public class IngredientManagerImplTest {
 
     public void updateIngredientTest() {
         Ingredient chicken = new Ingredient("chicken", 1, "kg");
-        Ingredient chicken1 = new Ingredient("chicken", 2, "kg");
         try {
-            manager.createIngredient(chicken, 1);
-        } catch (ServiceFailureException ex) {
-            Logger.getLogger(IngredientManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
-            fail();
-        }
-        try {
-            manager.updateIngredient(chicken1);
-        } catch (ServiceFailureException ex) {
-            Logger.getLogger(IngredientManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        SortedSet<Ingredient> expected = new TreeSet<Ingredient>();
-        expected.add(chicken1);
-        try {
-            assertEquals(expected, manager.getIngredientsOfRecipe(1l));
+            manager.createIngredient(chicken, 1l);
+            Long id = chicken.getId();
+            Ingredient result;
+            
+            chicken = manager.getIngredient(id);
+            chicken.setName("better chicken");
+            manager.updateIngredient(chicken);
+            id = chicken.getId();
+            result = manager.getIngredient(id);
+            assertEquals(chicken, result);
+            
+            chicken = manager.getIngredient(id);
+            chicken.setAmount(2);
+            manager.updateIngredient(chicken);
+            id = chicken.getId();
+            result = manager.getIngredient(id);
+            assertEquals(chicken, result);
+            
+            chicken = manager.getIngredient(id);
+            chicken.setUnit("dg");
+            manager.updateIngredient(chicken);
+            id = chicken.getId();
+            result = manager.getIngredient(id);
+            assertEquals(chicken, result);
         } catch (ServiceFailureException ex) {
             Logger.getLogger(IngredientManagerImplTest.class.getName()).log(Level.SEVERE, null, ex);
             fail();
@@ -239,42 +234,33 @@ public class IngredientManagerImplTest {
     public void deleteIngredientTest() {
         Ingredient chicken = new Ingredient("chicken", 1, "kg");
         Ingredient goose = new Ingredient("goose", 1, "kg");
-        Ingredient potatoes = new Ingredient("potatoes", 1, "kg");
 
         try {
-            manager.createIngredient(chicken, 1l);
-            manager.createIngredient(goose, 2l);
-            manager.createIngredient(potatoes, 1l);
-
-            assertNotEmpty(manager.getIngredientsOfRecipe(1l));
-            assertNotEmpty(manager.getIngredientsOfRecipe(2l));
-
-            manager.deleteIngredient(goose, 2l);
-
+            manager.createIngredient(goose, 1);
+            manager.createIngredient(chicken, 1);
+            
             try {
-                manager.deleteIngredient(goose, 1l);
+                manager.getIngredient(chicken.getId());
+                manager.getIngredient(goose.getId());
+            } catch (IllegalArgumentException ex) {
+                fail();
+            }
+            
+            manager.deleteIngredient(chicken, 1);
+            
+            try {
+                manager.getIngredient(goose.getId());
+            } catch (IllegalArgumentException ex) {
+                fail();
+            }
+            
+            try {
+                manager.getIngredient(chicken.getId());
                 fail();
             } catch (IllegalArgumentException ex) {
                 //OK
             }
-
-            assertEmpty(manager.getIngredientsOfRecipe(2l));
-            assertNotEmpty(manager.getIngredientsOfRecipe(1l));
-
-            manager.deleteIngredient(potatoes, 1l);
-
-            try {
-                manager.deleteIngredient(goose, 2l);
-                fail();
-            } catch (IllegalArgumentException ex) {
-                //OK
-            }
-
-            SortedSet<Ingredient> expected = new TreeSet<Ingredient>();
-            expected.add(chicken);
-
-            assertEquals(expected, manager.getIngredientsOfRecipe(1l));
-            assertEmpty(manager.getIngredientsOfRecipe(2l));
+            
         } catch (ServiceFailureException ex) {
             logger.log(Level.SEVERE, "error when testing deleteIngredient", ex);
             fail();

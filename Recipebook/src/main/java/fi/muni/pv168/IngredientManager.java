@@ -1,21 +1,12 @@
 package fi.muni.pv168;
 
 import fi.muni.pv168.exceptions.ServiceFailureException;
-import java.util.SortedSet;
 
 /**
  * interface for handling ingredients in database
  * @author Mimo
  */
 public interface IngredientManager {
-    
-    /**
-     * gets ingredients of selected recipe
-     * @param recipeId recipe, which ingredients you want
-     * @return SortedSet of ingredients
-     * @throws ServiceFailureException problem with database
-     */
-    SortedSet<Ingredient> getIngredientsOfRecipe(long recipeId) throws ServiceFailureException;
     
     /**
      * create ingredient, adds it to the recipe
@@ -39,4 +30,12 @@ public interface IngredientManager {
      * @throws ServiceFailureException problem with database
      */
     void deleteIngredient(Ingredient ingredient, long recipeId) throws ServiceFailureException;
+    
+    /**
+     * retrieves ingredient from database
+     * @param id of wanted ingredient
+     * @return ingredient with given ID
+     * @throws ServiceFailureException if something went wrong
+     */
+    Ingredient getIngredient(Long id) throws ServiceFailureException;
 }

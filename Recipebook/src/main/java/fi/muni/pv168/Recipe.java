@@ -15,7 +15,9 @@ public class Recipe implements Comparable<Recipe> {
     /**
      * constructor
      */
-    public Recipe(){}
+    public Recipe(){
+        this.ingredients = new TreeSet<Ingredient>();
+    }
     
     /**
      * attributes of the recipe: ID, name, type, category, cooking time (in minutes), number of portions, instructions to cook and a set of ingredients
@@ -72,6 +74,21 @@ public class Recipe implements Comparable<Recipe> {
         }
         this.ingredients = new TreeSet<Ingredient>();
         this.ingredients.addAll(ingredients);
+    }
+    public void addIngredient(Ingredient ingredient){
+        if (ingredient == null) {
+            throw new IllegalArgumentException("ingredient cannot be null");
+        }
+        this.ingredients.add(ingredient);
+    }
+    public void removeIngredient(Ingredient ingredient){
+        if (ingredient == null) {
+            throw new IllegalArgumentException("ingredient cannot be null");
+        }
+        if (!(ingredients.contains(ingredient))){
+            throw new IllegalArgumentException("ingredient is not in this recipe");
+        }
+        this.ingredients.remove(ingredient);
     }
 
     public int getCookingTime() {return cookingTime;}

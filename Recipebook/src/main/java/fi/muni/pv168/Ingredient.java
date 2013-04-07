@@ -14,9 +14,7 @@ public class Ingredient implements Comparable<Ingredient> {
     private Long id;
     private String name;
     private double amount;
-    private String unit;
-    
-    
+    private String unit;  
     
     /**
      * parameterless constructor
@@ -48,7 +46,7 @@ public class Ingredient implements Comparable<Ingredient> {
             throw new IllegalArgumentException("ID cannot be null");
         }
         this.id = id;
-    }
+    } 
     
     public String getName() {return name;}
     public void setName(String name) {
