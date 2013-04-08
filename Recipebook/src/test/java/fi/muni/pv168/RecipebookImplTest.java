@@ -201,6 +201,8 @@ public class RecipebookImplTest {
             Ingredient chicken = new Ingredient("chicken", 1.0, "kg");
             Ingredient potatoes = new Ingredient("potatoes", 1.0, "kg");
             Ingredient milk = new Ingredient("milk", 1.0, "l");
+            Ingredient peas = new Ingredient("peas", 0.2, "kg");
+            Ingredient tree = new Ingredient("tree", 10, "g");
 
             SortedSet<Ingredient> ing1 = new TreeSet<Ingredient>();
             SortedSet<Ingredient> ing2 = new TreeSet<Ingredient>();
@@ -228,7 +230,8 @@ public class RecipebookImplTest {
             recipeManager.createRecipe(r2);
 
             ing1.add(chicken);
-            ing1.add(potatoes);
+            ing1.add(peas);
+            ing1.add(tree);
 
             ing2.add(potatoes);
             ing2.add(milk);
@@ -246,7 +249,7 @@ public class RecipebookImplTest {
             manager.removeIngredientsFromRecipe(remove, r2);
 
             SortedSet<Ingredient> expected = new TreeSet<Ingredient>();
-            remove.add(potatoes);
+            expected.add(potatoes);
 
             assertEmpty(manager.getIngredientsOfRecipe(r1));
             assertEquals(expected, manager.getIngredientsOfRecipe(r2));
@@ -280,32 +283,6 @@ public class RecipebookImplTest {
 
             try {
                 manager.removeIngredientsFromRecipe(in1, r2);
-                fail();
-            } catch (InvalidEntityException ex) {
-                //OK
-            }
-
-            Ingredient i2 = new Ingredient();
-            i2.setAmount(1);
-            i2.setUnit("1");
-            SortedSet<Ingredient> in2 = new TreeSet<Ingredient>();
-            in1.add(i2);
-
-            try {
-                manager.removeIngredientsFromRecipe(in2, r2);
-                fail();
-            } catch (InvalidEntityException ex) {
-                //OK
-            }
-
-            Ingredient i3 = new Ingredient();
-            i3.setName("mlieko");
-            i3.setAmount(1);
-            SortedSet<Ingredient> in3 = new TreeSet<Ingredient>();
-            in1.add(i3);
-
-            try {
-                manager.removeIngredientsFromRecipe(in3, r2);
                 fail();
             } catch (InvalidEntityException ex) {
                 //OK
@@ -412,6 +389,6 @@ public class RecipebookImplTest {
 
     private void assertEmpty(SortedSet<Ingredient> ingredients) {
         SortedSet<Ingredient> empty = new TreeSet<Ingredient>();
-        assertEquals(ingredients, empty);
+        assertEquals(empty, ingredients);
     }
 }

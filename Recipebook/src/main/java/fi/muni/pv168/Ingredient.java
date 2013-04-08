@@ -58,7 +58,7 @@ public class Ingredient implements Comparable<Ingredient> {
     
     public double getAmount() {return amount;}
     public void setAmount(double amount) {
-        if (amount<1){
+        if (amount<0){
             throw new IllegalArgumentException("amount cannot be negative");
         }
         this.amount = amount;}

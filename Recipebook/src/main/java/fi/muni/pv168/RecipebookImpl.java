@@ -59,8 +59,6 @@ public class RecipebookImpl implements Recipebook {
     public void removeIngredientsFromRecipe(SortedSet<Ingredient> ingredients, Recipe recipe) throws ServiceFailureException {
         validate(recipe);
         validate(ingredients);
-
-        System.out.println(recipe);
         
         if (recipe.getId() == null) {
             throw new InvalidEntityException("recipe has null Id");
@@ -102,10 +100,10 @@ public class RecipebookImpl implements Recipebook {
         
         try {
             for (Long id : ids) {
-                result.add(recipeManager.findRecipeById(id));
+                Recipe recipe = recipeManager.findRecipeById(id);
+                recipe.setIngredients(ingredientManager.getIngredientsOfRecipe(recipe.getId()));
+                result.add(recipe);
             }
-            
-            System.out.println("AAAAAAAAAAAAA: "+result);
             
         } catch (ServiceFailureException ex) {
             Logger.getLogger(RecipebookImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -139,9 +137,6 @@ public class RecipebookImpl implements Recipebook {
             Logger.getLogger(RecipebookImpl.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServiceFailureException();
         }
-        
-        if(result.isEmpty() ) throw new ServiceFailureException("no ingredients for recipe in database");
-        
         return result;
     }
 
