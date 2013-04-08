@@ -32,7 +32,7 @@ public class RecipeManagerImpl implements RecipeManager {
         this.dataSource = dataSource;
     }
 
-    // implementing RecipeManager.createRecipe
+    @Override
     public void createRecipe(Recipe recipe) throws ServiceFailureException {
         checkDataSource();
         validate(recipe);
@@ -74,7 +74,7 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
-    // implementing RecipeManager.updateRecipe
+    @Override
     public void updateRecipe(Recipe recipe) throws ServiceFailureException {
         checkDataSource();
         validate(recipe);
@@ -115,7 +115,7 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
-    // implementing RecipeManager.deleteRecipe
+    @Override
     public void deleteRecipe(Recipe recipe) throws ServiceFailureException {
         checkDataSource();
         validate(recipe);
@@ -157,7 +157,7 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
-    // implementing RecipeManager.findRecipeById
+    @Override
     public Recipe findRecipeById(Long id) throws ServiceFailureException {
         checkDataSource();
         
@@ -195,7 +195,7 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
-    // implements RecipeManager.findRecipesByName
+    @Override
     public SortedSet<Recipe> findRecipesByName(String name) throws ServiceFailureException {
         checkDataSource();
 
@@ -234,7 +234,7 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
-    // implementing RecipeManager.findRecipesByType
+    @Override
     public SortedSet<Recipe> findRecipesByType(MealType type) throws ServiceFailureException {
         checkDataSource();
 
@@ -270,7 +270,7 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
-    // implementing RecipeManager.findRecipesByCategory
+    @Override
     public SortedSet<Recipe> findRecipesByCategory(MealCategory category) throws ServiceFailureException {
         checkDataSource();
 
@@ -306,7 +306,7 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
-    // implementing RecipeManager.findRecipesByCookingTime
+    @Override
     public SortedSet<Recipe> findRecipesByCookingTime(int fromTime, int toTime) throws ServiceFailureException {
         checkDataSource();
 
@@ -343,17 +343,17 @@ public class RecipeManagerImpl implements RecipeManager {
         }
     }
 
-    // implementing RecipeManager.findRecipesUpToCookingTime
+    @Override
     public SortedSet<Recipe> findRecipesUptoCookingTime(int toTime) throws ServiceFailureException {
         return this.findRecipesByCookingTime(0, toTime);
     }
 
-    // implementing RecipeManager.findRecipesFromCookingTime
+    @Override
     public SortedSet<Recipe> findRecipesFromCookingTime(int fromTime) throws ServiceFailureException {
         return this.findRecipesByCookingTime(fromTime, Integer.MAX_VALUE);
     }
 
-    // implementing RecipeManager.findAllRecipes
+    @Override
     public SortedSet<Recipe> findAllRecipes() throws ServiceFailureException {
         checkDataSource();
 

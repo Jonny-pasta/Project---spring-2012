@@ -32,7 +32,7 @@ public interface Recipebook {
         
     /**
      * gets ingredients of selected recipe
-     * @param recipeId recipe, which ingredients you want
+     * @param recipe recipe, which ingredients you want
      * @return SortedSet of ingredients
      * @throws ServiceFailureException problem with database
      */

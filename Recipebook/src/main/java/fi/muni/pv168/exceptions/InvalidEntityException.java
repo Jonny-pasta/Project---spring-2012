@@ -1,32 +1,38 @@
 package fi.muni.pv168.exceptions;
 
 /**
- *
+ * exception is throws, when some entity has null argument, negative attribute etc.
  * @author mulan
  */
 public class InvalidEntityException extends RuntimeException {
 
     /**
-     * Creates a new instance of
-     * <code>InvalidEntityException</code> without detail message.
+     * parameterless constructor
      */
     public InvalidEntityException() {
     }
 
     /**
-     * Constructs an instance of
-     * <code>InvalidEntityException</code> with the specified detail message.
-     *
-     * @param msg the detail message.
+     * constructor with string message
+     * @param msg message to show
      */
     public InvalidEntityException(String msg) {
         super(msg);
     }
     
+    /**
+     * constructor with Throwable cause of exception
+     * @param cause what caused exception
+     */
     public InvalidEntityException(Throwable cause ) {
         super(cause);
     }
     
+    /**
+     * constructor with both cause of exception and message
+     * @param msg message to show
+     * @param cause cause of the exception
+     */
     public InvalidEntityException(String msg, Throwable cause) {
         super(msg, cause);
     }

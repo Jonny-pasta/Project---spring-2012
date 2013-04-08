@@ -34,7 +34,7 @@ public class IngredientManagerImpl implements IngredientManager {
         this.dataSource = dataSource;
     }
 
-    // implementing IngredientManager.createIngredient
+    @Override
     public void createIngredient(Ingredient ingredient, long recipeId) throws ServiceFailureException {
         checkDataSource();
         validate(ingredient);
@@ -66,7 +66,7 @@ public class IngredientManagerImpl implements IngredientManager {
 
             connection.commit();
         } catch (SQLException ex) {
-            String msg = "Error when inserting ingredent into DB";
+            String msg = "Error when inserting ingredent into DB " + ingredient + recipeId;
             logger.log(Level.SEVERE, msg, ex);
             throw new ServiceFailureException(msg, ex);
         } finally {
@@ -75,7 +75,7 @@ public class IngredientManagerImpl implements IngredientManager {
         }
     }
 
-    // implementing IngredientManager.updateIngredient
+    @Override
     public void updateIngredient(Ingredient ingredient) throws ServiceFailureException {
         checkDataSource();
         validate(ingredient);
@@ -106,7 +106,7 @@ public class IngredientManagerImpl implements IngredientManager {
             connection.commit();
 
         } catch (SQLException ex) {
-            String msg = "Error when updating ingredient in the db";
+            String msg = "Error when updating ingredient in the db " + ingredient;
             logger.log(Level.SEVERE, msg, ex);
             throw new ServiceFailureException(msg, ex);
         } finally {
@@ -115,7 +115,7 @@ public class IngredientManagerImpl implements IngredientManager {
         }
     }
 
-    // implementing IngredientManager.deleteIngredient
+    @Override
     public void deleteIngredient(Ingredient ingredient, long recipeId) throws ServiceFailureException {
         validate(ingredient);
 
@@ -124,7 +124,7 @@ public class IngredientManagerImpl implements IngredientManager {
         }
 
         if (recipeId < 0) {
-            throw new IllegalArgumentException("recipeId");
+            throw new IllegalArgumentException("recipeId is negative");
         }
 
         checkDataSource();
@@ -197,6 +197,7 @@ public class IngredientManagerImpl implements IngredientManager {
         }
     }
 
+    @Override
     public SortedSet<Ingredient> getIngredientsOfRecipe(long recipeid) throws ServiceFailureException {
         checkDataSource();
         
@@ -233,6 +234,7 @@ public class IngredientManagerImpl implements IngredientManager {
         }
     }
     
+    @Override
     public SortedSet<Long> getRecipeIDByIngredient(Ingredient ingredient) throws ServiceFailureException {
         checkDataSource();
         validate(ingredient);

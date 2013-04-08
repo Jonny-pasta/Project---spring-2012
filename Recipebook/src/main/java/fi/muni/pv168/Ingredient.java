@@ -71,7 +71,6 @@ public class Ingredient implements Comparable<Ingredient> {
         this.unit = unit;
     }
 
-    // overriding Object.hashCode()
     @Override
     public int hashCode() {
         int hash = 3;
@@ -81,7 +80,6 @@ public class Ingredient implements Comparable<Ingredient> {
         return hash;
     }
 
-    // overriding Object.equals()
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -103,13 +101,11 @@ public class Ingredient implements Comparable<Ingredient> {
         return true;
     }
 
-    // overriding Object.toString()
     @Override
     public String toString() {
         return "Ingredient{" + "name=" + name + ", amount=" + amount + ", unit=" + unit + '}';
     }
     
-    // overriding compareTo
     @Override
     public int compareTo(Ingredient o) {
         int diff = this.getName().compareTo(o.getName());
@@ -123,7 +119,5 @@ public class Ingredient implements Comparable<Ingredient> {
                 return new Double(this.getAmount()).compareTo(new Double(o.getAmount()));
             }
         }
-    }
-    
-    
+    }  
 }

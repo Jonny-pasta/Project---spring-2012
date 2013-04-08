@@ -14,6 +14,7 @@ public class Recipe implements Comparable<Recipe> {
     
     /**
      * constructor
+     * creates empty SortedSet as its ingredients
      */
     public Recipe(){
         this.ingredients = new TreeSet<Ingredient>();
@@ -26,7 +27,6 @@ public class Recipe implements Comparable<Recipe> {
     private String name;
     private MealType type;
     private MealCategory category;
-    //cooking time in minutes
     private int cookingTime;
     private int numPortions;
     private String instructions;
@@ -115,7 +115,6 @@ public class Recipe implements Comparable<Recipe> {
         this.instructions = instructions;
     }
 
-    // overriding Object.hashCode
     @Override
     public int hashCode() {
         int hash = 7;
@@ -130,7 +129,6 @@ public class Recipe implements Comparable<Recipe> {
         return hash;
     }
 
-    // overriding Object.equals
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -167,13 +165,11 @@ public class Recipe implements Comparable<Recipe> {
         return true;
     }
     
-    // overriding Object.toString
     @Override
     public String toString() {
         return "Recipe{" + "id=" + id + ", name=" + name + ", type=" + type + ", category=" + category + ", cookingTime=" + cookingTime + ", numPortions=" + numPortions + ", instructions=" + instructions + ", ingredients=" + ingredients + "}";
     }
     
-    // overriding compareTo
     @Override
     public int compareTo(Recipe o) {
         return new Long(this.getId()).compareTo(new Long(o.getId()));

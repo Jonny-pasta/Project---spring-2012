@@ -10,19 +10,19 @@ import java.util.SortedSet;
 public interface RecipeManager {
     
     /** 
-     * creates a recipe
+     * creates a recipe in DB
      * @param recipe recipe to be created
      */
     void createRecipe(Recipe recipe) throws ServiceFailureException;
     
     /**
-     * deletes a recipe
+     * deletes a recipe from DB
      * @param recipe recipe to be deleted
      */
     void deleteRecipe(Recipe recipe) throws ServiceFailureException;
     
     /**
-     * edit a recipe
+     * edit a recipe in DB
      * @param recipe recipe to be edited 
      */
     void updateRecipe(Recipe recipe) throws ServiceFailureException;

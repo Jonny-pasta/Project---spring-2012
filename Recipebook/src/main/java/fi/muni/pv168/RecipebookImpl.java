@@ -18,16 +18,19 @@ public class RecipebookImpl implements Recipebook {
             IngredientManagerImpl.class.getName());
     
     private IngredientManagerImpl ingredientManager;
-    
     private RecipeManagerImpl recipeManager;
 
+    /**
+     * constructor, creates recipe book that uses given ingredient and recipe managers
+     * @param ingredientManager ingredient manager to use
+     * @param recipeManager recipe manager to use
+     */
     public RecipebookImpl(IngredientManagerImpl ingredientManager, RecipeManagerImpl recipeManager) {
         this.ingredientManager = ingredientManager;
         this.recipeManager = recipeManager;
     }
 
-    // implementing IngredientManager.getIngredientsOfRecipe
-
+    @Override
     public void addIngredientsToRecipe(SortedSet<Ingredient> ingredients, Recipe recipe) throws ServiceFailureException {
         validate(recipe);
         validate(ingredients);
@@ -52,10 +55,11 @@ public class RecipebookImpl implements Recipebook {
                 recipe.addIngredient(ingredient);
             }
         } catch (ServiceFailureException ex) {
-            Logger.getLogger(RecipebookImpl.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, "check exception's message", ex);
         }
     }
 
+    @Override
     public void removeIngredientsFromRecipe(SortedSet<Ingredient> ingredients, Recipe recipe) throws ServiceFailureException {
         validate(recipe);
         validate(ingredients);
@@ -71,18 +75,16 @@ public class RecipebookImpl implements Recipebook {
         }
 
         try {
-
-            for (Ingredient ingredient : ingredients) {
-                
+            for (Ingredient ingredient : ingredients) {            
                 ingredientManager.deleteIngredient(ingredient, recipe.getId());
-
                 recipe.removeIngredient(ingredient);
             }
         } catch (ServiceFailureException ex) {
-            Logger.getLogger(RecipebookImpl.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, "check exception's message", ex);
         }
     }
     
+    @Override
     public SortedSet<Recipe> findRecipesByIngredients(SortedSet<Ingredient> ingredients) throws ServiceFailureException {
         validate(ingredients);
 
@@ -106,7 +108,7 @@ public class RecipebookImpl implements Recipebook {
             }
             
         } catch (ServiceFailureException ex) {
-            Logger.getLogger(RecipebookImpl.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, "check exception's message", ex);
             throw new ServiceFailureException();
         }
         
@@ -120,6 +122,7 @@ public class RecipebookImpl implements Recipebook {
         return result;
     }
     
+    @Override
     public SortedSet<Ingredient> getIngredientsOfRecipe(Recipe recipe) throws ServiceFailureException {
         validate(recipe);
         
@@ -134,16 +137,14 @@ public class RecipebookImpl implements Recipebook {
             result = ingredientManager.getIngredientsOfRecipe(recipe.getId());
             
         } catch (ServiceFailureException ex) {
-            Logger.getLogger(RecipebookImpl.class.getName()).log(Level.SEVERE, null, ex);
-            throw new ServiceFailureException();
+            logger.log(Level.SEVERE, "check exception's message", ex);
         }
         return result;
     }
 
     /**
-     * validates, if given recipe is valid entity
-     *
-     * @param recipe
+     * validates, that given recipe is a valid entity
+     * @param recipe recipe to check
      */
     static private void validate(Recipe recipe) {
         if (recipe == null) {
@@ -170,9 +171,8 @@ public class RecipebookImpl implements Recipebook {
     }
 
     /**
-     * validates, if given set of ingredients is valid entity
-     *
-     * @param ingredients
+     * validates, that every ingredient in given sets of ingredients is a valid entity
+     * @param ingredients given set of ingredients
      */
     static private void validate(SortedSet<Ingredient> ingredients) {
         if (ingredients == null) {
@@ -196,36 +196,15 @@ public class RecipebookImpl implements Recipebook {
             }
         }
     }
-
-    /**
-     * validates, if given ingredient is valid entity
-     *
-     * @param ingredient
-     */
-    static private void validate(Ingredient ingredient) {
-        if (ingredient == null) {
-            throw new IllegalArgumentException("Ingredient is null");
-        }
-        if (ingredient.getName() == null) {
-            throw new InvalidEntityException("name is null");
-        }
-        if (ingredient.getUnit() == null) {
-            throw new InvalidEntityException("unit is null");
-        }
-        if ((Double.compare(ingredient.getAmount(), 0.0) == 0) || (ingredient.getAmount() < 0)) {
-            throw new InvalidEntityException("amount is 0 or less");
-        }
-    }
     
     /**
      * checks, if ingredient is in given recipe
      *
-     * @param ingredient
-     * @param recipe
-     * @return
-     * @throws ServiceFailureException
+     * @param ingredient given ingredient
+     * @param recipe recipe to search in
+     * @return yes, if recipe contains ingredient, no otherwise
      */
-    private boolean isIngredientInRecipe(Ingredient ingredient, Recipe recipe) throws ServiceFailureException {
+    private boolean isIngredientInRecipe(Ingredient ingredient, Recipe recipe) {
         if (recipe.getIngredients().contains(ingredient)) {
             return true;
         } else {
