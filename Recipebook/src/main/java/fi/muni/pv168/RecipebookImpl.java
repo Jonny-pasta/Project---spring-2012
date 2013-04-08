@@ -24,55 +24,19 @@ public class RecipebookImpl implements Recipebook {
 
     private static final Logger logger = Logger.getLogger(
             IngredientManagerImpl.class.getName());
-    private DataSource dataSource;
+    
+    private IngredientManagerImpl ingredientManager;
+    
+    private RecipeManagerImpl recipeManager;
 
-    public RecipebookImpl(DataSource dataSource) {
-        if (dataSource == null) {
-            throw new IllegalArgumentException();
-        }
-        this.dataSource = dataSource;
+    public RecipebookImpl(IngredientManagerImpl ingredientManager, RecipeManagerImpl recipeManager) {
+        this.ingredientManager = ingredientManager;
+        this.recipeManager = recipeManager;
     }
 
     // implementing IngredientManager.getIngredientsOfRecipe
-    public SortedSet<Ingredient> getIngredientsOfRecipe(Recipe recipe) throws ServiceFailureException {
-        checkDataSource();
-        validate(recipe);
-
-        Connection connection = null;
-        PreparedStatement query = null;
-
-        try {
-            connection = dataSource.getConnection();
-            connection.setAutoCommit(false);
-            query = connection.prepareStatement("SELECT * FROM INGREDIENTS WHERE RECIPEID = ?");
-
-            query.setLong(1, recipe.getId());
-
-            ResultSet resultsDB = query.executeQuery();
-
-            SortedSet<Ingredient> result = new TreeSet<Ingredient>();
-            while (resultsDB.next()) {
-                Ingredient output = rowToIngredient(resultsDB);
-                validate(output);
-
-                result.add(output);
-            }
-            connection.commit();
-            return result;
-
-        } catch (SQLException ex) {
-            String msg = "Error getting ingredient for recipe id " + recipe.getId() + " from DB";
-            logger.log(Level.SEVERE, msg, ex);
-            throw new ServiceFailureException(msg, ex);
-
-        } finally {
-            DBUtils.doRollbackQuietly(connection);
-            DBUtils.closeQuietly(connection, query);
-        }
-    }
 
     public void addIngredientsToRecipe(SortedSet<Ingredient> ingredients, Recipe recipe) throws ServiceFailureException {
-        checkDataSource();
         validate(recipe);
         validate(ingredients);
 
@@ -88,46 +52,24 @@ public class RecipebookImpl implements Recipebook {
         }
         ingredients.removeAll(toRemove);
         
-        Connection con = null;
-        PreparedStatement query = null;
         try {
-            con = dataSource.getConnection();
-            con.setAutoCommit(false);
-            int count;
-            long newId;
-
             for (Ingredient ingredient : ingredients) {
-                query = con.prepareStatement(
-                        "INSERT INTO INGREDIENTS (NAME, AMOUNT, UNIT, RECIPEID) VALUES(?, ?, ?, ?)",
-                        Statement.RETURN_GENERATED_KEYS);
-                query.setString(1, ingredient.getName());
-                query.setDouble(2, ingredient.getAmount());
-                query.setString(3, ingredient.getUnit());
-                query.setLong(4, recipe.getId());
-
-                count = query.executeUpdate();
-
-                DBUtils.checkUpdatesCount(count, true);
-
-                newId = DBUtils.getId(query.getGeneratedKeys());
-
-                ingredient.setId(newId);
+                
+                ingredientManager.createIngredient(ingredient, recipe.getId());
+                
                 recipe.addIngredient(ingredient);
             }
-            con.commit();
-        } catch (SQLException ex) {
+        } catch (ServiceFailureException ex) {
             Logger.getLogger(RecipebookImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            DBUtils.doRollbackQuietly(con);
-            DBUtils.closeQuietly(con, query);
         }
     }
 
     public void removeIngredientsFromRecipe(SortedSet<Ingredient> ingredients, Recipe recipe) throws ServiceFailureException {
-        checkDataSource();
         validate(recipe);
         validate(ingredients);
 
+        System.out.println(recipe);
+        
         if (recipe.getId() == null) {
             throw new InvalidEntityException("recipe has null Id");
         }
@@ -138,97 +80,46 @@ public class RecipebookImpl implements Recipebook {
             }
         }
 
-        Connection con = null;
-        PreparedStatement query = null;
         try {
-            con = dataSource.getConnection();
-            con.setAutoCommit(false);
-            int count = 0;
 
             for (Ingredient ingredient : ingredients) {
-                query = con.prepareStatement(
-                        "DELETE FROM INGREDIENTS WHERE RECIPEID = ? AND ID = ? AND AMOUNT = ? AND NAME = ? AND UNIT = ?");
-                query.setLong(1, recipe.getId());
-                query.setLong(2, ingredient.getId());
-                query.setDouble(3, ingredient.getAmount());
-                query.setString(4, ingredient.getName());
-                query.setString(5, ingredient.getUnit());
-
-                count = query.executeUpdate();
-                DBUtils.checkUpdatesCount(count, false);
+                
+                ingredientManager.deleteIngredient(ingredient, recipe.getId());
 
                 recipe.removeIngredient(ingredient);
             }
-
-            con.commit();
-        } catch (SQLException ex) {
+        } catch (ServiceFailureException ex) {
             Logger.getLogger(RecipebookImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            DBUtils.doRollbackQuietly(con);
-            DBUtils.closeQuietly(con, query);
         }
     }
-
+    
     public SortedSet<Recipe> findRecipesByIngredients(SortedSet<Ingredient> ingredients) throws ServiceFailureException {
-        checkDataSource();
         validate(ingredients);
 
-        Connection con = null;
-        PreparedStatement query = null;
         SortedSet<Long> ids = new TreeSet<Long>();
         SortedSet<Recipe> result = new TreeSet<Recipe>();
+        
         try {
-            con = dataSource.getConnection();
-            con.setAutoCommit(false);
-            ResultSet resultsDB;
             for (Ingredient ingredient : ingredients) {
-                query = con.prepareStatement(
-                        "SELECT RECIPEID FROM INGREDIENTS WHERE NAME = ? AND AMOUNT = ? AND UNIT = ?");
-                query.setString(1, ingredient.getName());
-                query.setDouble(2, ingredient.getAmount());
-                query.setString(3, ingredient.getUnit());
-
-                resultsDB = query.executeQuery();
-
-                while (resultsDB.next()) {
-                    Long idDB = resultsDB.getLong("RECIPEID");
-                    ids.add(idDB);
-                }
+                ids.addAll( ingredientManager.getRecipeIDByIngredient(ingredient) );
             }
-            con.commit();
-        } catch (SQLException ex) {
+        } catch (ServiceFailureException ex) {
             Logger.getLogger(RecipebookImpl.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServiceFailureException();
-        } finally {
-            DBUtils.doRollbackQuietly(con);
-            DBUtils.closeQuietly(con, query);
-        }
+        } 
+        
         try {
-            con = dataSource.getConnection();
-            con.setAutoCommit(false);
-            ResultSet resultsDB;
             for (Long id : ids) {
-                query = con.prepareStatement(
-                        "SELECT * FROM RECIPES WHERE ID = ?");
-                query.setLong(1, id);
-
-                resultsDB = query.executeQuery();
-
-                while (resultsDB.next()) {
-                    Recipe output = rowToRecipe(resultsDB);
-                    validate(output);
-                    output.setIngredients(this.getIngredientsOfRecipe(output));
-                    result.add(output);
-                }
+                result.add(recipeManager.findRecipeById(id));
             }
-            con.commit();
-        } catch (SQLException ex) {
+            
+            System.out.println("AAAAAAAAAAAAA: "+result);
+            
+        } catch (ServiceFailureException ex) {
             Logger.getLogger(RecipebookImpl.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServiceFailureException();
-        } finally {
-            DBUtils.doRollbackQuietly(con);
-            DBUtils.closeQuietly(con, query);
         }
+        
         SortedSet<Recipe> toRemove = new TreeSet<Recipe>();
         for (Recipe r : result) {
             if (!(r.getIngredients().containsAll(ingredients))){
@@ -238,21 +129,28 @@ public class RecipebookImpl implements Recipebook {
         result.removeAll(toRemove);
         return result;
     }
-
-    public void setDataSource(DataSource ds) {
-        if (ds == null) {
-            throw new IllegalArgumentException();
+    
+    public SortedSet<Ingredient> getIngredientsOfRecipe(Recipe recipe) throws ServiceFailureException {
+        validate(recipe);
+        
+        if (recipe.getId() == null) {
+            throw new InvalidEntityException("recipe has null Id");
         }
-        this.dataSource = ds;
-    }
-
-    /**
-     * checks if dataSource is not null
-     */
-    private void checkDataSource() {
-        if (dataSource == null) {
-            throw new IllegalStateException("DataSource is not set");
+        
+         SortedSet<Ingredient> result= null; 
+        
+        try{
+            
+            result = ingredientManager.getIngredientsOfRecipe(recipe.getId());
+            
+        } catch (ServiceFailureException ex) {
+            Logger.getLogger(RecipebookImpl.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ServiceFailureException();
         }
+        
+        if(result.isEmpty() ) throw new ServiceFailureException("no ingredients for recipe in database");
+        
+        return result;
     }
 
     /**
@@ -331,28 +229,7 @@ public class RecipebookImpl implements Recipebook {
             throw new InvalidEntityException("amount is 0 or less");
         }
     }
-
-    /**
-     * transforms rows from database into new ingredient
-     *
-     * @param results result set from database
-     * @return new ingredient with attributes from database
-     */
-    static private Ingredient rowToIngredient(ResultSet results) {
-        Ingredient newIngredient = new Ingredient();
-
-        try {
-            newIngredient.setId(results.getLong("id"));
-            newIngredient.setName(results.getString("name"));
-            newIngredient.setAmount(results.getDouble("amount"));
-            newIngredient.setUnit(results.getString("unit"));
-        } catch (SQLException ex) {
-            Logger.getLogger(IngredientManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return newIngredient;
-    }
-
+    
     /**
      * checks, if ingredient is in given recipe
      *
@@ -367,28 +244,5 @@ public class RecipebookImpl implements Recipebook {
         } else {
             return false;
         }
-    }
-
-    /**
-     * transfers results from database into new recipe
-     *
-     * @param results database output
-     * @return new recipe
-     */
-    static private Recipe rowToRecipe(ResultSet results) {
-        Recipe newRecipe = new Recipe();
-
-        try {
-            newRecipe.setId(results.getLong("id"));
-            newRecipe.setName(results.getString("name"));
-            newRecipe.setType(MealType.fromInt(results.getInt("type")));
-            newRecipe.setCategory(MealCategory.fromInt(results.getInt("category")));
-            newRecipe.setCookingTime(results.getInt("cookingTime"));
-            newRecipe.setNumPortions(results.getInt("numPortions"));
-            newRecipe.setInstructions(results.getString("instructions"));
-        } catch (SQLException ex) {
-            logger.log(Level.SEVERE, null, ex);
-        }
-        return newRecipe;
     }
 }

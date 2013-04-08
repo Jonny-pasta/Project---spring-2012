@@ -36,9 +36,10 @@ public class RecipebookImplTest {
     @Before
     public void setUp() throws SQLException {
         ds = prepareDataSource();
-        manager = new RecipebookImpl(ds);
         recipeManager = new RecipeManagerImpl(ds);
         ingredientManager = new IngredientManagerImpl(ds);
+        
+        manager = new RecipebookImpl(ingredientManager, recipeManager);
 
         String createTableSQL1 = "CREATE TABLE INGREDIENTS("
                 + "ID BIGINT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY, "
