@@ -93,7 +93,7 @@ public class RecipebookImpl implements Recipebook {
         
         try {
             for (Ingredient ingredient : ingredients) {
-                ids.addAll( ingredientManager.getRecipeIDByIngredient(ingredient) );
+                ids.addAll( ingredientManager.getRecipeIdsByIngredient(ingredient) );
             }
         } catch (ServiceFailureException ex) {
             Logger.getLogger(RecipebookImpl.class.getName()).log(Level.SEVERE, null, ex);

@@ -46,7 +46,7 @@ public interface IngredientManager {
      * @return sorted set of ids of recipes associated with ingredients similar to ingredient
      * @throws ServiceFailureException problem with database
      */
-    SortedSet<Long> getRecipeIDByIngredient(Ingredient ingredient) throws ServiceFailureException;
+    SortedSet<Long> getRecipeIdsByIngredient(Ingredient ingredient) throws ServiceFailureException;
     
      /**
      * returns ingredients containing recipe ids given as parameter

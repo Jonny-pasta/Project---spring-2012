@@ -235,7 +235,7 @@ public class IngredientManagerImpl implements IngredientManager {
     }
     
     @Override
-    public SortedSet<Long> getRecipeIDByIngredient(Ingredient ingredient) throws ServiceFailureException {
+    public SortedSet<Long> getRecipeIdsByIngredient(Ingredient ingredient) throws ServiceFailureException {
         checkDataSource();
         validate(ingredient);
 
