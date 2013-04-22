@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
@@ -33,7 +35,7 @@ public class IngredientManagerImpl implements IngredientManager {
     public IngredientManagerImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
-
+    
     @Override
     public void createIngredient(Ingredient ingredient, long recipeId) throws ServiceFailureException {
         checkDataSource();
@@ -270,6 +272,38 @@ public class IngredientManagerImpl implements IngredientManager {
         return ids;
     }
     
+        public List<Ingredient> findAllIngredients() throws ServiceFailureException {
+        checkDataSource();
+
+        Connection connection = null;
+        PreparedStatement query = null;
+
+        try {
+            connection = dataSource.getConnection();
+            query = connection.prepareStatement("SELECT * FROM INGREDIENTS");
+
+            ResultSet resultsDB = query.executeQuery();
+
+            List<Ingredient> result = new ArrayList<Ingredient>();
+            while (resultsDB.next()) {
+                Ingredient output = rowToIngredient(resultsDB);
+                validate(output);
+
+                result.add(output);
+            }
+            return result;
+
+        } catch (SQLException ex) {
+            String msg = "Error getting recipe from DB";
+
+            logger.log(Level.SEVERE, msg, ex);
+            throw new ServiceFailureException(msg, ex);
+
+        } finally {
+            DBUtils.closeQuietly(connection, query);
+        }
+    }
+        
     /**
      * checks if data source is not null
      */
