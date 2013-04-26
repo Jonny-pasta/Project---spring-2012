@@ -55,4 +55,6 @@ public interface IngredientManager {
      * @throws ServiceFailureException problem with database
      */
     SortedSet<Ingredient> getIngredientsOfRecipe(long recipeid) throws ServiceFailureException;
+    
+    SortedSet<Ingredient> getAllIngredients() throws ServiceFailureException;
 }

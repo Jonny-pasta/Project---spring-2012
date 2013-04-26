@@ -2,8 +2,10 @@ package fi.muni.pv168;
 
 import fi.muni.pv168.exceptions.InvalidEntityException;
 import fi.muni.pv168.exceptions.ServiceFailureException;
+import fi.muni.pv168.utils.DBUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
@@ -22,6 +24,9 @@ public class RecipeManagerImplTest {
 
     private RecipeManagerImpl manager;
     private BasicDataSource ds;
+    
+     private static final Logger logger = Logger.getLogger(
+            IngredientManagerImpl.class.getName());
 
     @Before
     public void setUp() throws Exception {
@@ -37,11 +42,22 @@ public class RecipeManagerImplTest {
                 + "NUMPORTIONS INT, "
                 + "INSTRUCTIONS VARCHAR(255)"
                 + ")";
-        Connection con = ds.getConnection();
-        con.setAutoCommit(false);
-        PreparedStatement query = con.prepareStatement(createTableSQL);
-        query.executeUpdate();
-        con.commit();
+        
+        Connection con = null;
+        PreparedStatement query = null;
+        
+        try{
+            con = ds.getConnection();
+            con.setAutoCommit(false);
+            query = con.prepareStatement(createTableSQL);
+            query.executeUpdate();
+            con.commit();
+        }catch(SQLException e)
+        {
+            logger.log(Level.SEVERE, "canoot create table");
+            DBUtils.doRollbackQuietly(con);
+            DBUtils.closeQuietly(con, query);
+        }
     }
 
     @After

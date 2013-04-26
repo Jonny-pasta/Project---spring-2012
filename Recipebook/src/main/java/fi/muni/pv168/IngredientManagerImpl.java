@@ -100,6 +100,7 @@ public class IngredientManagerImpl implements IngredientManager {
             query.setString(1, ingredient.getName());
             query.setDouble(2, ingredient.getAmount());
             query.setString(3, ingredient.getUnit());
+            query.setString(4, ingredient.getId().toString());
 
             int count = query.executeUpdate();
 
@@ -300,6 +301,41 @@ public class IngredientManagerImpl implements IngredientManager {
             throw new ServiceFailureException(msg, ex);
 
         } finally {
+            DBUtils.closeQuietly(connection, query);
+        }
+    }
+        
+    @Override
+    public SortedSet<Ingredient> getAllIngredients() throws ServiceFailureException {
+        checkDataSource();
+        
+        Connection connection = null;
+        PreparedStatement query = null;
+
+        try {
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+            query = connection.prepareStatement("SELECT * FROM INGREDIENTS");
+
+            ResultSet resultsDB = query.executeQuery();
+
+            SortedSet<Ingredient> result = new TreeSet<Ingredient>();
+            while (resultsDB.next()) {
+                Ingredient output = rowToIngredient(resultsDB);
+                validate(output);
+
+                result.add(output);
+            }
+            connection.commit();
+            return result;
+
+        } catch (SQLException ex) {
+            String msg = "Error getting ingredient from DB";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new ServiceFailureException(msg, ex);
+
+        } finally {
+            DBUtils.doRollbackQuietly(connection);
             DBUtils.closeQuietly(connection, query);
         }
     }
