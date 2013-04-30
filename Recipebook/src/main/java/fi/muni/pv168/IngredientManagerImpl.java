@@ -272,38 +272,6 @@ public class IngredientManagerImpl implements IngredientManager {
         }
         return ids;
     }
-    
-        public List<Ingredient> findAllIngredients() throws ServiceFailureException {
-        checkDataSource();
-
-        Connection connection = null;
-        PreparedStatement query = null;
-
-        try {
-            connection = dataSource.getConnection();
-            query = connection.prepareStatement("SELECT * FROM INGREDIENTS");
-
-            ResultSet resultsDB = query.executeQuery();
-
-            List<Ingredient> result = new ArrayList<Ingredient>();
-            while (resultsDB.next()) {
-                Ingredient output = rowToIngredient(resultsDB);
-                validate(output);
-
-                result.add(output);
-            }
-            return result;
-
-        } catch (SQLException ex) {
-            String msg = "Error getting recipe from DB";
-
-            logger.log(Level.SEVERE, msg, ex);
-            throw new ServiceFailureException(msg, ex);
-
-        } finally {
-            DBUtils.closeQuietly(connection, query);
-        }
-    }
         
     @Override
     public SortedSet<Ingredient> getAllIngredients() throws ServiceFailureException {

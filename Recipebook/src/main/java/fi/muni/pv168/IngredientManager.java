@@ -49,12 +49,17 @@ public interface IngredientManager {
     SortedSet<Long> getRecipeIdsByIngredient(Ingredient ingredient) throws ServiceFailureException;
     
      /**
-     * returns ingredients containing recipe ids given as parameter
+     * returns ingredients containing recipe IDs given as parameter
      * @param recipeId id of recipe from witch ingredients will be returned
      * @return sorted set ingredients containing given recipe id  
      * @throws ServiceFailureException problem with database
      */
     SortedSet<Ingredient> getIngredientsOfRecipe(long recipeid) throws ServiceFailureException;
     
+    /**
+     * returns all ingredients in the database
+     * @return all ingredients in the database
+     * @throws ServiceFailureException problem with database 
+     */
     SortedSet<Ingredient> getAllIngredients() throws ServiceFailureException;
 }
