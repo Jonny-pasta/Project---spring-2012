@@ -111,17 +111,18 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jScrollPane1 = new javax.swing.JScrollPane();
-        RecipeList = new javax.swing.JList();
+        recipeList = new javax.swing.JList();
         jScrollPane3 = new javax.swing.JScrollPane();
-        IngredientList = new javax.swing.JList();
-        RecipeTextLabel = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        RecipeNameLabel = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        canvas1 = new java.awt.Canvas();
+        ingredientList = new javax.swing.JList();
+        label_Instructions = new javax.swing.JLabel();
+        label_Ingredients = new javax.swing.JLabel();
+        label_RecipeName = new javax.swing.JLabel();
+        label_NumPortions = new javax.swing.JLabel();
+        label_CookingTime = new javax.swing.JLabel();
+        label_RecipeType = new javax.swing.JLabel();
+        label_RecipeCategory = new javax.swing.JLabel();
+        image = new java.awt.Canvas();
+        label_Recipes = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu5 = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
@@ -140,51 +141,53 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        RecipeList.setModel(new javax.swing.AbstractListModel() {
+        recipeList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        RecipeList.addMouseListener(new java.awt.event.MouseAdapter() {
+        recipeList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                RecipeListClicked(evt);
+                recipeListClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(RecipeList);
+        jScrollPane1.setViewportView(recipeList);
 
-        IngredientList.setModel(new javax.swing.AbstractListModel() {
+        ingredientList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        IngredientList.addMouseListener(new java.awt.event.MouseAdapter() {
+        ingredientList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                IngredientListMouseClicked(evt);
+                ingredientListMouseClicked(evt);
             }
         });
-        jScrollPane3.setViewportView(IngredientList);
+        jScrollPane3.setViewportView(ingredientList);
 
-        RecipeTextLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        RecipeTextLabel.setText("INSTRUCTIONS");
-        RecipeTextLabel.setToolTipText("");
+        label_Instructions.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        label_Instructions.setText("INSTRUCTIONS");
+        label_Instructions.setToolTipText("");
 
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Ingredients");
+        label_Ingredients.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        label_Ingredients.setText("Ingredients");
 
-        RecipeNameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        RecipeNameLabel.setText("NAME");
+        label_RecipeName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        label_RecipeName.setText("NAME");
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("NP");
+        label_NumPortions.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        label_NumPortions.setText("NP");
 
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("CT");
+        label_CookingTime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        label_CookingTime.setText("CT");
 
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("TYPE");
+        label_RecipeType.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        label_RecipeType.setText("TYPE");
 
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("CATEGOTY");
+        label_RecipeCategory.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        label_RecipeCategory.setText("CATEGOTY");
+
+        label_Recipes.setText("Recipes:");
 
         jMenu5.setText("File");
         jMenuBar1.add(jMenu5);
@@ -199,27 +202,29 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(label_Recipes, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(RecipeNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(label_RecipeName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(label_RecipeType, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(label_RecipeCategory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(198, 198, 198)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(label_Ingredients, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(175, 175, 175)
+                                    .addComponent(label_CookingTime, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(29, 29, 29)
+                                    .addComponent(label_NumPortions, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(jScrollPane3)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(canvas1, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(RecipeTextLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(image, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(label_Instructions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -230,35 +235,39 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(RecipeNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(label_RecipeName, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(label_RecipeType, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(label_RecipeCategory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(label_NumPortions, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(label_CookingTime, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(label_Ingredients, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane3))
-                            .addComponent(canvas1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(image, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(RecipeTextLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)))
+                        .addComponent(label_Instructions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(label_Recipes, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 617, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void RecipeListClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RecipeListClicked
+    private void recipeListClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeListClicked
         logger.log(Level.INFO, "RecileList clicked");
-    }//GEN-LAST:event_RecipeListClicked
+    }//GEN-LAST:event_recipeListClicked
 
-    private void IngredientListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IngredientListMouseClicked
+    private void ingredientListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingredientListMouseClicked
         logger.log(Level.INFO, "IngredientList clicked");
-    }//GEN-LAST:event_IngredientListMouseClicked
+    }//GEN-LAST:event_ingredientListMouseClicked
 
     /**
      * @param args the command line arguments
@@ -296,16 +305,8 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList IngredientList;
-    private javax.swing.JList RecipeList;
-    private javax.swing.JLabel RecipeNameLabel;
-    private javax.swing.JLabel RecipeTextLabel;
-    private java.awt.Canvas canvas1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private java.awt.Canvas image;
+    private javax.swing.JList ingredientList;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -317,5 +318,14 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel label_CookingTime;
+    private javax.swing.JLabel label_Ingredients;
+    private javax.swing.JLabel label_Instructions;
+    private javax.swing.JLabel label_NumPortions;
+    private javax.swing.JLabel label_RecipeCategory;
+    private javax.swing.JLabel label_RecipeName;
+    private javax.swing.JLabel label_RecipeType;
+    private javax.swing.JLabel label_Recipes;
+    private javax.swing.JList recipeList;
     // End of variables declaration//GEN-END:variables
 }
