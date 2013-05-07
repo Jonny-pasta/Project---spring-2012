@@ -5,6 +5,7 @@
 package fi.muni.pv168.gui;
 
 import fi.muni.pv168.IngredientManagerImpl;
+import fi.muni.pv168.Recipe;
 import fi.muni.pv168.RecipeManagerImpl;
 import fi.muni.pv168.Recipebook;
 import fi.muni.pv168.RecipebookImpl;
@@ -12,9 +13,11 @@ import java.awt.Dialog;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.SortedSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
+import javax.swing.SwingWorker;
 import org.apache.commons.dbcp.BasicDataSource;
 
 /**
@@ -23,9 +26,12 @@ import org.apache.commons.dbcp.BasicDataSource;
  */
 public class RecipebookListJFrame extends javax.swing.JFrame {
 
+   
     private Recipebook recipebook;
     
     private RecipeForm recipeForm;
+    
+    private MainFrameWorker mainFrameWorker;
     
     private IngredientForm ingredientForm;
     
@@ -328,4 +334,11 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel label_Recipes;
     private javax.swing.JList recipeList;
     // End of variables declaration//GEN-END:variables
+   
+    private class MainFrameWorker extends SwingWorker<SortedSet<Recipe>, Integer >{
+       @Override
+        protected SortedSet<Recipe> doInBackground() throws Exception {
+           return null;
+        }
+    }
 }
