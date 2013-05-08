@@ -1,5 +1,12 @@
-package fi.muni.pv168;
+package fi.muni.pv168.backend;
 
+import fi.muni.pv168.backend.RecipebookImpl;
+import fi.muni.pv168.backend.IngredientManagerImpl;
+import fi.muni.pv168.backend.MealCategory;
+import fi.muni.pv168.backend.RecipeManagerImpl;
+import fi.muni.pv168.backend.Ingredient;
+import fi.muni.pv168.backend.MealType;
+import fi.muni.pv168.backend.Recipe;
 import fi.muni.pv168.exceptions.InvalidEntityException;
 import fi.muni.pv168.exceptions.ServiceFailureException;
 import java.sql.Connection;

@@ -1,4 +1,4 @@
-package fi.muni.pv168;
+package fi.muni.pv168.backend;
 
 import fi.muni.pv168.exceptions.InvalidEntityException;
 import fi.muni.pv168.exceptions.ServiceFailureException;
@@ -15,47 +15,52 @@ import java.util.logging.Logger;
 public class RecipebookImpl implements Recipebook {
 
     private static final Logger logger = Logger.getLogger(
-            IngredientManagerImpl.class.getName());
+            RecipebookImpl.class.getName());
     
-    private IngredientManagerImpl ingredientManager;
-    private RecipeManagerImpl recipeManager;
+    private IngredientManager ingredientManager;
+    private RecipeManager recipeManager;
+    
+    private static final Object LOCK = new Object();
 
     /**
      * constructor, creates recipe book that uses given ingredient and recipe managers
      * @param ingredientManager ingredient manager to use
      * @param recipeManager recipe manager to use
      */
-    public RecipebookImpl(IngredientManagerImpl ingredientManager, RecipeManagerImpl recipeManager) {
+    public RecipebookImpl(IngredientManager ingredientManager, RecipeManager recipeManager) {
         this.ingredientManager = ingredientManager;
         this.recipeManager = recipeManager;
     }
 
     @Override
     public void addIngredientsToRecipe(SortedSet<Ingredient> ingredients, Recipe recipe) throws ServiceFailureException {
-        validate(recipe);
-        validate(ingredients);
-
-        if (recipe.getId() == null) {
-            throw new InvalidEntityException("recipe has null Id");
-        }
-
-        SortedSet<Ingredient> toRemove = new TreeSet<Ingredient>();
-        for (Ingredient ingredient : ingredients) {
-            if (this.isIngredientInRecipe(ingredient, recipe)) {
-                toRemove.add(ingredient);
-            }
-        }
-        ingredients.removeAll(toRemove);
         
-        try {
-            for (Ingredient ingredient : ingredients) {
-                
-                ingredientManager.createIngredient(ingredient, recipe.getId());
-                
-                recipe.addIngredient(ingredient);
+        synchronized(LOCK){
+            validate(recipe);
+            validate(ingredients);
+
+            if (recipe.getId() == null) {
+                throw new InvalidEntityException("recipe has null Id");
             }
-        } catch (ServiceFailureException ex) {
-            logger.log(Level.SEVERE, "check exception's message", ex);
+
+            SortedSet<Ingredient> toRemove = new TreeSet<Ingredient>();
+            for (Ingredient ingredient : ingredients) {
+                if (this.isIngredientInRecipe(ingredient, recipe)) {
+                    toRemove.add(ingredient);
+                }
+            }
+            ingredients.removeAll(toRemove);
+
+            try {
+                for (Ingredient ingredient : ingredients) {
+
+                    ingredientManager.createIngredient(ingredient, recipe.getId());
+
+                    recipe.addIngredient(ingredient);
+                }
+            } catch (ServiceFailureException ex) {
+                logger.log(Level.SEVERE, "check exception's message", ex);
+            }
         }
     }
 

@@ -1,10 +1,8 @@
-package fi.muni.pv168;
+package fi.muni.pv168.backend;
 
 import fi.muni.pv168.exceptions.InvalidEntityException;
 import fi.muni.pv168.exceptions.ServiceFailureException;
 import fi.muni.pv168.utils.DBUtils;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -28,11 +26,11 @@ public class IngredientManagerImplTest {
     private BasicDataSource ds;
 
     @Before
-    public void setUp() {
+    public void setUp() throws SQLException {
         ds = new BasicDataSource();
         ds.setUrl("jdbc:derby:memory:ingredient;create=true");
         manager = new IngredientManagerImpl(ds);
-        String createTableSQL = "CREATE TABLE INGREDIENTS("
+        /*String createTableSQL = "CREATE TABLE INGREDIENTS("
                 + "ID BIGINT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY, "
                 + "NAME VARCHAR(255), "
                 + "AMOUNT DOUBLE, "
@@ -54,21 +52,23 @@ public class IngredientManagerImplTest {
             logger.log(Level.SEVERE, "canoot create table");
             DBUtils.doRollbackQuietly(con);
             DBUtils.closeQuietly(con, query);
-        }
+        }*/
+        DBUtils.executeSqlScript(ds, Recipebook.class.getResource("/createTables.sql"));
     }
 
     @After
     public void tearDown() throws Exception {
-        Connection con = ds.getConnection();
+        /*Connection con = ds.getConnection();
         con.setAutoCommit(false);
         PreparedStatement query = con.prepareStatement("DROP TABLE INGREDIENTS");
         query.executeUpdate();
         con.commit();
-        ds.close();
+        ds.close();*/
+        DBUtils.executeSqlScript(ds, Recipebook.class.getResource("/dropTables.sql"));
     }
 
     @Test
-    public void getBody() {
+    public void getIngredient() {
         try {
             manager.getIngredient(1l);
             fail();

@@ -1,4 +1,4 @@
-package fi.muni.pv168;
+package fi.muni.pv168.backend;
 
 import java.util.Collections;
 import java.util.SortedSet;
@@ -12,13 +12,7 @@ import java.util.TreeSet;
  */
 public class Recipe implements Comparable<Recipe> {
     
-    /**
-     * constructor
-     * creates empty SortedSet as its ingredients
-     */
-    public Recipe(){
-        this.ingredients = new TreeSet<Ingredient>();
-    }
+
     
     /**
      * attributes of the recipe: ID, name, type, category, cooking time (in minutes), number of portions, instructions to cook and a set of ingredients
@@ -31,7 +25,25 @@ public class Recipe implements Comparable<Recipe> {
     private int numPortions;
     private String instructions;
     private SortedSet<Ingredient> ingredients;
+
+    public Recipe(Recipe recipe) {
+        this.name = recipe.getName();
+        this.type = recipe.getType();
+        this.category = recipe.getCategory();
+        this.cookingTime = recipe.getCookingTime();
+        this.numPortions = recipe.getNumPortions();
+        this.instructions = recipe.getInstructions();
+        this.ingredients = recipe.getIngredients();
+    }
            
+    /**
+     * constructor
+     * creates empty SortedSet as its ingredients
+     */
+    public Recipe(){
+        this.ingredients = new TreeSet<Ingredient>();
+    }
+    
     /**
      * getters, setters
      */
@@ -167,7 +179,8 @@ public class Recipe implements Comparable<Recipe> {
     
     @Override
     public String toString() {
-        return "Recipe{" + "id=" + id + ", name=" + name + ", type=" + type + ", category=" + category + ", cookingTime=" + cookingTime + ", numPortions=" + numPortions + ", instructions=" + instructions + ", ingredients=" + ingredients + "}";
+        //return "Recipe{" + "id=" + id + ", name=" + name + ", type=" + type + ", category=" + category + ", cookingTime=" + cookingTime + ", numPortions=" + numPortions + ", instructions=" + instructions + ", ingredients=" + ingredients + "}";
+        return getName();
     }
     
     @Override

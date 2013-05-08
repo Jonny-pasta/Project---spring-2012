@@ -1,4 +1,4 @@
-package fi.muni.pv168;
+package fi.muni.pv168.backend;
 
 /**
  * enumeration of meal types, when and how should be the meal served

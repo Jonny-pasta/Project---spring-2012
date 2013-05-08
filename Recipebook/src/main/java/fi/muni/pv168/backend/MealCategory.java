@@ -1,4 +1,4 @@
-package fi.muni.pv168;
+package fi.muni.pv168.backend;
 
 /**
  * enumeration of meal category, what's the key element in the meal

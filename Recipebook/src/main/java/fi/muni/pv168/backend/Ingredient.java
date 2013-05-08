@@ -1,4 +1,4 @@
-package fi.muni.pv168;
+package fi.muni.pv168.backend;
 
 /**
  * class that represents an ingredient
@@ -20,6 +20,16 @@ public class Ingredient implements Comparable<Ingredient> {
      * parameterless constructor
      */
     public Ingredient(){}
+    
+    /**
+     * copy constructor
+     * @param ingredient copy from 
+     */
+    public Ingredient(Ingredient ingredient) {
+        this.name = ingredient.getName();
+        this.amount = ingredient.getAmount();
+        this.unit = ingredient.getUnit();
+    }
     
     /**
      * constructors

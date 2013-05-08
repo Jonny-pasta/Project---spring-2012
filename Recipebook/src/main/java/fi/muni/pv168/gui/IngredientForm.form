@@ -2,7 +2,7 @@
 
 <Form version="1.3" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
-    <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -34,20 +34,20 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="NameTextField" alignment="0" min="-2" pref="244" max="-2" attributes="0"/>
+                          <Component id="nameTextField" alignment="0" min="-2" pref="244" max="-2" attributes="0"/>
                           <Component id="NameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="AnountTextField" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="AmountLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="amountLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="amountTextField" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="UnitLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="UnitTextField" min="-2" max="-2" attributes="0"/>
+                          <Component id="unitTextField" min="-2" pref="48" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -60,14 +60,14 @@
               <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="NameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="AmountLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="amountLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="UnitLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="NameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="AnountTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="UnitTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="nameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="amountTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="unitTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="19" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -80,23 +80,14 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JTextField" name="NameTextField">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="--name--"/>
-      </Properties>
+    <Component class="javax.swing.JTextField" name="nameTextField">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NameTextFieldActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nameTextFieldActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="AnountTextField">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField3"/>
-      </Properties>
+    <Component class="javax.swing.JTextField" name="amountTextField">
     </Component>
-    <Component class="javax.swing.JTextField" name="UnitTextField">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField4"/>
-      </Properties>
+    <Component class="javax.swing.JTextField" name="unitTextField">
     </Component>
     <Component class="javax.swing.JButton" name="CancelButton">
       <Properties>
@@ -104,19 +95,23 @@
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="KillDialog"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CancelButtonActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="OKButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="AddIngredient"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="OKButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="NameLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Ingredient name"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="AmountLabel">
+    <Component class="javax.swing.JLabel" name="amountLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Amount"/>
       </Properties>

@@ -1,8 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package fi.muni.pv168.gui;
+
+import fi.muni.pv168.backend.Ingredient;
+import fi.muni.pv168.backend.MealCategory;
+import fi.muni.pv168.backend.MealType;
+import fi.muni.pv168.backend.Recipe;
+import java.awt.EventQueue;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -10,11 +15,17 @@ package fi.muni.pv168.gui;
  */
 public class RecipeForm extends javax.swing.JFrame {
 
+    private RecipebookListJFrame hostFrame;
+    private IngredientForm ingredientForm;
+    
     /**
      * Creates new form RecipeForm
      */
-    public RecipeForm() {
+    public RecipeForm(RecipebookListJFrame frame) {
         initComponents();
+        this.hostFrame = frame;
+        this.ingredientForm = new IngredientForm(this);
+        this.ingredientsList.setModel(new DefaultListModel());
     }
 
     /**
@@ -27,25 +38,28 @@ public class RecipeForm extends javax.swing.JFrame {
     private void initComponents() {
 
         NameLabel = new javax.swing.JLabel();
-        NameTextField = new javax.swing.JTextField();
+        nameText = new javax.swing.JTextField();
         CancelButton = new javax.swing.JButton();
         OKButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        typeCombo = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox();
+        categoryCombo = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        cookingTimeText = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        numPortionsText = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        instructionsText = new javax.swing.JTextArea();
+        jLabel7 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        ingredientsList = new javax.swing.JList();
+        addIngredientButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         NameLabel.setText("Recipe name:");
-
-        NameTextField.setText("NAME");
 
         CancelButton.setText("Cancel");
         CancelButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -53,29 +67,47 @@ public class RecipeForm extends javax.swing.JFrame {
                 KillDialog(evt);
             }
         });
+        CancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelButtonActionPerformed(evt);
+            }
+        });
 
         OKButton.setText("AddRecipe");
+        OKButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OKButtonActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Meal type");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        typeCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Breakfast", "Appetizer", "Soup", "Main dish", "Salad", "Dessert", "Drink" }));
 
         jLabel2.setText("Meal category");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        categoryCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Meat", "Meatless", "Fish", "Sweet", "Alcoholic", "Nonalcoholic", "Pasta" }));
 
         jLabel3.setText("Cooking time (in minutes)");
 
-        jTextField1.setText("TIME");
-
         jLabel4.setText("Number of portions");
 
-        jTextField2.setText("PORTIONS");
+        jLabel5.setText("Ingredients:");
 
-        jLabel5.setText("Instructions:");
+        instructionsText.setColumns(20);
+        instructionsText.setRows(5);
+        jScrollPane1.setViewportView(instructionsText);
 
-        jTextField3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField3.setText("INSTRUCTIONS");
+        jLabel7.setText("Instructions:");
+
+        jScrollPane2.setViewportView(ingredientsList);
+
+        addIngredientButton.setText("AddIngredient");
+        addIngredientButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addIngredientButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -84,20 +116,16 @@ public class RecipeForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField3)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(OKButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(CancelButton))
+                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cookingTimeText, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(numPortionsText, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -107,12 +135,25 @@ public class RecipeForm extends javax.swing.JFrame {
                                     .addComponent(NameLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(NameTextField)
-                                    .addComponent(jComboBox1, 0, 323, Short.MAX_VALUE)
-                                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(nameText)
+                                    .addComponent(typeCombo, 0, 323, Short.MAX_VALUE)
+                                    .addComponent(categoryCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(OKButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(CancelButton))
+                            .addComponent(addIngredientButton, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(20, 20, 20)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(329, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,30 +161,39 @@ public class RecipeForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(NameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(NameTextField))
+                    .addComponent(nameText))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(typeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(categoryCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cookingTimeText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(numPortionsText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(addIngredientButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CancelButton)
                     .addComponent(OKButton))
                 .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addContainerGap(354, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(207, 207, 207)))
         );
 
         pack();
@@ -152,21 +202,84 @@ public class RecipeForm extends javax.swing.JFrame {
     private void KillDialog(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_KillDialog
         this.hide();
     }//GEN-LAST:event_KillDialog
+
+    private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
+        nameText.setText("");
+        categoryCombo.setSelectedIndex(0);
+        typeCombo.setSelectedIndex(0);
+        cookingTimeText.setText("");
+        numPortionsText.setText("");
+        instructionsText.setText("");
+        
+        ingredientsList.setModel(new DefaultListModel());
+        this.setVisible(false);
+    }//GEN-LAST:event_CancelButtonActionPerformed
+
+    private void OKButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OKButtonActionPerformed
+        Recipe r = new Recipe();
+        r.setName(nameText.getText());
+        r.setCategory(MealCategory.fromInt(categoryCombo.getSelectedIndex()));
+        r.setType(MealType.fromInt(typeCombo.getSelectedIndex()));
+        r.setCookingTime(Integer.parseInt(cookingTimeText.getText()));
+        r.setNumPortions(Integer.parseInt(numPortionsText.getText()));
+        r.setInstructions(instructionsText.getText());
+        
+        SortedSet<Ingredient> ingrs= new TreeSet<Ingredient>();
+        
+        DefaultListModel model = (DefaultListModel) ingredientsList.getModel();
+        for (int i = 0; i < model.getSize(); i++) {
+           ingrs.add((Ingredient)model.elementAt(i));
+        }
+
+        hostFrame.createRecipe(r, ingrs);
+        
+        nameText.setText("");
+        categoryCombo.setSelectedIndex(0);
+        typeCombo.setSelectedIndex(0);
+        cookingTimeText.setText("");
+        numPortionsText.setText("");
+        instructionsText.setText("");
+        
+        ingredientsList.setModel(new DefaultListModel());
+        this.setVisible(false);
+    }//GEN-LAST:event_OKButtonActionPerformed
+
+    private void addIngredientButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addIngredientButtonActionPerformed
+        EventQueue.invokeLater(new Runnable() {
+
+            public void run() {
+                ingredientForm.setVisible(true);
+            }
+            
+        });
+    }//GEN-LAST:event_addIngredientButtonActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;
     private javax.swing.JLabel NameLabel;
-    private javax.swing.JTextField NameTextField;
     private javax.swing.JButton OKButton;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
+    private javax.swing.JButton addIngredientButton;
+    private javax.swing.JComboBox categoryCombo;
+    private javax.swing.JTextField cookingTimeText;
+    private javax.swing.JList ingredientsList;
+    private javax.swing.JTextArea instructionsText;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField nameText;
+    private javax.swing.JTextField numPortionsText;
+    private javax.swing.JComboBox typeCombo;
     // End of variables declaration//GEN-END:variables
+    
+    public void addIngredient(Ingredient ingredient) {
+        DefaultListModel model = (DefaultListModel) ingredientsList.getModel();
+        model.addElement(ingredient);
+        ingredientsList.setModel(model);
+    }
+
 }

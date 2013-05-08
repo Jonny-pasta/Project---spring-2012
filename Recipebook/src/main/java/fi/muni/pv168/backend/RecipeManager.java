@@ -1,4 +1,4 @@
-package fi.muni.pv168;
+package fi.muni.pv168.backend;
 
 import fi.muni.pv168.exceptions.ServiceFailureException;
 import java.util.SortedSet;

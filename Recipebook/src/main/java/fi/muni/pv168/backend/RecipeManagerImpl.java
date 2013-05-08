@@ -1,4 +1,4 @@
-package fi.muni.pv168;
+package fi.muni.pv168.backend;
 
 import fi.muni.pv168.exceptions.InvalidEntityException;
 import fi.muni.pv168.exceptions.ServiceFailureException;
@@ -33,7 +33,7 @@ public class RecipeManagerImpl implements RecipeManager {
     }
 
     @Override
-    public void createRecipe(Recipe recipe) throws ServiceFailureException {
+    public void  createRecipe(Recipe recipe) throws ServiceFailureException {
         checkDataSource();
         validate(recipe);
 
@@ -65,7 +65,7 @@ public class RecipeManagerImpl implements RecipeManager {
 
             con.commit();
         } catch (SQLException ex) {
-            String msg = "Error when inserting recipe into ingredient";
+            String msg = "Error when inserting recipe into database";
             logger.log(Level.SEVERE, msg, ex);
             throw new ServiceFailureException(msg, ex);
         } finally {
@@ -373,6 +373,7 @@ public class RecipeManagerImpl implements RecipeManager {
 
                 result.add(output);
             }
+            
             return result;
 
         } catch (SQLException ex) {

@@ -4,17 +4,21 @@
  */
 package fi.muni.pv168.gui;
 
+import fi.muni.pv168.backend.Ingredient;
+
 /**
  *
  * @author mulan
  */
 public class IngredientForm extends javax.swing.JFrame {
 
+    private RecipeForm hostForm;
     /**
      * Creates new form IngredientForm
      */
-    public IngredientForm() {
+    public IngredientForm(RecipeForm form) {
         initComponents();
+        this.hostForm = form;
     }
 
     /**
@@ -26,27 +30,22 @@ public class IngredientForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        NameTextField = new javax.swing.JTextField();
-        AnountTextField = new javax.swing.JTextField();
-        UnitTextField = new javax.swing.JTextField();
+        nameTextField = new javax.swing.JTextField();
+        amountTextField = new javax.swing.JTextField();
+        unitTextField = new javax.swing.JTextField();
         CancelButton = new javax.swing.JButton();
         OKButton = new javax.swing.JButton();
         NameLabel = new javax.swing.JLabel();
-        AmountLabel = new javax.swing.JLabel();
+        amountLabel = new javax.swing.JLabel();
         UnitLabel = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        NameTextField.setText("--name--");
-        NameTextField.addActionListener(new java.awt.event.ActionListener() {
+        nameTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NameTextFieldActionPerformed(evt);
+                nameTextFieldActionPerformed(evt);
             }
         });
-
-        AnountTextField.setText("jTextField3");
-
-        UnitTextField.setText("jTextField4");
 
         CancelButton.setText("Cancel");
         CancelButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -54,12 +53,22 @@ public class IngredientForm extends javax.swing.JFrame {
                 KillDialog(evt);
             }
         });
+        CancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelButtonActionPerformed(evt);
+            }
+        });
 
         OKButton.setText("AddIngredient");
+        OKButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OKButtonActionPerformed(evt);
+            }
+        });
 
         NameLabel.setText("Ingredient name");
 
-        AmountLabel.setText("Amount");
+        amountLabel.setText("Amount");
 
         UnitLabel.setText("Unit");
 
@@ -77,17 +86,17 @@ public class IngredientForm extends javax.swing.JFrame {
                         .addComponent(CancelButton))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(NameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(NameLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(AnountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AmountLabel))
+                            .addComponent(amountLabel)
+                            .addComponent(amountTextField))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(UnitLabel)
-                            .addComponent(UnitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(unitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(33, 33, 33)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -96,13 +105,13 @@ public class IngredientForm extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(NameLabel)
-                    .addComponent(AmountLabel)
+                    .addComponent(amountLabel)
                     .addComponent(UnitLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(NameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AnountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(UnitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(amountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(unitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CancelButton)
@@ -117,18 +126,39 @@ public class IngredientForm extends javax.swing.JFrame {
         this.hide();
     }//GEN-LAST:event_KillDialog
 
-    private void NameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NameTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NameTextFieldActionPerformed
+    private void nameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameTextFieldActionPerformed
+
+    }//GEN-LAST:event_nameTextFieldActionPerformed
+
+    private void OKButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OKButtonActionPerformed
+        Ingredient ingredient = new Ingredient();
+        ingredient.setName(nameTextField.getText());
+        ingredient.setUnit(unitTextField.getText());
+        ingredient.setAmount(Double.parseDouble(amountTextField.getText()));
+        
+        hostForm.addIngredient(ingredient);
+            
+        nameTextField.setText("");
+        unitTextField.setText("");
+        amountTextField.setText("");
+        this.setVisible(false);
+    }//GEN-LAST:event_OKButtonActionPerformed
+
+    private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
+        nameTextField.setText("");
+        unitTextField.setText("");
+        amountTextField.setText("");
+        this.setVisible(false);
+    }//GEN-LAST:event_CancelButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel AmountLabel;
-    private javax.swing.JTextField AnountTextField;
     private javax.swing.JButton CancelButton;
     private javax.swing.JLabel NameLabel;
-    private javax.swing.JTextField NameTextField;
     private javax.swing.JButton OKButton;
     private javax.swing.JLabel UnitLabel;
-    private javax.swing.JTextField UnitTextField;
+    private javax.swing.JLabel amountLabel;
+    private javax.swing.JTextField amountTextField;
+    private javax.swing.JTextField nameTextField;
+    private javax.swing.JTextField unitTextField;
     // End of variables declaration//GEN-END:variables
 }
