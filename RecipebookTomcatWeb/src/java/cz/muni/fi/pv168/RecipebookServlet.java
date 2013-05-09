@@ -4,9 +4,9 @@
  */
 package cz.muni.fi.pv168;
 
-import fi.muni.pv168.Ingredient;
-import fi.muni.pv168.IngredientManager;
-import fi.muni.pv168.IngredientManagerImpl;
+import fi.muni.pv168.backend.Ingredient;
+import fi.muni.pv168.backend.IngredientManager;
+import fi.muni.pv168.backend.IngredientManagerImpl;
 import fi.muni.pv168.exceptions.ServiceFailureException;
 import fi.muni.pv168.utils.DBUtils;
 import java.io.IOException;
