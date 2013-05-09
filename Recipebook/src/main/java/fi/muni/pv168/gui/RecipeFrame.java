@@ -11,7 +11,7 @@ import javax.swing.DefaultListModel;
 
 /**
  *
- * @author mulan
+ * @author mimo
  */
 public class RecipeFrame extends javax.swing.JFrame {
 

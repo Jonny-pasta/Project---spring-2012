@@ -31,7 +31,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 
 /**
  *
- * @author mulan
+ * @author mimo
  */
 public class RecipebookFrame extends javax.swing.JFrame {
 
@@ -41,7 +41,6 @@ public class RecipebookFrame extends javax.swing.JFrame {
     private RecipeFrame recipeFrame;
     private ConfirmationFrame confirmationFrame;
     private Recipe selectedRecipe = new Recipe();
-
     private static final Logger logger = Logger.getLogger(RecipebookFrame.class.getName());
 
     private static BasicDataSource prepareDataSource() throws SQLException {
@@ -147,7 +146,6 @@ public class RecipebookFrame extends javax.swing.JFrame {
                     recipeList.setModel(listModel);
                     selectedRecipe = recipes.first();
                     loadRecipeToLabels(selectedRecipe);
-
                 } catch (InterruptedException ex) {
                     Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ExecutionException ex) {
@@ -364,12 +362,23 @@ public class RecipebookFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_addRecipeMenuActionPerformed
 
     private void removeRecipeMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeRecipeMenuActionPerformed
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                confirmationFrame.setVisible(true);
-                confirmationFrame.setRecipeToDelete(selectedRecipe);
-            }
-        });
+        DefaultListModel model = (DefaultListModel) recipeList.getModel();
+        if (model.size() == 1) {
+            EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    WarningFrame frame = new WarningFrame();
+                    frame.setText("You cannot delete last recipe!");
+                    frame.setVisible(true);
+                }
+            });
+        } else {
+            EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    confirmationFrame.setVisible(true);
+                    confirmationFrame.setRecipeToDelete(selectedRecipe);
+                }
+            });
+        }
     }//GEN-LAST:event_removeRecipeMenuActionPerformed
 
     public static void main(String args[]) {
@@ -439,44 +448,47 @@ public class RecipebookFrame extends javax.swing.JFrame {
         label_CookingTime.setText(new Integer(recipe.getCookingTime()).toString());
         label_NumPortions.setText(new Integer(recipe.getNumPortions()).toString());
         label_Instructions.setText(recipe.getInstructions());
-
-        DefaultListModel listModel = new DefaultListModel();
-        for (Ingredient ingredient : recipe.getIngredients()) {
-            listModel.addElement(ingredient);
-        }
-        ingredientList.setModel(listModel);
     }
-    
+
     public void updateRecipeList(Recipe recipe, boolean b) {
         DefaultListModel model = (DefaultListModel) recipeList.getModel();
         if (b) {
             model.addElement(recipe);
         } else {
+            if (model.indexOf(recipe) + 1 < model.size()) {
+                selectedRecipe = (Recipe) model.get(model.indexOf(recipe) + 1);
+                loadRecipeToLabels(selectedRecipe);
+            } else {
+                if (model.indexOf(recipe) + 1 == model.size()) {
+                    selectedRecipe = (Recipe) model.get(model.indexOf(recipe) - 1);
+                    loadRecipeToLabels(selectedRecipe);
+                }
+            }
             model.removeElement(recipe);
         }
         recipeList.setModel(model);
     }
 
     public void createRecipe(final Recipe recipe, final SortedSet<Ingredient> ingrs) {
-      
+
         SwingWorker<Recipe, Void> worker = new SwingWorker<Recipe, Void>() {
             @Override
             protected Recipe doInBackground() throws Exception {
-                try{
+                try {
                     SortedSet<Ingredient> is = new TreeSet<Ingredient>(ingrs);
                     Recipe r = new Recipe();
-                     
+
                     r.setName(recipe.getName());
                     r.setType(recipe.getType());
                     r.setNumPortions(recipe.getNumPortions());
                     r.setCategory(recipe.getCategory());
                     r.setCookingTime(recipe.getCookingTime());
                     r.setInstructions(recipe.getInstructions());
-                    
+
                     recipeManager.createRecipe(r);
                     recipebook.addIngredientsToRecipe(is, r);
                     return r;
-                }catch(ServiceFailureException e){
+                } catch (ServiceFailureException e) {
                     logger.log(Level.SEVERE, "adding recipe t DB failed", e);
                     return null;
                 }
@@ -484,19 +496,20 @@ public class RecipebookFrame extends javax.swing.JFrame {
 
             @Override
             protected void done() {
-                try{
-                    updateRecipeList(get(),true);
-                }catch(Exception e){
+                try {
+                    updateRecipeList(get(), true);
+                } catch (Exception e) {
                     logger.log(Level.SEVERE, "get failed with exception", e);
                 }
             }
-        };      
+        };
         worker.execute();
     }
 
     public void deleteRecipe(final Recipe recipe) {
-        SwingWorker<Recipe, Void> worker = new SwingWorker<Recipe, Void>() {
 
+
+        SwingWorker<Recipe, Void> worker = new SwingWorker<Recipe, Void>() {
             @Override
             protected Recipe doInBackground() throws Exception {
                 try {

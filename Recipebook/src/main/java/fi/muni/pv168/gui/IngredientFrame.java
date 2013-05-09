@@ -8,7 +8,7 @@ import fi.muni.pv168.backend.Ingredient;
 
 /**
  *
- * @author mulan
+ * @author mimo
  */
 public class IngredientFrame extends javax.swing.JFrame {
 
