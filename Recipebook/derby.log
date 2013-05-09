@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
-Wed May 08 23:03:25 CEST 2013:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.9.1.0 - (1344872): instance a816c00e-013e-85f4-aee1-000003868b60 
-on database directory memory:C:\Users\Mimo\Desktop\inf\Java\Project---spring-2012\Recipebook\recipebook  with class loader sun.misc.Launcher$AppClassLoader@1830e4a7 
+Thu May 09 23:17:45 CEST 2013:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.9.1.0 - (1344872): instance a816c00e-013e-8b28-28b2-00000496e000 
+on database directory memory:C:\Users\Mimo\Desktop\Inf\Java\Project---spring-2012\Recipebook\recipebook  with class loader sun.misc.Launcher$AppClassLoader@4de8b671 
 Loaded from file:/C:/Users/Mimo/.m2/repository/org/apache/derby/derby/10.9.1.0/derby-10.9.1.0.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.7.0_17-b02
-user.dir=C:\Users\Mimo\Desktop\inf\Java\Project---spring-2012\Recipebook
+java.runtime.version=1.7.0_21-b11
+user.dir=C:\Users\Mimo\Desktop\Inf\Java\Project---spring-2012\Recipebook
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''

@@ -13,18 +13,18 @@ import javax.swing.DefaultListModel;
  *
  * @author mulan
  */
-public class RecipeForm extends javax.swing.JFrame {
+public class RecipeFrame extends javax.swing.JFrame {
 
-    private RecipebookListJFrame hostFrame;
-    private IngredientForm ingredientForm;
-    
+    private RecipebookFrame hostFrame;
+    private IngredientFrame ingredientFrame;
+
     /**
      * Creates new form RecipeForm
      */
-    public RecipeForm(RecipebookListJFrame frame) {
+    public RecipeFrame(RecipebookFrame frame) {
         initComponents();
         this.hostFrame = frame;
-        this.ingredientForm = new IngredientForm(this);
+        this.ingredientFrame = new IngredientFrame(this);
         this.ingredientsList.setModel(new DefaultListModel());
     }
 
@@ -56,8 +56,10 @@ public class RecipeForm extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         ingredientsList = new javax.swing.JList();
         addIngredientButton = new javax.swing.JButton();
+        errorLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Add recipe");
 
         NameLabel.setText("Recipe name:");
 
@@ -73,7 +75,7 @@ public class RecipeForm extends javax.swing.JFrame {
             }
         });
 
-        OKButton.setText("AddRecipe");
+        OKButton.setText("Add recipe");
         OKButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 OKButtonActionPerformed(evt);
@@ -102,12 +104,14 @@ public class RecipeForm extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(ingredientsList);
 
-        addIngredientButton.setText("AddIngredient");
+        addIngredientButton.setText("Add ingredient");
         addIngredientButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addIngredientButtonActionPerformed(evt);
             }
         });
+
+        errorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -123,9 +127,9 @@ public class RecipeForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cookingTimeText, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(numPortionsText, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(numPortionsText, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -142,12 +146,13 @@ public class RecipeForm extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(OKButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(CancelButton))
-                            .addComponent(addIngredientButton, javax.swing.GroupLayout.Alignment.TRAILING))))
+                        .addComponent(addIngredientButton))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(errorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(OKButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(CancelButton)))
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -185,9 +190,10 @@ public class RecipeForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CancelButton)
-                    .addComponent(OKButton))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(errorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(CancelButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(OKButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -210,50 +216,76 @@ public class RecipeForm extends javax.swing.JFrame {
         cookingTimeText.setText("");
         numPortionsText.setText("");
         instructionsText.setText("");
-        
+
         ingredientsList.setModel(new DefaultListModel());
         this.setVisible(false);
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void OKButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OKButtonActionPerformed
-        Recipe r = new Recipe();
-        r.setName(nameText.getText());
-        r.setCategory(MealCategory.fromInt(categoryCombo.getSelectedIndex()));
-        r.setType(MealType.fromInt(typeCombo.getSelectedIndex()));
-        r.setCookingTime(Integer.parseInt(cookingTimeText.getText()));
-        r.setNumPortions(Integer.parseInt(numPortionsText.getText()));
-        r.setInstructions(instructionsText.getText());
-        
-        SortedSet<Ingredient> ingrs= new TreeSet<Ingredient>();
-        
-        DefaultListModel model = (DefaultListModel) ingredientsList.getModel();
-        for (int i = 0; i < model.getSize(); i++) {
-           ingrs.add((Ingredient)model.elementAt(i));
-        }
+        int cookingTime;
+        int numPortions;
 
-        hostFrame.createRecipe(r, ingrs);
-        
-        nameText.setText("");
-        categoryCombo.setSelectedIndex(0);
-        typeCombo.setSelectedIndex(0);
-        cookingTimeText.setText("");
-        numPortionsText.setText("");
-        instructionsText.setText("");
-        
-        ingredientsList.setModel(new DefaultListModel());
-        this.setVisible(false);
+        if (nameText.getText().equals("")) {
+            errorLabel.setText("Recipe name cannot be empty!");
+        } else {
+            try {
+                cookingTime = Integer.parseInt(cookingTimeText.getText());
+                if (cookingTime < 0) {
+                    errorLabel.setText("Cooking time has to be possitive!");
+                } else {
+                    try {
+                        numPortions = Integer.parseInt(numPortionsText.getText());
+                        if (numPortions < 0) {
+                            errorLabel.setText("Number of portions cannot be negative!");
+                        } else {
+                            if (instructionsText.getText().equals("")) {
+                                errorLabel.setText("Instructions cannot be empty!");
+                            } else {
+                                Recipe r = new Recipe();
+                                r.setName(nameText.getText());
+                                r.setCategory(MealCategory.fromInt(categoryCombo.getSelectedIndex()));
+                                r.setType(MealType.fromInt(typeCombo.getSelectedIndex()));
+                                r.setCookingTime(Integer.parseInt(cookingTimeText.getText()));
+                                r.setNumPortions(Integer.parseInt(numPortionsText.getText()));
+                                r.setInstructions(instructionsText.getText());
+
+                                SortedSet<Ingredient> ingrs = new TreeSet<Ingredient>();
+
+                                DefaultListModel model = (DefaultListModel) ingredientsList.getModel();
+                                for (int i = 0; i < model.getSize(); i++) {
+                                    ingrs.add((Ingredient) model.elementAt(i));
+                                }
+
+                                hostFrame.createRecipe(r, ingrs);
+
+                                nameText.setText("");
+                                categoryCombo.setSelectedIndex(0);
+                                typeCombo.setSelectedIndex(0);
+                                cookingTimeText.setText("");
+                                numPortionsText.setText("");
+                                instructionsText.setText("");
+
+                                ingredientsList.setModel(new DefaultListModel());
+                                this.setVisible(false);
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        errorLabel.setText("Number of portions has to be a number!");
+                    }
+                }
+            } catch (NumberFormatException e) {
+                errorLabel.setText("Cooking time has to be a number!");
+            }
+        }
     }//GEN-LAST:event_OKButtonActionPerformed
 
     private void addIngredientButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addIngredientButtonActionPerformed
         EventQueue.invokeLater(new Runnable() {
-
             public void run() {
-                ingredientForm.setVisible(true);
+                ingredientFrame.setVisible(true);
             }
-            
         });
     }//GEN-LAST:event_addIngredientButtonActionPerformed
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;
     private javax.swing.JLabel NameLabel;
@@ -261,6 +293,7 @@ public class RecipeForm extends javax.swing.JFrame {
     private javax.swing.JButton addIngredientButton;
     private javax.swing.JComboBox categoryCombo;
     private javax.swing.JTextField cookingTimeText;
+    private javax.swing.JLabel errorLabel;
     private javax.swing.JList ingredientsList;
     private javax.swing.JTextArea instructionsText;
     private javax.swing.JLabel jLabel1;
@@ -275,11 +308,10 @@ public class RecipeForm extends javax.swing.JFrame {
     private javax.swing.JTextField numPortionsText;
     private javax.swing.JComboBox typeCombo;
     // End of variables declaration//GEN-END:variables
-    
+
     public void addIngredient(Ingredient ingredient) {
         DefaultListModel model = (DefaultListModel) ingredientsList.getModel();
         model.addElement(ingredient);
         ingredientsList.setModel(model);
     }
-
 }

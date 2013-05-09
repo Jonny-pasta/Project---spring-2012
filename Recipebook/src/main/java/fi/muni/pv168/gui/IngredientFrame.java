@@ -10,15 +10,16 @@ import fi.muni.pv168.backend.Ingredient;
  *
  * @author mulan
  */
-public class IngredientForm extends javax.swing.JFrame {
+public class IngredientFrame extends javax.swing.JFrame {
 
-    private RecipeForm hostForm;
+    private RecipeFrame hostFrame;
+
     /**
      * Creates new form IngredientForm
      */
-    public IngredientForm(RecipeForm form) {
+    public IngredientFrame(RecipeFrame frame) {
         initComponents();
-        this.hostForm = form;
+        this.hostFrame = frame;
     }
 
     /**
@@ -38,8 +39,10 @@ public class IngredientForm extends javax.swing.JFrame {
         NameLabel = new javax.swing.JLabel();
         amountLabel = new javax.swing.JLabel();
         UnitLabel = new javax.swing.JLabel();
+        errorLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Add ingredient");
 
         nameTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -59,7 +62,7 @@ public class IngredientForm extends javax.swing.JFrame {
             }
         });
 
-        OKButton.setText("AddIngredient");
+        OKButton.setText("Add ingredient");
         OKButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 OKButtonActionPerformed(evt);
@@ -72,6 +75,8 @@ public class IngredientForm extends javax.swing.JFrame {
 
         UnitLabel.setText("Unit");
 
+        errorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -79,8 +84,9 @@ public class IngredientForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(errorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(OKButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(CancelButton))
@@ -112,10 +118,14 @@ public class IngredientForm extends javax.swing.JFrame {
                     .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(amountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(unitTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CancelButton)
-                    .addComponent(OKButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 8, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(CancelButton)
+                            .addComponent(OKButton)))
+                    .addComponent(errorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -127,21 +137,38 @@ public class IngredientForm extends javax.swing.JFrame {
     }//GEN-LAST:event_KillDialog
 
     private void nameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameTextFieldActionPerformed
-
     }//GEN-LAST:event_nameTextFieldActionPerformed
 
     private void OKButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OKButtonActionPerformed
-        Ingredient ingredient = new Ingredient();
-        ingredient.setName(nameTextField.getText());
-        ingredient.setUnit(unitTextField.getText());
-        ingredient.setAmount(Double.parseDouble(amountTextField.getText()));
-        
-        hostForm.addIngredient(ingredient);
-            
-        nameTextField.setText("");
-        unitTextField.setText("");
-        amountTextField.setText("");
-        this.setVisible(false);
+        double amount;
+        if (nameTextField.getText().equals("")) {
+            errorLabel.setText("Ingredient name cannot be empty!");
+        } else {
+            if (unitTextField.getText().equals("")) {
+                errorLabel.setText("Unit cannot be empty!");
+            } else {
+                try {
+                    amount = Double.parseDouble(amountTextField.getText());
+                    if (amount <= 0) {
+                        errorLabel.setText("Amount cannot be negative or null");
+                    } else {
+                        Ingredient ingredient = new Ingredient();
+                        ingredient.setName(nameTextField.getText());
+                        ingredient.setUnit(unitTextField.getText());
+                        ingredient.setAmount(Double.parseDouble(amountTextField.getText()));
+
+                        hostFrame.addIngredient(ingredient);
+
+                        nameTextField.setText("");
+                        unitTextField.setText("");
+                        amountTextField.setText("");
+                        this.setVisible(false);
+                    }
+                } catch (NumberFormatException e) {
+                    errorLabel.setText("Amount has to be a number!");
+                }
+            }
+        }
     }//GEN-LAST:event_OKButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
@@ -150,7 +177,6 @@ public class IngredientForm extends javax.swing.JFrame {
         amountTextField.setText("");
         this.setVisible(false);
     }//GEN-LAST:event_CancelButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;
     private javax.swing.JLabel NameLabel;
@@ -158,6 +184,7 @@ public class IngredientForm extends javax.swing.JFrame {
     private javax.swing.JLabel UnitLabel;
     private javax.swing.JLabel amountLabel;
     private javax.swing.JTextField amountTextField;
+    private javax.swing.JLabel errorLabel;
     private javax.swing.JTextField nameTextField;
     private javax.swing.JTextField unitTextField;
     // End of variables declaration//GEN-END:variables

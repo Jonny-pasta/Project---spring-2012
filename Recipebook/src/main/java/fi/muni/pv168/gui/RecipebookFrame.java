@@ -33,14 +33,16 @@ import org.apache.commons.dbcp.BasicDataSource;
  *
  * @author mulan
  */
-public class RecipebookListJFrame extends javax.swing.JFrame {
+public class RecipebookFrame extends javax.swing.JFrame {
 
     private Recipebook recipebook;
     private RecipeManager recipeManager;
     private IngredientManager ingredientManager;
-    private RecipeForm recipeForm;
+    private RecipeFrame recipeFrame;
+    private ConfirmationFrame confirmationFrame;
+    private Recipe selectedRecipe = new Recipe();
 
-    private static final Logger logger = Logger.getLogger(RecipebookListJFrame.class.getName());
+    private static final Logger logger = Logger.getLogger(RecipebookFrame.class.getName());
 
     private static BasicDataSource prepareDataSource() throws SQLException {
         BasicDataSource ds = new BasicDataSource();
@@ -48,9 +50,10 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
         return ds;
     }
 
-    public RecipebookListJFrame() {
+    public RecipebookFrame() {
 
-        recipeForm = new RecipeForm(this);
+        recipeFrame = new RecipeFrame(this);
+        confirmationFrame = new ConfirmationFrame(this);
 
         DataSource ds = null;
         try {
@@ -114,7 +117,7 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
             ingredients2.add(potatoes);
             recipebook.addIngredientsToRecipe(ingredients2, recipe2);
         } catch (ServiceFailureException ex) {
-            Logger.getLogger(RecipebookListJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
         // end of test stuff
 
@@ -128,7 +131,7 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
                         r.setIngredients(recipebook.getIngredientsOfRecipe(r));
                     }
                 } catch (ServiceFailureException ex) {
-                    Logger.getLogger(RecipebookListJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 return recipes;
             }
@@ -142,13 +145,13 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
                         listModel.addElement(r);
                     }
                     recipeList.setModel(listModel);
-
-                    loadRecipeToLabels(recipes.first());
+                    selectedRecipe = recipes.first();
+                    loadRecipeToLabels(selectedRecipe);
 
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(RecipebookListJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ExecutionException ex) {
-                    Logger.getLogger(RecipebookListJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         };
@@ -203,6 +206,7 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
         jMenu4.setText("jMenu4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Recipebook");
 
         recipeList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -256,6 +260,11 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
         jMenu5.add(addRecipeMenu);
 
         removeRecipeMenu.setText("Remove Recipe");
+        removeRecipeMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeRecipeMenuActionPerformed(evt);
+            }
+        });
         jMenu5.add(removeRecipeMenu);
 
         editRecipeMenu.setText("Edit Recipe");
@@ -336,8 +345,8 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
         logger.log(Level.INFO, "RecileList clicked");
         JList list = (JList) evt.getSource();
         Recipe r = (Recipe) list.getSelectedValue();
-
-        loadRecipeToLabels(r);
+        selectedRecipe = r;
+        loadRecipeToLabels(selectedRecipe);
     }//GEN-LAST:event_recipeListClicked
 
     private void ingredientListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingredientListMouseClicked
@@ -348,11 +357,20 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
 
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-                recipeForm.setVisible(true);
+                recipeFrame.setVisible(true);
             }
         });
 
     }//GEN-LAST:event_addRecipeMenuActionPerformed
+
+    private void removeRecipeMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeRecipeMenuActionPerformed
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                confirmationFrame.setVisible(true);
+                confirmationFrame.setRecipeToDelete(selectedRecipe);
+            }
+        });
+    }//GEN-LAST:event_removeRecipeMenuActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -369,20 +387,20 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RecipebookListJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RecipebookFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RecipebookListJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RecipebookFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RecipebookListJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RecipebookFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RecipebookListJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RecipebookFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RecipebookListJFrame().setVisible(true);
+                new RecipebookFrame().setVisible(true);
             }
         });
     }
@@ -428,6 +446,16 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
         }
         ingredientList.setModel(listModel);
     }
+    
+    public void updateRecipeList(Recipe recipe, boolean b) {
+        DefaultListModel model = (DefaultListModel) recipeList.getModel();
+        if (b) {
+            model.addElement(recipe);
+        } else {
+            model.removeElement(recipe);
+        }
+        recipeList.setModel(model);
+    }
 
     public void createRecipe(final Recipe recipe, final SortedSet<Ingredient> ingrs) {
       
@@ -457,7 +485,7 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
             @Override
             protected void done() {
                 try{
-                    updateRecipeList(get());
+                    updateRecipeList(get(),true);
                 }catch(Exception e){
                     logger.log(Level.SEVERE, "get failed with exception", e);
                 }
@@ -466,8 +494,31 @@ public class RecipebookListJFrame extends javax.swing.JFrame {
         worker.execute();
     }
 
-    public void updateRecipeList(Recipe recipe) {
-        DefaultListModel model = (DefaultListModel) recipeList.getModel();
-        model.addElement(recipe);
+    public void deleteRecipe(final Recipe recipe) {
+        SwingWorker<Recipe, Void> worker = new SwingWorker<Recipe, Void>() {
+
+            @Override
+            protected Recipe doInBackground() throws Exception {
+                try {
+                    for (Ingredient ingredient : recipe.getIngredients()) {
+                        ingredientManager.deleteIngredient(ingredient, recipe.getId());
+                    }
+                    recipeManager.deleteRecipe(recipe);
+                } catch (ServiceFailureException ex) {
+                    logger.log(Level.SEVERE, "error while deleting recipe from DB", recipe);
+                }
+                return recipe;
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    updateRecipeList(recipe, false);
+                } catch (Exception e) {
+                    logger.log(Level.SEVERE, "get failed with exception", e);
+                }
+            }
+        };
+        worker.execute();
     }
 }
