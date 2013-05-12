@@ -113,7 +113,8 @@ public class Ingredient implements Comparable<Ingredient> {
 
     @Override
     public String toString() {
-        return "Ingredient{" + "name=" + name + ", amount=" + amount + ", unit=" + unit + '}';
+        //return "Ingredient{" + "name=" + name + ", amount=" + amount + ", unit=" + unit + '}';
+        return name + " " + amount + " " + unit;
     }
     
     @Override

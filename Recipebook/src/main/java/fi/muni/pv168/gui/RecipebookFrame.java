@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package fi.muni.pv168.gui;
 
 import fi.muni.pv168.backend.Ingredient;
@@ -51,7 +47,6 @@ public class RecipebookFrame extends javax.swing.JFrame {
 
     public RecipebookFrame() {
 
-        recipeFrame = new RecipeFrame(this);
         confirmationFrame = new ConfirmationFrame(this);
 
         DataSource ds = null;
@@ -186,10 +181,10 @@ public class RecipebookFrame extends javax.swing.JFrame {
         label_Recipes = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu5 = new javax.swing.JMenu();
+        jMenu6 = new javax.swing.JMenu();
         addRecipeMenu = new javax.swing.JMenuItem();
         removeRecipeMenu = new javax.swing.JMenuItem();
         editRecipeMenu = new javax.swing.JMenuItem();
-        jMenu6 = new javax.swing.JMenu();
 
         jMenu1.setText("jMenu1");
 
@@ -248,6 +243,9 @@ public class RecipebookFrame extends javax.swing.JFrame {
         label_Recipes.setText("Recipes:");
 
         jMenu5.setText("File");
+        jMenuBar1.add(jMenu5);
+
+        jMenu6.setText("Edit");
 
         addRecipeMenu.setText("Add Recipe");
         addRecipeMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -255,7 +253,7 @@ public class RecipebookFrame extends javax.swing.JFrame {
                 addRecipeMenuActionPerformed(evt);
             }
         });
-        jMenu5.add(addRecipeMenu);
+        jMenu6.add(addRecipeMenu);
 
         removeRecipeMenu.setText("Remove Recipe");
         removeRecipeMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -263,14 +261,16 @@ public class RecipebookFrame extends javax.swing.JFrame {
                 removeRecipeMenuActionPerformed(evt);
             }
         });
-        jMenu5.add(removeRecipeMenu);
+        jMenu6.add(removeRecipeMenu);
 
         editRecipeMenu.setText("Edit Recipe");
-        jMenu5.add(editRecipeMenu);
+        editRecipeMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editRecipeMenuActionPerformed(evt);
+            }
+        });
+        jMenu6.add(editRecipeMenu);
 
-        jMenuBar1.add(jMenu5);
-
-        jMenu6.setText("Edit");
         jMenuBar1.add(jMenu6);
 
         setJMenuBar(jMenuBar1);
@@ -352,7 +352,7 @@ public class RecipebookFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_ingredientListMouseClicked
 
     private void addRecipeMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRecipeMenuActionPerformed
-
+        recipeFrame = new RecipeFrame(this, false, null);
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 recipeFrame.setVisible(true);
@@ -380,6 +380,18 @@ public class RecipebookFrame extends javax.swing.JFrame {
             });
         }
     }//GEN-LAST:event_removeRecipeMenuActionPerformed
+
+    private void editRecipeMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editRecipeMenuActionPerformed
+
+        if (selectedRecipe != null) {
+            recipeFrame = new RecipeFrame(this, true, selectedRecipe);
+            EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    recipeFrame.setVisible(true);
+                }
+            });
+        }
+    }//GEN-LAST:event_editRecipeMenuActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -448,6 +460,11 @@ public class RecipebookFrame extends javax.swing.JFrame {
         label_CookingTime.setText(new Integer(recipe.getCookingTime()).toString());
         label_NumPortions.setText(new Integer(recipe.getNumPortions()).toString());
         label_Instructions.setText(recipe.getInstructions());
+        DefaultListModel model = new DefaultListModel();
+        for (Ingredient ingredient : recipe.getIngredients()) {
+            model.addElement(ingredient);
+        }
+        ingredientList.setModel(model);
     }
 
     public void updateRecipeList(Recipe recipe, boolean b) {
@@ -527,6 +544,51 @@ public class RecipebookFrame extends javax.swing.JFrame {
             protected void done() {
                 try {
                     updateRecipeList(recipe, false);
+                } catch (Exception e) {
+                    logger.log(Level.SEVERE, "get failed with exception", e);
+                }
+            }
+        };
+        worker.execute();
+    }
+    
+        public void updateRecipe(final Recipe recipe, final SortedSet<Ingredient> toAdd, final SortedSet<Ingredient> toUpdate) {
+
+        SwingWorker<Recipe, Void> worker = new SwingWorker<Recipe, Void>() {
+            @Override
+            protected Recipe doInBackground() throws Exception {
+                try {
+                    SortedSet<Ingredient> is = new TreeSet<Ingredient>(toAdd);
+                    Recipe r = new Recipe();
+                    
+                    r.setId(recipe.getId());
+                    r.setName(recipe.getName());
+                    r.setType(recipe.getType());
+                    r.setNumPortions(recipe.getNumPortions());
+                    r.setCategory(recipe.getCategory());
+                    r.setCookingTime(recipe.getCookingTime());
+                    r.setInstructions(recipe.getInstructions());
+                    
+                    r.setIngredients(new TreeSet<Ingredient>());
+                    
+                    for (Ingredient ingredient : toUpdate) {
+                        ingredientManager.updateIngredient(ingredient);
+                        r.addIngredient(ingredient);
+                    }
+                    
+                    recipeManager.updateRecipe(r);
+                    recipebook.addIngredientsToRecipe(is, r);
+                    return r;
+                } catch (ServiceFailureException e) {
+                    logger.log(Level.SEVERE, "adding recipe to DB failed", e);
+                    return null;
+                }
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    updateRecipeList(get(), true);
                 } catch (Exception e) {
                     logger.log(Level.SEVERE, "get failed with exception", e);
                 }

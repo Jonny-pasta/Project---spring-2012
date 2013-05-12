@@ -13,13 +13,22 @@ import fi.muni.pv168.backend.Ingredient;
 public class IngredientFrame extends javax.swing.JFrame {
 
     private RecipeFrame hostFrame;
+    private boolean update;
+    private Ingredient uIngredient = new Ingredient();
 
     /**
      * Creates new form IngredientForm
      */
-    public IngredientFrame(RecipeFrame frame) {
+    public IngredientFrame(RecipeFrame frame, boolean update, Ingredient uIngredient) {
         initComponents();
+        this.update = update;
+        this.uIngredient = uIngredient;
         this.hostFrame = frame;
+        if (update) {
+            this.nameTextField.setText(uIngredient.getName());
+            this.unitTextField.setText(uIngredient.getUnit());
+            this.amountTextField.setText(new Double(uIngredient.getAmount()).toString());
+        }
     }
 
     /**
@@ -152,13 +161,20 @@ public class IngredientFrame extends javax.swing.JFrame {
                     if (amount <= 0) {
                         errorLabel.setText("Amount cannot be negative or null");
                     } else {
-                        Ingredient ingredient = new Ingredient();
-                        ingredient.setName(nameTextField.getText());
-                        ingredient.setUnit(unitTextField.getText());
-                        ingredient.setAmount(Double.parseDouble(amountTextField.getText()));
+                        if (!update) {
+                            Ingredient ingredient = new Ingredient();
+                            ingredient.setName(nameTextField.getText());
+                            ingredient.setUnit(unitTextField.getText());
+                            ingredient.setAmount(amount);
 
-                        hostFrame.addIngredient(ingredient);
-
+                            hostFrame.addIngredient(ingredient, false);
+                        } else {
+                            uIngredient.setName(nameTextField.getText());
+                            uIngredient.setUnit(unitTextField.getText());
+                            uIngredient.setAmount(amount);
+                            
+                            hostFrame.addIngredient(uIngredient, true);
+                        }
                         nameTextField.setText("");
                         unitTextField.setText("");
                         amountTextField.setText("");
