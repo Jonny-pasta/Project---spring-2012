@@ -72,7 +72,7 @@ public class WarningFrame extends javax.swing.JFrame {
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_okButtonActionPerformed
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton okButton;
     private javax.swing.JLabel warningLabel;

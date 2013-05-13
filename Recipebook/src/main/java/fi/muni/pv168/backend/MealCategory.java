@@ -56,4 +56,26 @@ public enum MealCategory {
         }
         return -1;
     }
+    
+    // overriding Object.toString
+    @Override
+    public String toString() {
+        switch(this) {
+            case MEAT:
+                return "meat";
+            case MEATLESS:
+                return "meatless";
+            case FISH:
+                return "fish";
+            case SWEET:
+                return "sweet";
+            case ALCOHOLIC:
+                return "alcoholic";
+            case NONALCOHOLIC:
+                return "non-alcoholic";
+            case PASTA:
+                return "pasta";
+        }
+        return "";
+    }
 }

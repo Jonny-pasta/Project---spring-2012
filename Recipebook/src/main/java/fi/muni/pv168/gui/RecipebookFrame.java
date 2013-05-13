@@ -12,6 +12,7 @@ import fi.muni.pv168.backend.Recipebook;
 import fi.muni.pv168.backend.RecipebookImpl;
 import fi.muni.pv168.exceptions.ServiceFailureException;
 import fi.muni.pv168.utils.DBUtils;
+import java.awt.CardLayout;
 import java.awt.EventQueue;
 import java.sql.SQLException;
 import java.util.SortedSet;
@@ -21,6 +22,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
 import javax.swing.DefaultListModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.SwingWorker;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -31,6 +34,8 @@ import org.apache.commons.dbcp.BasicDataSource;
  */
 public class RecipebookFrame extends javax.swing.JFrame {
 
+    private boolean isSearchTextOn;
+    private JComboBox searchCombo;
     private Recipebook recipebook;
     private RecipeManager recipeManager;
     private IngredientManager ingredientManager;
@@ -71,6 +76,22 @@ public class RecipebookFrame extends javax.swing.JFrame {
         logger.log(Level.INFO, "Tables inserted into internal database, continuing happily");
 
         initComponents();
+
+        isSearchTextOn = true;
+
+        searchPanel.setLayout(new CardLayout());
+
+        searchCombo = new JComboBox();
+        searchCombo.setSize(searchText.getSize());
+        searchCombo.setVisible(false);
+        searchCombo.setLocation(searchText.getLocation());
+        searchCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchComboActionPerformed(evt);
+            }
+        });
+
+        recipeList.setFixedCellWidth(258);
 
         // test stuff
         Ingredient chicken = new Ingredient();
@@ -166,6 +187,20 @@ public class RecipebookFrame extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        jPopupMenu2 = new javax.swing.JPopupMenu();
+        jMenu7 = new javax.swing.JMenu();
+        jPopupMenu3 = new javax.swing.JPopupMenu();
+        jPopupMenu4 = new javax.swing.JPopupMenu();
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu8 = new javax.swing.JMenu();
+        jMenu9 = new javax.swing.JMenu();
+        jMenu10 = new javax.swing.JMenu();
+        jMenu11 = new javax.swing.JMenu();
+        jMenuBar3 = new javax.swing.JMenuBar();
+        jMenu12 = new javax.swing.JMenu();
+        jMenu13 = new javax.swing.JMenu();
+        jMenu14 = new javax.swing.JMenu();
         jScrollPane1 = new javax.swing.JScrollPane();
         recipeList = new javax.swing.JList();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -179,8 +214,14 @@ public class RecipebookFrame extends javax.swing.JFrame {
         label_RecipeCategory = new javax.swing.JLabel();
         image = new java.awt.Canvas();
         label_Recipes = new javax.swing.JLabel();
+        label_Ingredients1 = new javax.swing.JLabel();
+        label_Ingredients2 = new javax.swing.JLabel();
+        searchOptionsCombo = new javax.swing.JComboBox();
+        searchPanel = new javax.swing.JPanel();
+        searchText = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu5 = new javax.swing.JMenu();
+        menuExit = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
         addRecipeMenu = new javax.swing.JMenuItem();
         removeRecipeMenu = new javax.swing.JMenuItem();
@@ -198,9 +239,30 @@ public class RecipebookFrame extends javax.swing.JFrame {
 
         jMenu4.setText("jMenu4");
 
+        jMenu7.setText("jMenu7");
+
+        jMenu8.setText("File");
+        jMenuBar2.add(jMenu8);
+
+        jMenu9.setText("Edit");
+        jMenuBar2.add(jMenu9);
+
+        jMenu10.setText("jMenu10");
+
+        jMenu11.setText("jMenu11");
+
+        jMenu12.setText("File");
+        jMenuBar3.add(jMenu12);
+
+        jMenu13.setText("Edit");
+        jMenuBar3.add(jMenu13);
+
+        jMenu14.setText("jMenu14");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Recipebook");
 
+        recipeList.setRequestFocusEnabled(false);
         recipeList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 recipeListClicked(evt);
@@ -220,8 +282,8 @@ public class RecipebookFrame extends javax.swing.JFrame {
         label_Instructions.setToolTipText("");
         label_Instructions.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        label_Ingredients.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        label_Ingredients.setText("Ingredients");
+        label_Ingredients.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Ingredients.setText("Portions:");
 
         label_RecipeName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         label_RecipeName.setText("NAME");
@@ -242,7 +304,60 @@ public class RecipebookFrame extends javax.swing.JFrame {
 
         label_Recipes.setText("Recipes:");
 
+        label_Ingredients1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        label_Ingredients1.setText("Ingredients");
+
+        label_Ingredients2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Ingredients2.setText("Cooking Time:");
+
+        searchOptionsCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Show all", "Name", "Type", "Category", "Cooking time", "Ingredient" }));
+        searchOptionsCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchOptionsComboActionPerformed(evt);
+            }
+        });
+
+        searchPanel.setPreferredSize(new java.awt.Dimension(158, 25));
+
+        searchText.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        searchText.setText("Search recipes by...");
+        searchText.setPreferredSize(new java.awt.Dimension(158, 25));
+        searchText.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchTextMouseClicked(evt);
+            }
+        });
+        searchText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchTextActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout searchPanelLayout = new javax.swing.GroupLayout(searchPanel);
+        searchPanel.setLayout(searchPanelLayout);
+        searchPanelLayout.setHorizontalGroup(
+            searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(searchPanelLayout.createSequentialGroup()
+                .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 2, Short.MAX_VALUE))
+        );
+        searchPanelLayout.setVerticalGroup(
+            searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, searchPanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
         jMenu5.setText("File");
+
+        menuExit.setText("Exit");
+        menuExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuExitActionPerformed(evt);
+            }
+        });
+        jMenu5.add(menuExit);
+
         jMenuBar1.add(jMenu5);
 
         jMenu6.setText("Edit");
@@ -280,10 +395,15 @@ public class RecipebookFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(label_Recipes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(searchOptionsCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(label_Recipes, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -294,15 +414,21 @@ public class RecipebookFrame extends javax.swing.JFrame {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(label_RecipeCategory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(label_Ingredients, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(175, 175, 175)
+                                    .addComponent(label_Ingredients1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(42, 42, 42)
+                                    .addComponent(label_Ingredients2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(label_CookingTime, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(29, 29, 29)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(label_Ingredients, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(label_NumPortions, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(jScrollPane3)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(image, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(label_Instructions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(160, 160, 160)
+                        .addComponent(label_Instructions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -322,18 +448,24 @@ public class RecipebookFrame extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(label_NumPortions, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(label_CookingTime, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(label_Ingredients, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(label_CookingTime, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(label_Ingredients, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(label_Ingredients2, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(label_Ingredients1, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane3))
                             .addComponent(image, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(label_Instructions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(label_Recipes, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(searchOptionsCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(7, 7, 7)
+                        .addComponent(label_Recipes, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 617, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(12, Short.MAX_VALUE))))
         );
 
         pack();
@@ -393,6 +525,322 @@ public class RecipebookFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_editRecipeMenuActionPerformed
 
+    private void menuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuExitActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_menuExitActionPerformed
+
+    private void searchTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchTextActionPerformed
+
+        if (searchOptionsCombo.getSelectedIndex() == 1) {
+            SwingWorker<SortedSet<Recipe>, Void> worker = new SwingWorker<SortedSet<Recipe>, Void>() {
+                @Override
+                protected SortedSet<Recipe> doInBackground() throws Exception {
+                    SortedSet<Recipe> set = recipeManager.findRecipesByName(searchText.getText());
+                    for (Recipe r : set) {
+                        r.setIngredients(recipebook.getIngredientsOfRecipe(r));
+                    }
+                    return set;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        if (get().isEmpty()) {
+                            WarningFrame frame = new WarningFrame();
+                            frame.setText("No recipes found");
+                            frame.setVisible(true);
+                        } else {
+                            DefaultListModel model = new DefaultListModel();
+                            for (Recipe recipe : get()) {
+                                model.addElement(recipe);
+                            }
+                            recipeList.setModel(model);
+                        }
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ExecutionException ex) {
+                        Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            };
+            worker.execute();
+        }
+
+        if (searchOptionsCombo.getSelectedIndex() == 4) {
+            SwingWorker<SortedSet<Recipe>, Void> worker = new SwingWorker<SortedSet<Recipe>, Void>() {
+                @Override
+                protected SortedSet<Recipe> doInBackground() throws Exception {
+                    String[] lines = searchText.getText().split("-");
+                    int fromTime;
+                    int toTime;
+                    if (lines.length != 2) {
+                        return null;
+                    }
+                    try {
+                        fromTime = Integer.parseInt(lines[0]);
+                        toTime = Integer.parseInt(lines[1]);
+                    } catch (NumberFormatException e) {
+                        return null;
+                    }
+                    SortedSet<Recipe> set = recipeManager.findRecipesByCookingTime(fromTime, toTime);
+                    for (Recipe r : set) {
+                        r.setIngredients(recipebook.getIngredientsOfRecipe(r));
+                    }
+                    return set;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        if (get() == null) {
+                            WarningFrame frame = new WarningFrame();
+                            frame.setText("Wrong format of cooking time search!");
+                        } else {
+                            if (get().isEmpty()) {
+                                WarningFrame frame = new WarningFrame();
+                                frame.setText("No recipes found");
+                                frame.setVisible(true);
+                            } else {
+                                DefaultListModel model = new DefaultListModel();
+                                for (Recipe recipe : get()) {
+                                    model.addElement(recipe);
+                                }
+                                recipeList.setModel(model);
+                            }
+                        }
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ExecutionException ex) {
+                        Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            };
+            worker.execute();
+        }
+
+        if (searchOptionsCombo.getSelectedIndex() == 5) {
+            SwingWorker<SortedSet<Recipe>, Void> worker = new SwingWorker<SortedSet<Recipe>, Void>() {
+                @Override
+                protected SortedSet<Recipe> doInBackground() throws Exception {
+                    SortedSet<Recipe> set = recipebook.findRecipesByIngredientName(searchText.getText());
+                    for (Recipe r : set) {
+                        r.setIngredients(recipebook.getIngredientsOfRecipe(r));
+                    }
+                    return set;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        if (get().isEmpty()) {
+                            WarningFrame frame = new WarningFrame();
+                            frame.setText("No recipes found");
+                            frame.setVisible(true);
+                        } else {
+                            DefaultListModel model = new DefaultListModel();
+                            for (Recipe recipe : get()) {
+                                model.addElement(recipe);
+                            }
+                            recipeList.setModel(model);
+                        }
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ExecutionException ex) {
+                        Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            };
+            worker.execute();
+        }
+    }//GEN-LAST:event_searchTextActionPerformed
+
+    private void searchTextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchTextMouseClicked
+        searchText.setText("");
+    }//GEN-LAST:event_searchTextMouseClicked
+
+    private void searchOptionsComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchOptionsComboActionPerformed
+        if (searchOptionsCombo.getSelectedIndex() == 0) {
+            if (!isSearchTextOn) {
+                searchPanel.remove(searchCombo);
+                searchPanel.add(searchText);
+                searchCombo.setVisible(false);
+                searchText.setVisible(true);
+                isSearchTextOn = true;
+            }
+            searchText.setText("Search recipes by...");
+            SwingWorker<SortedSet<Recipe>, Void> worker = new SwingWorker<SortedSet<Recipe>, Void>() {
+                @Override
+                protected SortedSet<Recipe> doInBackground() throws Exception {
+                    SortedSet<Recipe> set = recipeManager.findAllRecipes();
+                    for (Recipe r : set) {
+                        r.setIngredients(recipebook.getIngredientsOfRecipe(r));
+                    }
+                    return set;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        if (get().isEmpty()) {
+                            WarningFrame frame = new WarningFrame();
+                            frame.setText("No recipes found");
+                            frame.setVisible(true);
+                        } else {
+                            DefaultListModel model = new DefaultListModel();
+                            for (Recipe recipe : get()) {
+                                model.addElement(recipe);
+                            }
+                            recipeList.setModel(model);
+                        }
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ExecutionException ex) {
+                        Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            };
+            worker.execute();
+        }
+
+        if (searchOptionsCombo.getSelectedIndex() == 1) {
+            if (!isSearchTextOn) {
+                searchPanel.remove(searchCombo);
+                searchPanel.add(searchText);
+                searchCombo.setVisible(false);
+                searchText.setVisible(true);
+                isSearchTextOn = true;
+            }
+            searchText.setText("Enter recipe's name...");
+        }
+        if (searchOptionsCombo.getSelectedIndex() == 2) {
+            if (isSearchTextOn) {
+                searchPanel.remove(searchText);
+                searchPanel.add(searchCombo);
+                searchText.setVisible(false);
+                searchCombo.setVisible(true);
+                isSearchTextOn = false;
+            }
+            DefaultComboBoxModel model = new DefaultComboBoxModel();
+            model.addElement("Breakfast");
+            model.addElement("Appetizer");
+            model.addElement("Soup");
+            model.addElement("Main dish");
+            model.addElement("Salad");
+            model.addElement("Dessert");
+            model.addElement("Drink");
+            searchCombo.setModel(model);
+        }
+        if (searchOptionsCombo.getSelectedIndex() == 3) {
+            if (isSearchTextOn) {
+                searchPanel.remove(searchText);
+                searchPanel.add(searchCombo);
+                searchText.setVisible(false);
+                searchCombo.setVisible(true);
+            }
+            DefaultComboBoxModel model = new DefaultComboBoxModel();
+            model.addElement("Meat");
+            model.addElement("Meatless");
+            model.addElement("Fish");
+            model.addElement("Sweet");
+            model.addElement("Alcoholic");
+            model.addElement("Non-alcoholic");
+            model.addElement("Pasta");
+            searchCombo.setModel(model);
+        }
+        if (searchOptionsCombo.getSelectedIndex() == 4) {
+            if (!isSearchTextOn) {
+                searchPanel.remove(searchCombo);
+                searchPanel.add(searchText);
+                searchCombo.setVisible(false);
+                searchText.setVisible(true);
+                isSearchTextOn = true;
+            }
+            searchText.setText("Enter interval: X-Y...");
+        }
+        if (searchOptionsCombo.getSelectedIndex() == 5) {
+            if (!isSearchTextOn) {
+                searchPanel.remove(searchCombo);
+                searchPanel.add(searchText);
+                searchCombo.setVisible(false);
+                searchText.setVisible(true);
+                isSearchTextOn = true;
+            }
+            searchText.setText("Enter ingredient's name...");
+        }
+    }//GEN-LAST:event_searchOptionsComboActionPerformed
+
+    private void searchComboActionPerformed(java.awt.event.ActionEvent evt) {
+        if (searchOptionsCombo.getSelectedIndex() == 2) {
+            SwingWorker<SortedSet<Recipe>, Void> worker = new SwingWorker<SortedSet<Recipe>, Void>() {
+                @Override
+                protected SortedSet<Recipe> doInBackground() throws Exception {
+                    SortedSet<Recipe> set = recipeManager.findRecipesByType(MealType.fromInt(searchCombo.getSelectedIndex()));
+                    for (Recipe r : set) {
+                        r.setIngredients(recipebook.getIngredientsOfRecipe(r));
+                    }
+                    return set;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        if (get().isEmpty()) {
+                            WarningFrame frame = new WarningFrame();
+                            frame.setText("No recipes found");
+                            frame.setVisible(true);
+                        } else {
+                            DefaultListModel model = new DefaultListModel();
+                            for (Recipe recipe : get()) {
+                                model.addElement(recipe);
+                            }
+                            recipeList.setModel(model);
+                        }
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ExecutionException ex) {
+                        Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            };
+            worker.execute();
+        }
+
+        if (searchOptionsCombo.getSelectedIndex() == 3) {
+            SwingWorker<SortedSet<Recipe>, Void> worker = new SwingWorker<SortedSet<Recipe>, Void>() {
+                @Override
+                protected SortedSet<Recipe> doInBackground() throws Exception {
+                    SortedSet<Recipe> set = recipeManager.findRecipesByCategory(MealCategory.fromInt(searchCombo.getSelectedIndex()));
+                    for (Recipe r : set) {
+                        r.setIngredients(recipebook.getIngredientsOfRecipe(r));
+                    }
+                    return set;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        if (get().isEmpty()) {
+                            WarningFrame frame = new WarningFrame();
+                            frame.setText("No recipes found");
+                            frame.setVisible(true);
+                        } else {
+                            DefaultListModel model = new DefaultListModel();
+                            for (Recipe recipe : get()) {
+                                model.addElement(recipe);
+                            }
+                            recipeList.setModel(model);
+                        }
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ExecutionException ex) {
+                        Logger.getLogger(RecipebookFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            };
+            worker.execute();
+        }
+    }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
 
@@ -405,16 +853,22 @@ public class RecipebookFrame extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RecipebookFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RecipebookFrame.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RecipebookFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RecipebookFrame.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RecipebookFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RecipebookFrame.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RecipebookFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RecipebookFrame.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -431,26 +885,46 @@ public class RecipebookFrame extends javax.swing.JFrame {
     private java.awt.Canvas image;
     private javax.swing.JList ingredientList;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu10;
+    private javax.swing.JMenu jMenu11;
+    private javax.swing.JMenu jMenu12;
+    private javax.swing.JMenu jMenu13;
+    private javax.swing.JMenu jMenu14;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenu jMenu7;
+    private javax.swing.JMenu jMenu8;
+    private javax.swing.JMenu jMenu9;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuBar jMenuBar3;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JPopupMenu jPopupMenu1;
+    private javax.swing.JPopupMenu jPopupMenu2;
+    private javax.swing.JPopupMenu jPopupMenu3;
+    private javax.swing.JPopupMenu jPopupMenu4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel label_CookingTime;
     private javax.swing.JLabel label_Ingredients;
+    private javax.swing.JLabel label_Ingredients1;
+    private javax.swing.JLabel label_Ingredients2;
     private javax.swing.JLabel label_Instructions;
     private javax.swing.JLabel label_NumPortions;
     private javax.swing.JLabel label_RecipeCategory;
     private javax.swing.JLabel label_RecipeName;
     private javax.swing.JLabel label_RecipeType;
     private javax.swing.JLabel label_Recipes;
+    private javax.swing.JMenuItem menuExit;
     private javax.swing.JList recipeList;
     private javax.swing.JMenuItem removeRecipeMenu;
+    private javax.swing.JComboBox searchOptionsCombo;
+    private javax.swing.JPanel searchPanel;
+    private javax.swing.JTextField searchText;
     // End of variables declaration//GEN-END:variables
 
     private void loadRecipeToLabels(Recipe recipe) {
@@ -551,8 +1025,8 @@ public class RecipebookFrame extends javax.swing.JFrame {
         };
         worker.execute();
     }
-    
-        public void updateRecipe(final Recipe recipe, final SortedSet<Ingredient> toAdd, final SortedSet<Ingredient> toUpdate) {
+
+    public void updateRecipe(final Recipe recipe, final SortedSet<Ingredient> toAdd, final SortedSet<Ingredient> toUpdate) {
 
         SwingWorker<Recipe, Void> worker = new SwingWorker<Recipe, Void>() {
             @Override
@@ -560,7 +1034,7 @@ public class RecipebookFrame extends javax.swing.JFrame {
                 try {
                     SortedSet<Ingredient> is = new TreeSet<Ingredient>(toAdd);
                     Recipe r = new Recipe();
-                    
+
                     r.setId(recipe.getId());
                     r.setName(recipe.getName());
                     r.setType(recipe.getType());
@@ -568,14 +1042,14 @@ public class RecipebookFrame extends javax.swing.JFrame {
                     r.setCategory(recipe.getCategory());
                     r.setCookingTime(recipe.getCookingTime());
                     r.setInstructions(recipe.getInstructions());
-                    
+
                     r.setIngredients(new TreeSet<Ingredient>());
-                    
+
                     for (Ingredient ingredient : toUpdate) {
                         ingredientManager.updateIngredient(ingredient);
                         r.addIngredient(ingredient);
                     }
-                    
+
                     recipeManager.updateRecipe(r);
                     recipebook.addIngredientsToRecipe(is, r);
                     return r;

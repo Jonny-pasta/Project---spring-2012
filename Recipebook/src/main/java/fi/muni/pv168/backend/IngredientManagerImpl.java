@@ -270,6 +270,42 @@ public class IngredientManagerImpl implements IngredientManager {
         }
         return ids;
     }
+    
+    @Override
+    public SortedSet<Long> getRecipeIdsByIngredientName(String ingredientName) throws ServiceFailureException {
+        checkDataSource();
+        if (ingredientName == null) {
+            throw new IllegalArgumentException();
+        }
+
+        Connection con = null;
+        PreparedStatement query = null;
+        SortedSet<Long> ids = new TreeSet<Long>();
+        try {
+            con = dataSource.getConnection();
+            con.setAutoCommit(false);
+            ResultSet resultsDB;
+           
+            query = con.prepareStatement(
+                    "SELECT RECIPEID FROM INGREDIENTS WHERE NAME = ?");
+            query.setString(1, ingredientName);
+
+            resultsDB = query.executeQuery();
+
+            while (resultsDB.next()) {
+                Long idDB = resultsDB.getLong("RECIPEID");
+                ids.add(idDB);
+            }
+            con.commit();
+        } catch (SQLException ex) {
+            Logger.getLogger(RecipebookImpl.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ServiceFailureException();
+        } finally {
+            DBUtils.doRollbackQuietly(con);
+            DBUtils.closeQuietly(con, query);
+        }
+        return ids;
+    }
         
     @Override
     public SortedSet<Ingredient> getAllIngredients() throws ServiceFailureException {

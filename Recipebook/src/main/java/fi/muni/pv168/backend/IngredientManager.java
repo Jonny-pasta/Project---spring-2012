@@ -48,6 +48,14 @@ public interface IngredientManager {
      */
     SortedSet<Long> getRecipeIdsByIngredient(Ingredient ingredient) throws ServiceFailureException;
     
+    /**
+     * returns sorted set of recipe ids that have ingredient with given name
+     * @param ingredientName given name
+     * @return sorted set of results
+     * @throws ServiceFailureException DB failure 
+     */
+    SortedSet<Long> getRecipeIdsByIngredientName(String ingredientName) throws ServiceFailureException;
+    
      /**
      * returns ingredients containing recipe IDs given as parameter
      * @param recipeId id of recipe from witch ingredients will be returned
@@ -62,4 +70,5 @@ public interface IngredientManager {
      * @throws ServiceFailureException problem with database 
      */
     SortedSet<Ingredient> getAllIngredients() throws ServiceFailureException;
+    
 }

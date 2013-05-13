@@ -56,4 +56,26 @@ public enum MealType {
         }
         return -1;
     }
+    
+    // overriding Object.toString
+    @Override
+    public String toString() {
+                switch(this) {
+            case BREAKFAST:
+                return "breakfast";
+            case APPETIZER:
+                return "appetizer";
+            case SOUP:
+                return "soup";
+            case MAIN_DISH:
+                return "main dish";
+            case DESSERT:
+                return "dessert";
+            case SALAD:
+                return "salad";
+            case DRINK:
+                return "drink";
+        }
+        return "";
+    }
 }

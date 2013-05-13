@@ -37,4 +37,6 @@ public interface Recipebook {
      * @throws ServiceFailureException problem with database
      */
     public SortedSet<Ingredient> getIngredientsOfRecipe(Recipe recipe) throws ServiceFailureException;
+    
+    public SortedSet<Recipe> findRecipesByIngredientName(String ingredientName) throws ServiceFailureException;
 }

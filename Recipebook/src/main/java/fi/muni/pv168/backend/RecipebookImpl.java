@@ -128,6 +128,26 @@ public class RecipebookImpl implements Recipebook {
     }
     
     @Override
+    public SortedSet<Recipe> findRecipesByIngredientName(String ingredientName) throws ServiceFailureException {
+        SortedSet<Long> ids;
+        SortedSet<Recipe> result = new TreeSet<Recipe>();
+        
+        try {
+            ids = ingredientManager.getRecipeIdsByIngredientName(ingredientName);
+            
+            for (Long id : ids) {
+                Recipe recipe = recipeManager.findRecipeById(id);
+                recipe.setIngredients(ingredientManager.getIngredientsOfRecipe(id));
+                result.add(recipe);
+            }
+        } catch (ServiceFailureException e) {
+            logger.log(Level.SEVERE, "check exception's message", e);
+            throw new ServiceFailureException();
+        }
+        return result;
+    }
+    
+    @Override
     public SortedSet<Ingredient> getIngredientsOfRecipe(Recipe recipe) throws ServiceFailureException {
         validate(recipe);
         
